@@ -10,11 +10,12 @@ const UserRoleSelection = () => {
     setUserRole(role);
   };
 
+  // TODO: Remove since both lead to same page
   const handleContinue = () => {
     if (userRole === 'coach') {
-      navigate('/onboardCoach');
+      navigate('/onboard');
     } else if (userRole === 'client') {
-      navigate('/onboardClient');
+      navigate('/onboard');
     }
   };
 

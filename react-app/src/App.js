@@ -7,6 +7,7 @@ import HomePage from "./HomePage";
 import LoginPage from "./LoginPage";
 import LogoutPage from "./LogoutPage";
 import { AuthContext } from "./AuthContext";
+import Onboarding from "./Onboarding";
 
 const App = () => {
   const { isLoggedIn } = useContext(AuthContext);   
@@ -47,6 +48,7 @@ const App = () => {
         <Route path="/role" element={<UserRoleSelection />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/logout" element={<LogoutPage />} />
+        <Route path="/onboard" element={<Onboarding />} />
       </Routes>
     </BrowserRouter>
   );
