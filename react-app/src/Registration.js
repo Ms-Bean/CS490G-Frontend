@@ -37,7 +37,6 @@ const RegisterField = ({ setAlertMessage, setAlertType }) => {
         },
       });
 
-
       const data = await response.json();
 
       // Update alert message and type
