@@ -20,8 +20,9 @@ const LoginPage = () => {
     e.preventDefault();
     const response = await fetch("http://localhost:3500/login", {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams(formData),
+      headers: { "Content-Type": "application/json" },  // Updated to json
+      body: JSON.stringify(formData),
+      credentials: 'include',  // Make sure credentials/cookies are included 
     });
     const data = await response.json();
     console.log(data);

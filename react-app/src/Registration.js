@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Form, Button, Alert, Spinner } from "react-bootstrap";
+import { AuthContext } from "./AuthContext"; // Import AuthContext
 
 const url = "http://localhost:3500/";
 
 // Main registration form containing form logic and fields
 const RegisterField = ({ setAlertMessage, setAlertType }) => {
+  const { setIsLoggedIn } = useContext(AuthContext); // setIsLoggedIn used to update the AuthContext
+
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -28,15 +31,18 @@ const RegisterField = ({ setAlertMessage, setAlertType }) => {
     try {
       const response = await fetch(`${url}insert_user/`, {
         method: "POST",
-        headers: {
+        headers: { // Moved data to body instead of headers
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           first_name: formData.first_name,
           last_name: formData.last_name,
           username: formData.username,
           email: formData.email,
           password: formData.password,
-        },
+        }),
+        credentials: "include", // Include credentials with the request
       });
-
       const data = await response.json();
 
       // Update alert message and type
@@ -44,7 +50,8 @@ const RegisterField = ({ setAlertMessage, setAlertType }) => {
       setAlertType(response.status !== 200 ? "danger" : "success");
 
       if (response.status === 200) {
-        navigate("/role");
+        setIsLoggedIn(true); // Update isLoggedIn to true upon successful registration
+        navigate("/role"); 
       }
     } catch (err) {
       console.error("Error occurred:", err);
