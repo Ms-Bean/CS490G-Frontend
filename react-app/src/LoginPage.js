@@ -66,7 +66,7 @@ const LoginForm = ({ setUser }) => {
           </p>
         </Form.Group>
         <div className="d-grid">
-          <Button variant="primary" type="submit">
+          <Button size="lg" variant="primary" type="submit">
             Sign In
           </Button>
         </div>

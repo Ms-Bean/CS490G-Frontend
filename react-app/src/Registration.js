@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Row, Col, Form, Button, Alert, Spinner } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Alert, Spinner, ButtonGroup, ToggleButton } from "react-bootstrap";
 import { AuthContext } from "./AuthContext"; // Import AuthContext
 
 const url = "http://localhost:3500/";
@@ -8,16 +8,21 @@ const url = "http://localhost:3500/";
 // Main registration form containing form logic and fields
 const RegisterField = ({ setAlertMessage, setAlertType }) => {
   const { setUser } = useContext(AuthContext); // setUser used to update the AuthContext
-
   const navigate = useNavigate();
+  const [userRole, setUserRole] = useState("client");
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
     email: "",
     username: "",
-    password: "",
+    password: ""
   });
+
+  const roles = [
+    { name: "Coach", value: "coach" },
+    { name: "Client", value: "client" },
+  ];
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -27,6 +32,8 @@ const RegisterField = ({ setAlertMessage, setAlertType }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    console.log("Submitting form data:", formData);
+    console.log("User role:", userRole);
 
     try {
       const response = await fetch(`${url}insert_user/`, {
@@ -41,6 +48,7 @@ const RegisterField = ({ setAlertMessage, setAlertType }) => {
           username: formData.username,
           email: formData.email,
           password: formData.password,
+          role: userRole,
         }),
         credentials: "include", // Include credentials with the request
       });
@@ -53,7 +61,7 @@ const RegisterField = ({ setAlertMessage, setAlertType }) => {
       if (response.status === 200) {
         setUser(data.user);
         localStorage.setItem("user", JSON.stringify(data.user));
-        navigate("/role");
+        navigate("/onboard");
       }
     } catch (err) {
       console.error("Error occurred:", err);
@@ -98,8 +106,29 @@ const RegisterField = ({ setAlertMessage, setAlertType }) => {
               <Form.Control type="password" value={formData.password} onChange={handleInputChange} />
             </Form.Group>
 
+            <Form.Group className="mb-3 d-grid" controlId="role">
+              <Form.Label>Select Role</Form.Label>
+              <ButtonGroup className="mb-3">
+                {roles.map((radio, idx) => (
+                  <ToggleButton
+                    key={idx}
+                    size="lg"
+                    id={`radio-${idx}`}
+                    type="radio"
+                    variant="outline-primary"
+                    name="radio"
+                    value={radio.value}
+                    checked={userRole === radio.value}
+                    onChange={(e) => setUserRole(e.target.value)}
+                  >
+                    {radio.name}
+                  </ToggleButton>
+                ))}
+              </ButtonGroup>
+            </Form.Group>
+
             <div className="d-grid">
-              <Button variant="primary" type="submit" disabled={isLoading}>
+              <Button size="lg" variant="primary" type="submit" disabled={isLoading}>
                 {isLoading ? <Spinner animation="border" size="sm" /> : "Submit"}
               </Button>
             </div>
