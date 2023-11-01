@@ -5,7 +5,6 @@
   import UserRoleSelection from "./UserRoleSelection";
   import HomePage from "./HomePage";
   import LoginPage from "./LoginPage";
-  import Onboarding from "./Onboarding";
 
   const App = () => {
     return (
@@ -16,7 +15,6 @@
           <Route path="/registration" element={<RegisterPage />} />
           <Route path="/role" element={<UserRoleSelection />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/onboard" element={<Onboarding />} />
         </Routes>
       </BrowserRouter>
     );
