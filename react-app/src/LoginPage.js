@@ -1,13 +1,16 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
 import { AuthContext } from "./AuthContext";
 
-const LoginForm = ({ setLoginSuccess, setUser, setAlertMessage, setAlertType }) => {
+const LoginForm = ({ setUser }) => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
+  const [alertMessage, setAlertMessage] = useState(null);
+  const [alertType, setAlertType] = useState("danger");
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -27,7 +30,7 @@ const LoginForm = ({ setLoginSuccess, setUser, setAlertMessage, setAlertType }) 
 
       if (data.success) {
         setUser(data.user);
-        setLoginSuccess(true);
+        navigate("/");
       } else {
         setAlertMessage(data.message);
         setAlertType("danger");
@@ -40,41 +43,59 @@ const LoginForm = ({ setLoginSuccess, setUser, setAlertMessage, setAlertType }) 
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Form.Group controlId="username">
-        <Form.Label>Username</Form.Label>
-        <Form.Control type="text" value={formData.username} onChange={handleInputChange} />
-      </Form.Group>
-      <Form.Group controlId="password">
-        <Form.Label>Password</Form.Label>
-        <Form.Control type="password" value={formData.password} onChange={handleInputChange} />
-      </Form.Group>
-      <Button type="submit">Login</Button>
-    </Form>
+    <>
+      {alertMessage && (
+        <Alert className="mb-3 mt-3" variant={alertType} dismissible onClose={() => setAlertMessage(null)}>
+          {alertMessage}
+        </Alert>
+      )}
+      <Form onSubmit={handleSubmit}>
+        <Form.Group className="mb-3" controlId="username">
+          <Form.Label>Username</Form.Label>
+          <Form.Control type="text" value={formData.username} onChange={handleInputChange} />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="password">
+          <Form.Label>Password</Form.Label>
+          <Form.Control type="password" value={formData.password} onChange={handleInputChange} />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="forgot">
+          <p className="small">
+            <a className="text-primary" href="#">
+              Forgot password?
+            </a>
+          </p>
+        </Form.Group>
+        <div className="d-grid">
+          <Button variant="primary" type="submit">
+            Sign In
+          </Button>
+        </div>
+      </Form>
+    </>
   );
 };
 
 const LoginPage = () => {
-  const navigate = useNavigate();
   const { setUser } = useContext(AuthContext);
-  const [loginSuccess, setLoginSuccess] = useState(false);
-  const [alertMessage, setAlertMessage] = useState(null);
-  const [alertType, setAlertType] = useState("danger");
-
-  useEffect(() => {
-    if (loginSuccess) navigate("/");
-  }, [loginSuccess, navigate]);
 
   return (
     <Container>
-      {alertMessage && (
-        <Alert variant={alertType} dismissible onClose={() => setAlertMessage(null)}>
-          {alertMessage}
-        </Alert>
-      )}
-      <Row>
-        <Col>
-          <LoginForm setLoginSuccess={setLoginSuccess} setUser={setUser} setAlertMessage={setAlertMessage} setAlertType={setAlertType} />
+      <Row className="d-flex justify-content-center align-items-center">
+        <Col md={8} lg={6} xs={12}>
+          <h2 className="mt-5 fw-bold mb-2 text-center">Sign In</h2>
+          <div className="mt-3">
+            <p className="mb-0  text-center">
+              Don't have an account?{" "}
+              <a href="{''}" className="text-primary fw-bold">
+                Sign Up
+              </a>
+            </p>
+          </div>{" "}
+          <Row>
+            <Col>
+              <LoginForm setUser={setUser} />
+            </Col>
+          </Row>
         </Col>
       </Row>
     </Container>
