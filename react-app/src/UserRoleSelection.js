@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 
+const url = "http://localhost:3500/";
+
 const UserRoleSelection = () => {
   const [userRole, setUserRole] = useState(null);
   const navigate = useNavigate();
@@ -11,7 +13,24 @@ const UserRoleSelection = () => {
   };
 
   // TODO: Remove since both lead to same page
-  const handleContinue = () => {
+  const handleContinue = async(e) => {
+
+    try {
+      const response = await fetch(`${url}assign_role/`, {
+        method: "POST",
+        headers: { // Moved data to body instead of headers
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          is_coach: userRole==='coach'
+        }),
+        credentials: "include", // Include credentials with the request
+      });
+      const data = await response.json();
+
+    } catch (err) {
+      console.error("Error occurred:", err);
+    }
     if (userRole === 'coach') {
       navigate('/onboard');
     } else if (userRole === 'client') {
