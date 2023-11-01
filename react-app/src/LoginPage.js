@@ -45,7 +45,7 @@ const LoginForm = ({ setUser }) => {
   return (
     <>
       {alertMessage && (
-        <Alert className="mb-3 mt-3" variant={alertType} dismissible onClose={() => setAlertMessage(null)}>
+        <Alert className="mb-3 mt-3 w-50 mx-auto" variant={alertType} dismissible onClose={() => setAlertMessage(null)}>
           {alertMessage}
         </Alert>
       )}
@@ -79,25 +79,29 @@ const LoginPage = () => {
   const { setUser } = useContext(AuthContext);
 
   return (
-    <Container>
-      <Row className="d-flex justify-content-center align-items-center">
-        <Col md={8} lg={6} xs={12}>
-          <h2 className="mt-5 fw-bold mb-2 text-center">Sign In</h2>
-          <div className="mt-3">
-            <p className="mb-0  text-center">
-              Don't have an account?{" "}
-              <a href="{''}" className="text-primary fw-bold">
-                Sign Up
-              </a>
-            </p>
-          </div>{" "}
-          <Row>
-            <Col>
-              <LoginForm setUser={setUser} />
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+    <Container className="mt-3 p-4 bg-primary text-white rounded w-50 mx-auto">
+      <Container className="">
+        <h1 className="mt-2 mb-2 text-center">Sign In</h1>
+        <div className="mt-3">
+          <p className="mb-0  text-center">
+            Don't have an account?{" "}
+            <a href="/registration" className="text-white fw-bold">
+              Sign Up
+            </a>
+          </p>
+        </div>{" "}
+      </Container>
+      <Container className="mt-3 form-background justify-content-center">
+        <Row className="bg-light text-dark rounded p-4">
+          <Col>
+            <Row>
+              <Col>
+                <LoginForm setUser={setUser} />
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      </Container>
     </Container>
   );
 };

@@ -31,8 +31,9 @@ const RegisterField = ({ setAlertMessage, setAlertType }) => {
     try {
       const response = await fetch(`${url}insert_user/`, {
         method: "POST",
-        headers: { // Moved data to body instead of headers
-          'Content-Type': 'application/json',
+        headers: {
+          // Moved data to body instead of headers
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           first_name: formData.first_name,
@@ -65,8 +66,8 @@ const RegisterField = ({ setAlertMessage, setAlertType }) => {
   };
 
   return (
-    <Container className="mt-3 form-background d-flex justify-content-center">
-      <Row className="w-50 bg-light text-dark rounded p-4">
+    <Container className="mt-3 form-background justify-content-center">
+      <Row className="bg-light text-dark rounded p-4">
         <Col>
           <Form onSubmit={handleSubmit}>
             {/* First Name and Last Name Side by Side */}
@@ -97,9 +98,11 @@ const RegisterField = ({ setAlertMessage, setAlertType }) => {
               <Form.Control type="password" value={formData.password} onChange={handleInputChange} />
             </Form.Group>
 
-            <Button variant="primary" type="submit" disabled={isLoading}>
-              {isLoading ? <Spinner animation="border" size="sm" /> : "Submit"}
-            </Button>
+            <div className="d-grid">
+              <Button variant="primary" type="submit" disabled={isLoading}>
+                {isLoading ? <Spinner animation="border" size="sm" /> : "Submit"}
+              </Button>
+            </div>
           </Form>
         </Col>
       </Row>
@@ -114,15 +117,17 @@ const RegisterPage = () => {
   return (
     <>
       <Container className="mt-3 p-4 bg-primary text-white rounded w-50 mx-auto">
-        <h1>Create Account</h1>
-        <p>This is the exercise and coaching app Moxi. Create an account below.</p>
+        <h1 className="mt-2 mb-2 text-center">Sign Up</h1>
+        <div className="mt-3">
+          <p className="text-center">This is the exercise and coaching app Moxi. Sign up for an account below.</p>
+        </div>
+        {alertMessage && (
+          <Alert variant={alertType} dismissible onClose={() => setAlertMessage(null)} className="mt-3 w-50 mx-auto">
+            {alertMessage}
+          </Alert>
+        )}
+        <RegisterField setAlertMessage={setAlertMessage} setAlertType={setAlertType} />
       </Container>
-      {alertMessage && (
-        <Alert variant={alertType} dismissible onClose={() => setAlertMessage(null)} className="mt-3 w-50 mx-auto">
-          {alertMessage}
-        </Alert>
-      )}
-      <RegisterField setAlertMessage={setAlertMessage} setAlertType={setAlertType} />
     </>
   );
 };
