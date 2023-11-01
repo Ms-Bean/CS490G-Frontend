@@ -1,15 +1,16 @@
-import React, { useState, useContext } from "react"; // Import useContext
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { AuthContext } from "./AuthContext"; // Import AuthContext
+import { AuthContext } from "./AuthContext"; 
 
 const LoginPage = () => {
-  const { setIsLoggedIn } = useContext(AuthContext); // Destructure setIsLoggedIn
+  const navigate = useNavigate();
+  const { setUser } = useContext(AuthContext); // setUser used to update the AuthContext
+  const [loginSuccess, setLoginSuccess] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
-  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -27,15 +28,20 @@ const LoginPage = () => {
     const data = await response.json();
     console.log(data);
     if (data.success) {
-      localStorage.setItem("isLoggedIn", true);
-      setIsLoggedIn(true); // Update isLoggedIn to true upon successful login
-      navigate("/");
+      setUser(data.user);
+      setLoginSuccess(true);
     } else {
       console.log("Login failed");
       alert(data.message);
     }
   };
 
+  useEffect(() => { // Check if user is logged in
+    if (loginSuccess) {
+      navigate("/");
+    }
+  }, [loginSuccess, navigate]);  // Depend on loginSuccess and navigate
+  
   return (
     <Container>
       <Row>

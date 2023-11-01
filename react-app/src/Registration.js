@@ -7,7 +7,7 @@ const url = "http://localhost:3500/";
 
 // Main registration form containing form logic and fields
 const RegisterField = ({ setAlertMessage, setAlertType }) => {
-  const { setIsLoggedIn } = useContext(AuthContext); // setIsLoggedIn used to update the AuthContext
+  const { setUser } = useContext(AuthContext); // setUser used to update the AuthContext
 
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -50,8 +50,9 @@ const RegisterField = ({ setAlertMessage, setAlertType }) => {
       setAlertType(response.status !== 200 ? "danger" : "success");
 
       if (response.status === 200) {
-        setIsLoggedIn(true); // Update isLoggedIn to true upon successful registration
-        navigate("/role"); 
+        setUser(data.user);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        navigate("/role");
       }
     } catch (err) {
       console.error("Error occurred:", err);
