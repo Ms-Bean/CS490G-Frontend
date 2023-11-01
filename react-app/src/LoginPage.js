@@ -1,12 +1,9 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { AuthContext } from "./AuthContext"; 
+import { Container, Row, Col, Form, Button, Alert } from "react-bootstrap";
+import { AuthContext } from "./AuthContext";
 
-const LoginPage = () => {
-  const navigate = useNavigate();
-  const { setUser } = useContext(AuthContext); // setUser used to update the AuthContext
-  const [loginSuccess, setLoginSuccess] = useState(false);
+const LoginForm = ({ setLoginSuccess, setUser, setAlertMessage, setAlertType }) => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -19,44 +16,65 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:3500/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },  // Updated to json
-      body: JSON.stringify(formData),
-      credentials: 'include',  // Make sure credentials/cookies are included 
-    });
-    const data = await response.json();
-    console.log(data);
-    if (data.success) {
-      setUser(data.user);
-      setLoginSuccess(true);
-    } else {
-      console.log("Login failed");
-      alert(data.message);
+    try {
+      const response = await fetch("http://localhost:3500/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+        credentials: "include",
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        setUser(data.user);
+        setLoginSuccess(true);
+      } else {
+        setAlertMessage(data.message);
+        setAlertType("danger");
+      }
+    } catch (err) {
+      console.error(err);
+      setAlertMessage("The backend is down. Please try again later.");
+      setAlertType("danger");
     }
   };
 
-  useEffect(() => { // Check if user is logged in
-    if (loginSuccess) {
-      navigate("/");
-    }
-  }, [loginSuccess, navigate]);  // Depend on loginSuccess and navigate
-  
+  return (
+    <Form onSubmit={handleSubmit}>
+      <Form.Group controlId="username">
+        <Form.Label>Username</Form.Label>
+        <Form.Control type="text" value={formData.username} onChange={handleInputChange} />
+      </Form.Group>
+      <Form.Group controlId="password">
+        <Form.Label>Password</Form.Label>
+        <Form.Control type="password" value={formData.password} onChange={handleInputChange} />
+      </Form.Group>
+      <Button type="submit">Login</Button>
+    </Form>
+  );
+};
+
+const LoginPage = () => {
+  const navigate = useNavigate();
+  const { setUser } = useContext(AuthContext);
+  const [loginSuccess, setLoginSuccess] = useState(false);
+  const [alertMessage, setAlertMessage] = useState(null);
+  const [alertType, setAlertType] = useState("danger");
+
+  useEffect(() => {
+    if (loginSuccess) navigate("/");
+  }, [loginSuccess, navigate]);
+
   return (
     <Container>
+      {alertMessage && (
+        <Alert variant={alertType} dismissible onClose={() => setAlertMessage(null)}>
+          {alertMessage}
+        </Alert>
+      )}
       <Row>
         <Col>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="username">
-              <Form.Label>Username</Form.Label>
-              <Form.Control type="text" value={formData.username} onChange={handleInputChange} />
-            </Form.Group>
-            <Form.Group controlId="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" value={formData.password} onChange={handleInputChange} />
-            </Form.Group>
-            <Button type="submit">Login</Button>
-          </Form>
+          <LoginForm setLoginSuccess={setLoginSuccess} setUser={setUser} setAlertMessage={setAlertMessage} setAlertType={setAlertType} />
         </Col>
       </Row>
     </Container>
