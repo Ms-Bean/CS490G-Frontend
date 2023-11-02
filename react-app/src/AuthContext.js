@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
       .then((res) => res.json())
       .then((data) => {
         setUser(data.user);
-        console.log("useEffect: User state in AuthContext.js:", user);
+        console.log("useEffect: User state in AuthContext.js:", data.user);
         localStorage.setItem("user", JSON.stringify(data.user));
         console.log("useEffect: Local storage:", localStorage.getItem("user"));
       });

@@ -25,7 +25,7 @@ const NavComp = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            {user ? ( // Check localUser instead of user
+            {user ? ( // Check localUser instead of user 
               <>
                 <Nav.Link href="#">Dashboard</Nav.Link>
                 <Nav.Link href="#">Goals</Nav.Link>
