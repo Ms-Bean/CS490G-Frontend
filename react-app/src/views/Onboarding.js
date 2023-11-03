@@ -3,21 +3,33 @@ import { Container } from "react-bootstrap";
 import ClientOnboarding from "../components/ClientOnboarding";
 import CoachOnboarding from "../components/CoachOnboarding";
 
-const fetchUserRole = () => {
-  // API call to fetch the user's role
-  // Return a Promise that resolves to "client" or "coach" for testing purposes
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve("client");
-    }, 1000);
-  });
+const fetchUserRole = async () => {
+  try {
+    const response = await fetch("http://localhost:3500/get_role", {
+      method: "GET",
+      credentials: "include",
+    });
+    if (!response.ok) {
+      throw new Error('Error: ' + response.statusText);
+    }
+    const data = await response.json();
+    return data.message;
+  } catch (error) {
+    console.error('Error fetching user role:', error);
+    throw error;
+  }
 };
 
 const Onboarding = () => {
   const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {
-    fetchUserRole().then((role) => setUserRole(role));
+    fetchUserRole()
+      .then((role) => {
+        setUserRole(role);
+        console.log(role); // Logs the role after it is fetched
+      })
+      .catch((error) => console.error('Error fetching user role:', error));
   }, []);
 
   return (

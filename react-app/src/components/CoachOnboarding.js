@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
 
+const url = "http://localhost:3500/";
+
 const CoachOnboarding = () => {
   const [formData, setFormData] = useState({
     experience: "",
@@ -23,9 +25,10 @@ const CoachOnboarding = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("/onboarding/coach", {
+      const response = await fetch(`${url}onboarding/client/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(formData),
       });
       if (response.ok) {
