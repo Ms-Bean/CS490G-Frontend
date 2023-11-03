@@ -1,8 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Navbar, Nav, Container } from "react-bootstrap";
+import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { useAuth } from "../hooks/useAuth";
 import { useLogout } from "../hooks/useLogout";
+import style from "../App.css"
+import profPic from "./m&m.jpeg"
 
 
 const NavComp = () => {
@@ -35,8 +37,23 @@ const NavComp = () => {
               <Nav.Link href="#">Coaches</Nav.Link>
               <Nav.Link href="#">Workouts</Nav.Link>
               <Nav.Link href="#">Messaging</Nav.Link>
-              <Nav.Link href="#">Profile</Nav.Link>
-              <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+              <NavDropdown eventKey={1}
+                title={
+                  <div className="pull-left">
+                      <img className="thumbnail-image"
+                        src={profPic}
+                        alt="Profile Picture"
+                        height="30"
+                        width="30"
+                        />
+                  </div>
+                }
+                id="basic-nav-dropdown">
+                  <NavDropdown.Item href="#">Profile</NavDropdown.Item>
+                  <NavDropdown.Item href="#">Account</NavDropdown.Item>
+                  <NavDropdown.Item divider/>
+                  <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
+                </NavDropdown>
             </>
             )}
             {!user && (

@@ -43,3 +43,6 @@
   background-color: rgb(235, 235, 235);
   padding: 10px;
 }
+.dropdown-toggle::after {
+  display: none !important; 
+}
