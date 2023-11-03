@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
-import ClientOnboarding from "./ClientOnboarding";
-import CoachOnboarding from "./CoachOnboarding";
+import ClientOnboarding from "../components/ClientOnboarding";
+import CoachOnboarding from "../components/CoachOnboarding";
 
 const fetchUserRole = () => {
   // API call to fetch the user's role

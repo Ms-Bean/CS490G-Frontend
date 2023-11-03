@@ -1,10 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar, Nav, Container } from "react-bootstrap";
-import { AuthContext } from "./AuthContext";
+import { useAuth } from "../hooks/useAuth";
+import { useLogout } from "../hooks/useLogout";
+
 
 const NavComp = () => {
-  const { logout, user } = useContext(AuthContext);
+  const {user} = useAuth();
+  const {logout} = useLogout();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -25,21 +28,21 @@ const NavComp = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
-            {user ? ( // Check localUser instead of user 
+            {user && (
               <>
-                <Nav.Link href="#">Dashboard</Nav.Link>
-                <Nav.Link href="#">Goals</Nav.Link>
-                <Nav.Link href="#">Coaches</Nav.Link>
-                <Nav.Link href="#">Workouts</Nav.Link>
-                <Nav.Link href="#">Messaging</Nav.Link>
-                <Nav.Link href="#">Profile</Nav.Link>
-                <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
-              </>
-            ) : (
-              // If user is null, show the following links
+              <Nav.Link href="#">Dashboard</Nav.Link>
+              <Nav.Link href="#">Goals</Nav.Link>
+              <Nav.Link href="#">Coaches</Nav.Link>
+              <Nav.Link href="#">Workouts</Nav.Link>
+              <Nav.Link href="#">Messaging</Nav.Link>
+              <Nav.Link href="#">Profile</Nav.Link>
+              <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+            </>
+            )}
+            {!user && (
               <>
-                <Nav.Link href="/login">Login</Nav.Link>
-                <Nav.Link href="/registration">Register</Nav.Link>
+              <Nav.Link href="/login">Login</Nav.Link>
+              <Nav.Link href="/registration">Register</Nav.Link>
               </>
             )}
           </Nav>
