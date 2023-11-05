@@ -1,4 +1,3 @@
-// CoachOnboarding.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";

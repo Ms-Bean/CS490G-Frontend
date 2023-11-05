@@ -32,7 +32,7 @@ const NavComp = () => {
           <Nav className="ms-auto">
             {user && (
               <>
-              <Nav.Link href="#">Dashboard</Nav.Link>
+              <Nav.Link href="/dashboard">Dashboard</Nav.Link>
               <Nav.Link href="#">Goals</Nav.Link>
               <Nav.Link href="#">Coaches</Nav.Link>
               <Nav.Link href="#">Workouts</Nav.Link>
