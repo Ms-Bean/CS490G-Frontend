@@ -1,19 +1,25 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
-import { Container, Row, Col, Form, Button, Alert, Spinner, ButtonGroup, ToggleButton } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, FormCheck, Spinner, ButtonGroup, ToggleButton } from "react-bootstrap";
 import { useAuth } from "../hooks/useAuth";
 import { useSignup } from "../hooks/useSignup";
 
 // Main registration form containing form logic and fields
 const RegisterField = ({ setAlertMessage, setAlertType }) => {
-    const [userRole, setUserRole] = useState("client");
-    const [formData, setFormData] = useState({
-      first_name: "",
-      last_name: "",
-      email: "",
-      username: "",
-      password: ""
-    });
+  const [userRole, setUserRole] = useState("client");
+  const [wantsLocal, setWantsLocal] = useState(false);
+  const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    username: "",
+    password: "",
+    // street_address: "",
+    // city: "",
+    // state: "",
+    // zip_code: "",
+    // country: "",
+  });
 
     const {user} = useAuth();
     const {signup, isLoading, errorMessage} = useSignup();
@@ -39,7 +45,6 @@ const RegisterField = ({ setAlertMessage, setAlertType }) => {
         setAlertMessage(errorMessage);
         setAlertType('danger')
       }
-
     };
   
     return (
@@ -47,54 +52,95 @@ const RegisterField = ({ setAlertMessage, setAlertType }) => {
         <Row className="bg-light text-dark rounded p-4">
           <Col>
             <Form onSubmit={handleSubmit}>
-              {/* First Name and Last Name Side by Side */}
-              <Row className="mb-3">
-                <Col>
-                  <Form.Label>First Name</Form.Label>
-                  <Form.Control id="first_name" type="text" value={formData.first_name} onChange={handleInputChange} />
-                </Col>
-                <Col>
-                  <Form.Label>Last Name</Form.Label>
-                  <Form.Control id="last_name" type="text" value={formData.last_name} onChange={handleInputChange} />
-                </Col>
-              </Row>
-  
-              {/* Remaining Fields */}
-              <Form.Group className="mb-3" controlId="email">
-                <Form.Label>Email</Form.Label>
-                <Form.Control type="email" value={formData.email} onChange={handleInputChange} />
-              </Form.Group>
-  
-              <Form.Group className="mb-3" controlId="username">
-                <Form.Label>Username</Form.Label>
-                <Form.Control type="text" value={formData.username} onChange={handleInputChange} />
-              </Form.Group>
-  
-              <Form.Group className="mb-3" controlId="password">
-                <Form.Label>Password</Form.Label>
-                <Form.Control type="password" value={formData.password} onChange={handleInputChange} />
-              </Form.Group>
-  
-              <Form.Group className="mb-3 d-grid" controlId="role">
-                <Form.Label>Select Role</Form.Label>
-                <ButtonGroup className="mb-3">
-                  {roles.map((radio, idx) => (
-                    <ToggleButton
-                      key={idx}
-                      size="lg"
-                      id={`radio-${idx}`}
-                      type="radio"
-                      variant="outline-primary"
-                      name="radio"
-                      value={radio.value}
-                      checked={userRole === radio.value}
-                      onChange={(e) => setUserRole(e.target.value)}
-                    >
-                      {radio.name}
-                    </ToggleButton>
-                  ))}
-                </ButtonGroup>
-              </Form.Group>
+            <Form.Group className=" d-grid" controlId="role">
+              <Form.Label>Select Role</Form.Label>
+              <ButtonGroup className="mb-3">
+                {roles.map((radio, idx) => (
+                  <ToggleButton
+                    key={idx}
+                    size="lg"
+                    id={`radio-${idx}`}
+                    type="radio"
+                    // Selected button should be primary, unselected should be secondary
+                    variant={userRole === radio.value ? "primary" : "secondary"}
+                    name="radio"
+                    value={radio.value}
+                    checked={userRole === radio.value}
+                    onChange={(e) => setUserRole(e.target.value)}
+                  >
+                    {radio.name}
+                  </ToggleButton>
+                ))}
+              </ButtonGroup>
+            </Form.Group>
+            {/* First Name and Last Name Side by Side */}
+            <Row className="mb-3">
+              <Col>
+                <Form.Label>First Name</Form.Label>
+                <Form.Control id="first_name" type="text" value={formData.first_name} onChange={handleInputChange} />
+              </Col>
+              <Col>
+                <Form.Label>Last Name</Form.Label>
+                <Form.Control id="last_name" type="text" value={formData.last_name} onChange={handleInputChange} />
+              </Col>
+            </Row>
+
+            {/* Remaining Fields */}
+            <Form.Group className="mb-3" controlId="email">
+              <Form.Label>Email</Form.Label>
+              <Form.Control type="email" value={formData.email} onChange={handleInputChange} />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="username">
+              <Form.Label>Username</Form.Label>
+              <Form.Control type="text" value={formData.username} onChange={handleInputChange} />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="password">
+              <Form.Label>Password</Form.Label>
+              <Form.Control type="password" value={formData.password} onChange={handleInputChange} />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <FormCheck
+                type="switch"
+                id="local-switch"
+                label="I am interested in connecting with local coaches"
+                checked={wantsLocal}
+                onChange={(e) => setWantsLocal(e.target.checked)}
+              />
+            </Form.Group>
+
+            {wantsLocal && (
+              <>
+                <Form.Group className="mb-3" controlId="street_address">
+                  <Form.Label>Street Address</Form.Label>
+                  <Form.Control type="text" value={formData.street_address} onChange={handleInputChange} />
+                </Form.Group>
+                <Row className="mb-3">
+                  <Col>
+                    <Form.Group controlId="city">
+                      <Form.Label>City</Form.Label>
+                      <Form.Control type="text" value={formData.city} onChange={handleInputChange} />
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group controlId="state">
+                      <Form.Label>State</Form.Label>
+                      <Form.Control type="text" value={formData.state} onChange={handleInputChange} />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Form.Group className="mb-3" controlId="zip_code">
+                  <Form.Label>Zip Code</Form.Label>
+                  <Form.Control type="text" value={formData.zip_code} onChange={handleInputChange} required={wantsLocal} />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="country">
+                  <Form.Label>Country</Form.Label>
+                  <Form.Control type="text" value={formData.country} onChange={handleInputChange} />
+                </Form.Group>
+              </>
+            )}
   
               <div className="d-grid">
                 <Button size="lg" variant="primary" type="submit" disabled={isLoading}>
@@ -109,4 +155,11 @@ const RegisterField = ({ setAlertMessage, setAlertType }) => {
     );
   };
 
-  export default RegisterField;
+export default RegisterField;
+
+
+
+
+
+
+
