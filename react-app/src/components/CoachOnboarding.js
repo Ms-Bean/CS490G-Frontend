@@ -8,24 +8,29 @@ const url = "http://localhost:3500/";
 const CoachOnboarding = () => {
   const [formData, setFormData] = useState({
     experience: "",
-    costPerSession: "",
-    availableHours: "",
+    cost_per_session: "",
+    availability: "",
   });
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    let parsedValue = value;
+    if (name === 'cost_per_session') {
+      parsedValue = value ? parseFloat(value) : ""; // Parse field as a float if it's not empty
+
+    }
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: parsedValue,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${url}onboarding/client/`, {
+      const response = await fetch(`${url}onboarding/coach/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -50,13 +55,13 @@ const CoachOnboarding = () => {
               <Form.Label>Experience</Form.Label>
               <Form.Control type="text" name="experience" value={formData.experience} onChange={handleChange} required />
             </Form.Group>
-            <Form.Group controlId="costPerSession">
+            <Form.Group controlId="cost_per_session">
               <Form.Label>Cost per Session</Form.Label>
-              <Form.Control type="number" name="costPerSession" value={formData.costPerSession} onChange={handleChange} required />
+              <Form.Control type="number" name="cost_per_session" value={formData.cost_per_session} onChange={handleChange} required />
             </Form.Group>
-            <Form.Group controlId="availableHours">
+            <Form.Group controlId="availability">
               <Form.Label>Available Hours</Form.Label>
-              <Form.Control type="text" name="availableHours" value={formData.availableHours} onChange={handleChange} required />
+              <Form.Control type="text" name="availability" value={formData.availability} onChange={handleChange} required />
             </Form.Group>
             <Button className="mt-5" type="submit" variant="primary">
               Submit
