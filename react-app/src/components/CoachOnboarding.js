@@ -46,7 +46,7 @@ const CoachOnboarding = () => {
   };
 
   return (
-    <Container className="mt-3 form-background justify-content-center">
+    <Container className="mt-3 justify-content-center">
       <Row className="bg-light text-dark rounded p-4">
         <Col>
           <Form onSubmit={handleSubmit}>
