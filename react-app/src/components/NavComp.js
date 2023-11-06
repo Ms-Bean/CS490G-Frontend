@@ -1,7 +1,7 @@
 import React from "react";
 import "./NavComp.css";
 import { useNavigate } from "react-router-dom";
-import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav, Container, NavDropdown, Image } from "react-bootstrap";
 import { useAuth } from "../hooks/useAuth";
 import { useLogout } from "../hooks/useLogout";
 import profPic from "./m&m.jpeg";
@@ -39,9 +39,7 @@ const NavComp = () => {
                 <NavDropdown
                   eventkey={1} // eventKey={1} is deprecated
                   title={
-                    <div className="pull-left">
-                      <img className="thumbnail-image" src={profPic} alt="Profile Picture" height="30" width="30" />
-                    </div>
+                      <Image className="thumbnail-image" roundedCircle src={profPic} alt="Profile Picture" height="25" width="25" />
                   }
                   id="basic-nav-dropdown"
                 >
