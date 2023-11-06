@@ -1,11 +1,10 @@
 import React from "react";
+import "./NavComp.css";
 import { useNavigate } from "react-router-dom";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { useAuth } from "../hooks/useAuth";
 import { useLogout } from "../hooks/useLogout";
-import style from "../App.css"
-import profPic from "./m&m.jpeg"
-
+import profPic from "./m&m.jpeg";
 
 const NavComp = () => {
   const {user} = useAuth();
@@ -17,7 +16,7 @@ const NavComp = () => {
     if (success) {
       navigate("/login");
     } else {
-      console.error("Logout failed"); 
+      console.error("Logout failed");
     }
   };
 
@@ -32,34 +31,31 @@ const NavComp = () => {
           <Nav className="ms-auto">
             {user && (
               <>
-              <Nav.Link href="/dashboard">Dashboard</Nav.Link>
-              <Nav.Link href="#">Goals</Nav.Link>
-              <Nav.Link href="#">Coaches</Nav.Link>
-              <Nav.Link href="#">Workouts</Nav.Link>
-              <Nav.Link href="#">Messaging</Nav.Link>
-              <NavDropdown eventKey={1}
-                title={
-                  <div className="pull-left">
-                      <img className="thumbnail-image"
-                        src={profPic}
-                        alt="Profile Picture"
-                        height="30"
-                        width="30"
-                        />
-                  </div>
-                }
-                id="basic-nav-dropdown">
+                <Nav.Link href="/dashboard">Dashboard</Nav.Link>
+                <Nav.Link href="#">Goals</Nav.Link>
+                <Nav.Link href="#">Coaches</Nav.Link>
+                <Nav.Link href="#">Workouts</Nav.Link>
+                <Nav.Link href="#">Messaging</Nav.Link>
+                <NavDropdown
+                  eventkey={1} // eventKey={1} is deprecated
+                  title={
+                    <div className="pull-left">
+                      <img className="thumbnail-image" src={profPic} alt="Profile Picture" height="30" width="30" />
+                    </div>
+                  }
+                  id="basic-nav-dropdown"
+                >
                   <NavDropdown.Item href="#">Profile</NavDropdown.Item>
                   <NavDropdown.Item href="#">Account</NavDropdown.Item>
-                  <NavDropdown.Item divider/>
+                  <NavDropdown.Divider />
                   <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
                 </NavDropdown>
-            </>
+              </>
             )}
             {!user && (
               <>
-              <Nav.Link href="/login">Login</Nav.Link>
-              <Nav.Link href="/registration">Register</Nav.Link>
+                <Nav.Link href="/login">Login</Nav.Link>
+                <Nav.Link href="/registration">Register</Nav.Link>
               </>
             )}
           </Nav>
