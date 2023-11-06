@@ -44,8 +44,6 @@ export const useSignup = () => {
 
         //update the auth context
         dispatch({ type: "LOGIN", payload: username });
-
-        setIsLoading(false);
       } else {
         setErrorMessage(data.message);
         console.error("Error occurred during Signup:", response.status);
@@ -53,6 +51,8 @@ export const useSignup = () => {
     } catch (err) {
       setErrorMessage("The backend is down. Please try again later.");
       console.log(err);
+    } finally {
+      setIsLoading(false); // This will run whether the try block succeeds or fails
     }
   };
 

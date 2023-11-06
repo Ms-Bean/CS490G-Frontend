@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { Container, Row, Col, Form, Button, FormCheck, Dropdown, Spinner, ButtonGroup, ToggleButton } from "react-bootstrap";
 import { useAuth } from "../hooks/useAuth";
@@ -37,6 +37,7 @@ const RegisterField = ({ setAlertMessage, setAlertType }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setAlertMessage(null); // Clear any previous alert messages
     console.log("Submitting form data:", formData);
     console.log("User role:", userRole);
 
@@ -47,6 +48,13 @@ const RegisterField = ({ setAlertMessage, setAlertType }) => {
       setAlertType("danger");
     }
   };
+
+  useEffect(() => {
+    if (errorMessage) {
+      setAlertMessage(errorMessage);
+      setAlertType("danger");
+    }
+  }, [errorMessage]); // Run when `errorMessage` changes.
 
   return (
     <Container className="mt-3 justify-content-center">
