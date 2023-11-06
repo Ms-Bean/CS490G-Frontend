@@ -1,0 +1,56 @@
+.nav-item {
+    cursor : pointer;
+}
+
+@media (min-width : 992px) {
+    .main_container {
+        position : relative;
+        min-height: 85vh;
+        border : 2px solid 
+        #d6d6c9;
+        border-radius: 15px;
+        box-shadow: 10px 5px 5px #eeeee4;
+    }
+    
+    .main_row {
+        width : 100%;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+
+    }
+
+    .main_bar{
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        overflow: auto;
+    }
+
+    .side_bar {
+        border-right: 1px 
+        #d6d6c9 solid;
+        border-radius: 15px;
+        box-shadow: 10px 5px 5px #eeeee4;
+    }
+    
+}
+
+@media (max-width : 992px) {
+
+    .main_bar {
+        border : 2px solid 
+        #d6d6c9;
+        border-radius: 15px;
+        box-shadow: 10px 5px 5px #eeeee4;
+    }
+
+    .side_bar {
+        border: 1px 
+        #d6d6c9 solid;
+        border-radius: 15px;
+        box-shadow: 10px 5px 5px #eeeee4;
+    }
+    
+} 

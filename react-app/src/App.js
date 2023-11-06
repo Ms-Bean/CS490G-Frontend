@@ -5,6 +5,7 @@ import NavComp from "./components/NavComp";
 import HomePage from "./views/HomePage";
 import LoginPage from "./views/LoginPage";
 import Onboarding from "./views/Onboarding";
+import AccountPage from "./views/AccountPage";
 import { useAuth } from "./hooks/useAuth";
 
 const App = () => {
@@ -20,9 +21,10 @@ const App = () => {
             <Route path="/registration" element={<RegisterPage />} />
             <Route path="/login" element={<LoginPage />}  />
             <Route path="/onboard" element={<Onboarding />} />
+            <Route path="/account" element={<AccountPage/>} />
           </Routes>
       </BrowserRouter>
-      </div>
+    </div>
   );
 };
 

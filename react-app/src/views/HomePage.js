@@ -4,7 +4,7 @@ import { Container, Card, Button } from "react-bootstrap";
 const HomePage = () => {
   return (
     <Container className="mt-5">
-      <Card className="text-center bg-light">
+        <Card className="text-center bg-light">
         <Card.Body>
           <Card.Title>
             <h1>Welcome to Moxi!</h1>
