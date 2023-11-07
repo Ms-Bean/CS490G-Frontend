@@ -1,5 +1,5 @@
 import React from "react";
-import "./NavComp.css";
+import "../css/NavComp.css";
 import { useNavigate } from "react-router-dom";
 import { Navbar, Nav, Container, NavDropdown, Image } from "react-bootstrap";
 import { useAuth } from "../hooks/useAuth";

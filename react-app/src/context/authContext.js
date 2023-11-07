@@ -1,4 +1,4 @@
-import { createContext, useReducer, useEffect } from "react";
+import { createContext, useReducer, useEffect, useState } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 export const AuthContext = createContext();
@@ -18,6 +18,7 @@ export const AuthContextProvide = ({ children }) => {
     const [state, dispatch] = useReducer(authReducer, {
         user: null
     });
+    const [isLoading, setIsLoading] = useState(true);
 
     const {setItem} = useLocalStorage();
 
@@ -29,17 +30,18 @@ export const AuthContextProvide = ({ children }) => {
             .then((data) => {
             if(data.user){
                 setItem(data.user);
-                dispatch({type : 'LOGIN', payload : data.user})
+                dispatch({type : 'LOGIN', payload : data.user});
             }
             console.log("useEffect: User state in AuthContext.js:", data.user);
             console.log("useEffect: Local storage:", localStorage.getItem("user"));
+            setIsLoading(false);
             });
         }, []);
 
     console.log('AuthContext state: ', state);
 
     return(
-        <AuthContext.Provider value={{...state, dispatch}}>
+        <AuthContext.Provider value={{...state, dispatch, isLoading}}>
             {children}
         </AuthContext.Provider>
     )
