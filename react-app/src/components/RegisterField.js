@@ -22,7 +22,7 @@ const RegisterField = ({ setAlertMessage, setAlertType }) => {
     zip_code: "",
   });
 
-  const { user } = useAuth();
+  const { user} = useAuth();
   const { signup, isLoading, errorMessage } = useSignup();
 
   const roles = [
