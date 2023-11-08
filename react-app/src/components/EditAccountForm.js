@@ -12,19 +12,35 @@ const EditAccountForm = () => {
     const [editing ,setEditing] = useState(false);
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const [formData, setFormData] = useState({
-        first_name : "", 
+        first_name : "",
         last_name : "",
+        username: "",
         email : "",
         address : "",
+        city: "",
+        state: "",
+        phone_number: "",
     });
 
     useEffect(() => {
         //Fetch user's information
-        setFormData({
-            first_name : tempFormData.first_name,
-            last_name : tempFormData.last_name,
-            email : tempFormData.email,
-            address : tempFormData.address,
+        fetch("http://localhost:3500/get_user_account_info", {
+            credentials: "include",
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log("DATA:")
+            console.log(data);
+            setFormData({
+                first_name : data.response.first_name,
+                last_name : data.response.last_name,
+                username: data.response.username,
+                email : data.response.email,
+                address : data.response.address,
+                city: data.response.city,
+                state: data.response.state,
+                phone_number: data.response.phone_number
+            });
         });
         setUploadSuccess(false);
         console.log("in use effect")
@@ -65,15 +81,27 @@ const EditAccountForm = () => {
             <button disabled={editing} onClick={() => {setEditing(true)}} className="btn btn-secondary mt-2">Edit</button>
             <form onSubmit={submitEdit}>
                 <div class="form-group my-3">
-                    <label className="lead" for="first_name">First Name</label>
+                    <label className="lead" for="username">Username</label>
                     <input 
                     className="form-control mt-2"
                     disabled={!editing} 
                     type="text"  
                     id="first_name" 
                     name="first_name"
-                    placeholder="First Name" 
+                    placeholder="Username" 
                     onChange={handleInputChange} 
+                    value={formData.username}/>
+                </div>
+                <div class="form-group my-3">
+                    <label className="lead" for="first_name">First Name</label>
+                    <input 
+                    className="form-control mt-2" 
+                    disabled={!editing} 
+                    type="text" 
+                    id="first_name" 
+                    name="first_name"
+                    placeholder="First Name" 
+                    onChange={handleInputChange}
                     value={formData.first_name}/>
                 </div>
                 <div class="form-group my-3">
@@ -101,7 +129,19 @@ const EditAccountForm = () => {
                     value={formData.email}/>
                 </div>
                 <div class="form-group my-3">
-                    <label className="lead" for="address">Last Name</label>
+                    <label className="lead" for="address">Phone number</label>
+                    <input 
+                    className="form-control mt-2" 
+                    disabled={!editing} 
+                    type="text" 
+                    id="phone_number"
+                    name="phone_number"
+                    placeholder="Phone number" 
+                    onChange={handleInputChange}
+                    value={formData.phone_number}/>
+                </div>
+                <div class="form-group my-3">
+                    <label className="lead" for="address">Address</label>
                     <input 
                     className="form-control mt-2" 
                     disabled={!editing} 
@@ -111,6 +151,30 @@ const EditAccountForm = () => {
                     placeholder="Address" 
                     onChange={handleInputChange}
                     value={formData.address}/>
+                </div>
+                <div class="form-group my-3">
+                    <label className="lead" for="city">City</label>
+                    <input 
+                    className="form-control mt-2" 
+                    disabled={!editing} 
+                    type="text" 
+                    id="city"
+                    name="city"
+                    placeholder="City" 
+                    onChange={handleInputChange}
+                    value={formData.city}/>
+                </div>
+                <div class="form-group my-3">
+                    <label className="lead" for="address">State</label>
+                    <input 
+                    className="form-control mt-2" 
+                    disabled={!editing} 
+                    type="text" 
+                    id="state"
+                    name="state"
+                    placeholder="State" 
+                    onChange={handleInputChange}
+                    value={formData.state}/>
                 </div>
                 <button type="submit" className={`btn btn-primary me-2 mb-3 ${!editing ? "d-none" : ""}`}>Submit</button>
                 <button onClick={() => setEditing(false)} className={`btn btn-danger mb-3 ${!editing ? "d-none" : ""}`}>Cancel</button>
