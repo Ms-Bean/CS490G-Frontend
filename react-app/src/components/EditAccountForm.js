@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from "react";
 import profile_pic from "./default-avatar-profile-icon-of-social-media-user-vector.jpg"
-
+import { Container, Row, Col, Form, Button, FormCheck, Dropdown, Spinner, ButtonGroup, ToggleButton } from "react-bootstrap";
+import { useEditAccount } from "../hooks/useEditAccount";
+import { State } from "country-state-city";
 let tempFormData = {
     first_name : "Luffy",
     last_name : "Monkey",
@@ -9,8 +11,10 @@ let tempFormData = {
 }
 
 const EditAccountForm = () => {
+    const states = State.getStatesOfCountry("US");
     const [editing ,setEditing] = useState(false);
     const [uploadSuccess, setUploadSuccess] = useState(false);
+    const {editaccount} = useEditAccount();
     const [formData, setFormData] = useState({
         first_name : "",
         last_name : "",
@@ -19,6 +23,7 @@ const EditAccountForm = () => {
         address : "",
         city: "",
         state: "",
+        zip_code: "",
         phone_number: "",
     });
 
@@ -29,17 +34,16 @@ const EditAccountForm = () => {
         })
         .then((res) => res.json())
         .then((data) => {
-            console.log("DATA:")
-            console.log(data);
             setFormData({
                 first_name : data.response.first_name,
                 last_name : data.response.last_name,
                 username: data.response.username,
                 email : data.response.email,
-                address : data.response.address,
+                street_address : data.response.street_address,
                 city: data.response.city,
                 state: data.response.state,
-                phone_number: data.response.phone_number
+                zip_code: data.response.zip_code,
+                phone_number: data.response.phone_number,
             });
         });
         setUploadSuccess(false);
@@ -48,18 +52,16 @@ const EditAccountForm = () => {
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
-
         setFormData({ ...formData, [name]: value });
 
         console.log(formData);
     }
 
-    const submitEdit = () => {
-        //rest call to update user's information
-        //... some code here
-
-        setEditing(false);
-    }
+    const submitEdit = async (e) => {
+        e.preventDefault();
+        await editaccount(formData);
+    };
+    
 
     const changeProfilePicture = () => {
         //... code to upload picture from computer
@@ -83,13 +85,13 @@ const EditAccountForm = () => {
                 <div class="form-group my-3">
                     <label className="lead" for="username">Username</label>
                     <input 
-                    className="form-control mt-2"
+                    className="form-control mt-2" 
                     disabled={!editing} 
-                    type="text"  
-                    id="first_name" 
-                    name="first_name"
+                    type="text" 
+                    id="username" 
+                    name="username"
                     placeholder="Username" 
-                    onChange={handleInputChange} 
+                    onChange={handleInputChange}
                     value={formData.username}/>
                 </div>
                 <div class="form-group my-3">
@@ -141,16 +143,16 @@ const EditAccountForm = () => {
                     value={formData.phone_number}/>
                 </div>
                 <div class="form-group my-3">
-                    <label className="lead" for="address">Address</label>
+                    <label className="lead" for="street_address">Street Address</label>
                     <input 
                     className="form-control mt-2" 
                     disabled={!editing} 
                     type="text" 
-                    id="address"
-                    name="address"
-                    placeholder="Address" 
+                    id="street_address"
+                    name="street_address"
+                    placeholder="Street address" 
                     onChange={handleInputChange}
-                    value={formData.address}/>
+                    value={formData.street_address}/>
                 </div>
                 <div class="form-group my-3">
                     <label className="lead" for="city">City</label>
@@ -163,9 +165,9 @@ const EditAccountForm = () => {
                     placeholder="City" 
                     onChange={handleInputChange}
                     value={formData.city}/>
-                </div>
+                </div>               
                 <div class="form-group my-3">
-                    <label className="lead" for="address">State</label>
+                    <label className="lead" for="state">State</label>
                     <input 
                     className="form-control mt-2" 
                     disabled={!editing} 
@@ -175,6 +177,19 @@ const EditAccountForm = () => {
                     placeholder="State" 
                     onChange={handleInputChange}
                     value={formData.state}/>
+                </div>
+     
+                <div class="form-group my-3">
+                    <label className="lead" for="street_address">Zip code</label>
+                    <input 
+                    className="form-control mt-2" 
+                    disabled={!editing} 
+                    type="text" 
+                    id="zip_code"
+                    name="zip_code"
+                    placeholder="Zip code" 
+                    onChange={handleInputChange}
+                    value={formData.zip_code}/>
                 </div>
                 <button type="submit" className={`btn btn-primary me-2 mb-3 ${!editing ? "d-none" : ""}`}>Submit</button>
                 <button onClick={() => setEditing(false)} className={`btn btn-danger mb-3 ${!editing ? "d-none" : ""}`}>Cancel</button>
