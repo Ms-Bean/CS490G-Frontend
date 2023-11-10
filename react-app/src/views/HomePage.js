@@ -1,9 +1,12 @@
 import React from "react";
 import { Container, Card, Button } from "react-bootstrap";
+import CarouselComp from "../components/CarouselComp"
 
 const HomePage = () => {
   return (
     <Container className="mt-5">
+      <CarouselComp/>
+      <br/>
         <Card className="text-center bg-light">
         <Card.Body>
           <Card.Title>
