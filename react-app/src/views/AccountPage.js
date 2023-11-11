@@ -30,19 +30,25 @@ const AccountPage = () => {
                 <div className="main_bar col-lg-9">
                     {activeTab === 0 && 
                     <>
-                        <h1 className="m-1">Account Details</h1>
+                        <div className="d-flex justify-content-center">
+                            <h1 className="m-2">Account Details</h1>
+                        </div>
                         <EditAccountForm/>
 
                     </>
                     }
                     {activeTab === 1 && 
                     <>
-                        <h1 className="m-1">Billing</h1>
+                        <div className="d-flex justify-content-center">
+                            <h1 className="m-2">Billing</h1>
+                        </div>
                     </>
                     }
                     {activeTab === 2 && 
                     <>
-                        <h1 className="m-1">Password</h1>
+                        <div className="d-flex justify-content-center">
+                            <h1 className="m-2">Password</h1>
+                        </div>
                     </>
                     }
                 </div>

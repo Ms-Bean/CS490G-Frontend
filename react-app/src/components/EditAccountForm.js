@@ -1,14 +1,7 @@
 import React, {useState, useEffect} from "react";
 import profile_pic from "./default-avatar-profile-icon-of-social-media-user-vector.jpg"
-import { Container, Row, Col, Form, Button, FormCheck, Dropdown, Spinner, ButtonGroup, ToggleButton } from "react-bootstrap";
 import { useEditAccount } from "../hooks/useEditAccount";
 import { State } from "country-state-city";
-let tempFormData = {
-    first_name : "Luffy",
-    last_name : "Monkey",
-    email : "monkeyDluffy@gmail.com",
-    address : "123 wano street"
-}
 
 const EditAccountForm = () => {
     const states = State.getStatesOfCountry("US");
@@ -74,14 +67,17 @@ const EditAccountForm = () => {
 
     return (
         <div className="container">
+
             <div className="my-2">
-                <img className="img-thumbnail" src={profile_pic}/>
-                <button disabled={editing} onClick={changeProfilePicture} className="ms-3 btn btn-light">Change Profile Picture</button>
+                <img className="img-thumbnail rounded d-block mx-auto" src={profile_pic}/>
+                <div className="mt-4 me-3 d-flex justify-content-center">
+                    <button disabled={editing} onClick={changeProfilePicture} className="ms-3 btn btn-light">Change Profile Picture</button>
+                </div>
             </div>
 
 
+            <form onSubmit={submitEdit} className="w-75 mx-auto">
             <button disabled={editing} onClick={() => {setEditing(true)}} className="btn btn-secondary mt-2">Edit</button>
-            <form onSubmit={submitEdit}>
                 <div class="form-group my-3">
                     <label className="lead" for="username">Username</label>
                     <input 
@@ -191,9 +187,12 @@ const EditAccountForm = () => {
                     onChange={handleInputChange}
                     value={formData.zip_code}/>
                 </div>
-                <button type="submit" className={`btn btn-primary me-2 mb-3 ${!editing ? "d-none" : ""}`}>Submit</button>
+                <button type="submit" className={`btn btn-primary me-2 mb-3 ${!editing ? "d-none" : ""}`}>Save Changes</button>
                 <button onClick={() => setEditing(false)} className={`btn btn-danger mb-3 ${!editing ? "d-none" : ""}`}>Cancel</button>
             </form>
+            <div className="w-75 mx-auto mb-3 d-flex justify-content-center">
+                <button disabled={editing} className="ms-3 w-50 btn btn-danger">Delete Account</button>
+            </div>
         </div>
     )
 }
