@@ -1,0 +1,9 @@
+#caption {
+    display: inline-block;
+    border-radius: 6px 6px 6px 6px;
+    padding: 3px;
+    margin-bottom: 10px;
+    background-color:	#0D6EFD;
+    text-align: center;
+    vertical-align: middle;
+}
