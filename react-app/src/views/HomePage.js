@@ -51,6 +51,7 @@ const HomePage = () => {
         </Card.Body>
       </Card>
       </CardGroup>
+      <br/> <br/>
     </Container>
   );
 };
