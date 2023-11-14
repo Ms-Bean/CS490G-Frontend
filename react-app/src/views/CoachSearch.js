@@ -24,12 +24,16 @@ const CoachSearch = () => {
   };
 
   const createSearchRequestBody = (searchParams) => {
+    const [defaultMinRating, defaultMaxRating] = [1, 5];
+    const [defaultMinHourlyRate, defaultMaxHourlyRate] = [0, 1_000_000]  // TODO: We need to decide on a default max hourly rate
+    const [defaultMinExperienceLevel, defaultMaxExperienceLevel] = [0, 100];
+
     const pageInfo = {page_num: currentPage, page_size: pageSize};
     const filterOptions = {
       name: searchParams.name,
-      rating: {min: Number(searchParams.minRating), max: Number(searchParams.maxRating)},
-      hourly_rate: {min: Number(searchParams.minHourlyRate), max: Number(searchParams.maxHourlyRate)},
-      experience_level: {min: Number(searchParams.minExperience), max: Number(searchParams.maxExperience)},
+      rating: {min: Number(searchParams.minRating) || defaultMinRating, max: Number(searchParams.maxRating) || defaultMaxRating},
+      hourly_rate: {min: Number(searchParams.minHourlyRate) || defaultMinHourlyRate, max: Number(searchParams.maxHourlyRate) || defaultMaxHourlyRate},
+      experience_level: {min: Number(searchParams.minExperience) || defaultMinExperienceLevel, max: Number(searchParams.maxExperience) || defaultMaxExperienceLevel},
       location: {city: searchParams.city, state: searchParams.state}
     };
 
