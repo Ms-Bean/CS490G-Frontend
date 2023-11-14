@@ -23,23 +23,33 @@ const CoachSearch = () => {
     setSearchParams({ ...searchParams, [e.target.name]: e.target.value });
   };
 
+  const createSearchRequestBody = (searchParams) => {
+    const pageInfo = {page_num: currentPage, page_size: pageSize};
+    const filterOptions = {
+      name: searchParams.name,
+      rating: {min: Number(searchParams.minRating), max: Number(searchParams.maxRating)},
+      hourly_rate: {min: Number(searchParams.minHourlyRate), max: Number(searchParams.maxHourlyRate)},
+      experience_level: {min: Number(searchParams.minExperience), max: Number(searchParams.maxExperience)},
+      location: {city: searchParams.city, state: searchParams.state}
+    };
+
+    return {page_info: pageInfo, filter_options: filterOptions};
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
 
+    const headers = {'Accept': 'application/json', 'Content-Type': 'application/json'};
+    const body = JSON.stringify(createSearchRequestBody(searchParams));
     try {
-      const queryParams = new URLSearchParams();
-      Object.entries(searchParams).forEach(([key, value]) => {
-        if (value) queryParams.append(key, value);
-      });
+      
 
-      // page_info
-      queryParams.append("page_info", JSON.stringify({ page_num: currentPage, page_size: pageSize }));
-
-      const response = await fetch(`http://localhost:3500/coaches/search?${queryParams}`);
+      const response = await fetch('http://localhost:3500/coaches/search', {method: 'POST', headers: headers, body: body});
       if (!response.ok) throw new Error('Network response was not ok');
       const data = await response.json();
+      console.log(data.coaches);
       setResults(data.coaches);
     } catch (error) {
       setError(error.message);
