@@ -191,20 +191,25 @@ const EditAccountForm = () => {
             value={formData.city}
           />
         </div>
-        <div class="form-group my-3">
-          <label className="lead" for="state">
+        <div className="form-group my-3">
+          <label className="lead" htmlFor="state">
             State
           </label>
-          <input
+          <select
             className="form-control mt-2"
             disabled={!editing}
-            type="text"
             id="state"
             name="state"
-            placeholder="State"
             onChange={handleInputChange}
             value={formData.state}
-          />
+          >
+            <option value="">Select State</option>
+            {states.map((state) => (
+              <option key={state.isoCode} value={state.isoCode}>
+                {state.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div class="form-group my-3">
