@@ -32,14 +32,29 @@ const ClientProfile = () => {
     setEditing(false);
   };
 
+  
+  const changeProfilePicture = () => {
+    //... code to upload picture from computer
+
+    //... rest call to update user's profile picture
+
+    //if upload was a success
+    setUploadSuccess(true);
+  };
+
   const toggleEditing = () => {
     setEditing(!editing);
   };
 
   return (
     <div className="container my-2">
-      <div className="my-2">
+      <div className="my-3">
         <img className="img-thumbnail rounded-circle d-block mx-auto" src={profile_pic} />
+        <div className="mt-3 me-3 d-flex justify-content-center">
+          <button disabled={editing} onClick={changeProfilePicture} className="ms-3 btn btn-dark">
+            Change Profile Picture
+          </button>
+        </div>
       </div>
 
       <form onSubmit={submitEdit} className="w-75 mx-auto">
@@ -69,7 +84,7 @@ const ClientProfile = () => {
             value={formData.height}
           />
         </div>
-        <div class="form-group my-2">
+        <div class="form-group my-3">
           <label for="experience">Experience Level</label>
           <select
             disabled={!editing}
@@ -85,7 +100,7 @@ const ClientProfile = () => {
             <option>Advanced</option>
           </select>
         </div>
-        <div class="form-group my-2">
+        <div class="form-group my-3">
           <label for="budget">Budget Per Session</label>
           <select
             disabled={!editing}
@@ -103,7 +118,7 @@ const ClientProfile = () => {
             <option>$$$</option>
           </select>
         </div>
-        <div className="row mt-4">
+        <div className="row my-4">
           <div className="col-8">
             <button type="submit" className="btn btn-dark me-2 w-100" disabled={!editing}>
               Save Changes

@@ -34,13 +34,28 @@ const ClientProfile = () => {
     setEditing(false);
   };
 
+  
+  const changeProfilePicture = () => {
+    //... code to upload picture from computer
+
+    //... rest call to update user's profile picture
+
+    //if upload was a success
+    setUploadSuccess(true);
+  };
+
   const toggleEditing = () => {
     setEditing(!editing);
   };
   return (
     <div className="container my-2">
-      <div className="my-2">
-      <img className="img-thumbnail rounded-circle d-block mx-auto" src={profile_pic} />
+      <div className="my-3">
+        <img className="img-thumbnail rounded-circle d-block mx-auto" src={profile_pic} />
+        <div className="mt-3 me-3 d-flex justify-content-center">
+          <button disabled={editing} onClick={changeProfilePicture} className="ms-3 btn btn-dark">
+            Change Profile Picture
+          </button>
+        </div>
       </div>
 
       <form onSubmit={submitEdit} className="w-75 mx-auto">
