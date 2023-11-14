@@ -41,7 +41,7 @@ const EditAccountForm = () => {
         });
         setUploadSuccess(false);
         console.log("in use effect")
-    }, [uploadSuccess])
+    }, [uploadSuccess, editing])
 
     const handleInputChange = (e) => {
         const {name, value} = e.target;
@@ -53,6 +53,7 @@ const EditAccountForm = () => {
     const submitEdit = async (e) => {
         e.preventDefault();
         await editaccount(formData);
+        setEditing(false);
     };
     
 
@@ -77,7 +78,7 @@ const EditAccountForm = () => {
 
 
             <form onSubmit={submitEdit} className="w-75 mx-auto">
-            <button disabled={editing} onClick={() => {setEditing(true)}} className="btn btn-secondary mt-2">Edit</button>
+            <button type="button" disabled={editing} onClick={() => {setEditing(true)}} className="btn btn-secondary mt-2">Edit</button>
                 <div class="form-group my-3">
                     <label className="lead" for="username">Username</label>
                     <input 
@@ -188,7 +189,7 @@ const EditAccountForm = () => {
                     value={formData.zip_code}/>
                 </div>
                 <button type="submit" className={`btn btn-primary me-2 mb-3 ${!editing ? "d-none" : ""}`}>Save Changes</button>
-                <button onClick={() => setEditing(false)} className={`btn btn-danger mb-3 ${!editing ? "d-none" : ""}`}>Cancel</button>
+                <button type="button" onClick={() => setEditing(false)} className={`btn btn-danger mb-3 ${!editing ? "d-none" : ""}`}>Cancel</button>
             </form>
             <div className="w-75 mx-auto mb-3 d-flex justify-content-center">
                 <button disabled={editing} className="ms-3 w-50 btn btn-danger">Delete Account</button>

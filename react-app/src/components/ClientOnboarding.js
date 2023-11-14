@@ -69,7 +69,7 @@ const ClientOnboarding = () => {
             </Form.Group>
             <Form.Group className="mb-3" controlId="experience">
               <Form.Label>Experience Level</Form.Label>
-              <Form.Control as="select" name="experience" value={formData.experience} onChange={handleChange} required>
+              <Form.Control as="select" name="experience" value={formData.experience} onChange={handleChange}>
                 <option value="" disabled>
                   Select your experience level
                 </option>
@@ -80,13 +80,13 @@ const ClientOnboarding = () => {
             </Form.Group>
             <Form.Group className="mb-3" controlId="budget">
               <Form.Label>Budget per Session</Form.Label>
-              <Form.Control as="select" name="budget" value={formData.budget} onChange={handleChange} required>
+              <Form.Control as="select" name="budget" value={formData.budget} onChange={handleChange}>
                 <option value="" disabled>
                   Select your budget
                 </option>
-                <option>$</option>
-                <option>$$</option>
-                <option>$$$</option>
+                <option value="$">$</option>
+                <option value="$$">$$</option>
+                <option value="$$$">$$$</option>
               </Form.Control>
             </Form.Group>
             <Button className="mt-2" type="submit" variant="primary">
