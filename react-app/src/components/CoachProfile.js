@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import profile_pic from "./default-avatar-profile-icon-of-social-media-user-vector.jpg";
+import profile_pic from "./static_images/default-avatar-profile-icon-of-social-media-user-vector.jpg";
 
 const ClientProfile = () => {
 
