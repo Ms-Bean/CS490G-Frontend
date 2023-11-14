@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Navbar, Nav, Container, NavDropdown, Image } from "react-bootstrap";
 import { useAuth } from "../hooks/useAuth";
 import { useLogout } from "../hooks/useLogout";
-import profPic from "./m&m.jpeg";
+import profPic from "./static_images/default-avatar-profile-icon-of-social-media-user-vector.jpg";
 
 const NavComp = () => {
   const {user} = useAuth();
