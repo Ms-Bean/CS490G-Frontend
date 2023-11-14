@@ -67,7 +67,7 @@ const EditAccountForm = () => {
   return (
     <div className="container">
       <div className="my-3">
-        <img className="img-thumbnail rounded d-block mx-auto" src={profile_pic} />
+        <img className="img-thumbnail rounded-circle d-block mx-auto" src={profile_pic} />
         <div className="mt-3 me-3 d-flex justify-content-center">
           <button disabled={editing} onClick={changeProfilePicture} className="ms-3 btn btn-dark">
             Change Profile Picture
