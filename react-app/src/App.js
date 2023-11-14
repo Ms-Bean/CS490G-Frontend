@@ -9,6 +9,7 @@ import LoginPage from "./views/LoginPage";
 import Onboarding from "./views/Onboarding";
 import AccountPage from "./views/AccountPage";
 import Dashboard from "./views/Dashboard";
+import ProfilePage from "./views/ProfilePage";
 
 const App = () => {
 
@@ -31,6 +32,7 @@ const App = () => {
               {/* <Route path='/onboard' element={<Onboarding/>}/> */}
               <Route path="/account" element={<AccountPage/>}/>
               <Route path="/dashboard" element={<Dashboard/>}/>
+              <Route path="/profile" element={<ProfilePage/>}/>
             </Route>
             <Route path='/onboard' element={<Onboarding/>}/>
             <Route path='/registration' element={<RegisterPage/>}/>

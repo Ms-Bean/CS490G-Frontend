@@ -43,7 +43,7 @@ const NavComp = () => {
                   }
                   id="basic-nav-dropdown"
                 >
-                  <NavDropdown.Item href="#">Profile</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => navigate('/profile')} href="#">Profile</NavDropdown.Item>
                   <NavDropdown.Item onClick={() => navigate('/account')} href="#">Account</NavDropdown.Item>
                   <NavDropdown.Item divider/>
                   <NavDropdown.Divider />
