@@ -4,7 +4,7 @@ const url = "http://localhost:3500/";
 export const useEditAccount = () => {
   const editaccount = async (formData) => {
     try {
-        console.log("About to sen");
+        console.log("Edit Account");
         console.log(formData.state);
       const response = await fetch(`${url}alter_account_info/`, {
         method: "POST",
@@ -27,7 +27,7 @@ export const useEditAccount = () => {
         credentials: "include", // Include credentials with the request
       });
       if (response.ok) {
-        console.log("Yayyayy!!!");
+        console.log("Edit Account Success");
       } else {
         console.error("Error occurred:", response.status);
       }
