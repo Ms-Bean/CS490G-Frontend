@@ -81,11 +81,11 @@ const EditAccountForm = () => {
 
       <form onSubmit={submitEdit} className="mx-auto">
         <div class="form-group my-3">
-          <label className="lead" for="username">
+          <label  for="username">
             Username
           </label>
           <input
-            className="form-control mt-2"
+            className="form-control mt-1"
             disabled={!editing}
             type="text"
             id="username"
@@ -96,11 +96,11 @@ const EditAccountForm = () => {
           />
         </div>
         <div class="form-group my-3">
-          <label className="lead" for="first_name">
+          <label  for="first_name">
             First Name
           </label>
           <input
-            className="form-control mt-2"
+            className="form-control mt-1"
             disabled={!editing}
             type="text"
             id="first_name"
@@ -111,11 +111,11 @@ const EditAccountForm = () => {
           />
         </div>
         <div class="form-group my-3">
-          <label className="lead" for="last_name">
+          <label  for="last_name">
             Last Name
           </label>
           <input
-            className="form-control mt-2"
+            className="form-control mt-1"
             disabled={!editing}
             type="text"
             id="last_name"
@@ -126,11 +126,11 @@ const EditAccountForm = () => {
           />
         </div>
         <div class="form-group my-3">
-          <label className="lead" for="email">
+          <label  for="email">
             Email
           </label>
           <input
-            className="form-control mt-2"
+            className="form-control mt-1"
             disabled={!editing}
             type="email"
             id="email"
@@ -141,56 +141,56 @@ const EditAccountForm = () => {
           />
         </div>
         <div class="form-group my-3">
-          <label className="lead" for="address">
-            Phone number
+          <label  for="phone_number">
+            Phone Number
           </label>
           <input
-            className="form-control mt-2"
+            className="form-control mt-1"
             disabled={!editing}
             type="text"
             id="phone_number"
             name="phone_number"
-            placeholder="Phone number"
+            placeholder=""
             onChange={handleInputChange}
             value={formData.phone_number}
           />
         </div>
         <div class="form-group my-3">
-          <label className="lead" for="street_address">
+          <label  for="street_address">
             Street Address
           </label>
           <input
-            className="form-control mt-2"
+            className="form-control mt-1"
             disabled={!editing}
             type="text"
             id="street_address"
             name="street_address"
-            placeholder="Street address"
+            placeholder=""
             onChange={handleInputChange}
             value={formData.street_address}
           />
         </div>
         <div class="form-group my-3">
-          <label className="lead" for="city">
+          <label  for="city">
             City
           </label>
           <input
-            className="form-control mt-2"
+            className="form-control mt-1"
             disabled={!editing}
             type="text"
             id="city"
             name="city"
-            placeholder="City"
+            placeholder=""
             onChange={handleInputChange}
             value={formData.city}
           />
         </div>
         <div className="form-group my-3">
-          <label className="lead" htmlFor="state">
+          <label  htmlFor="state">
             State
           </label>
           <select
-            className="form-control mt-2"
+            className="form-control mt-1"
             disabled={!editing}
             id="state"
             name="state"
@@ -207,31 +207,27 @@ const EditAccountForm = () => {
         </div>
 
         <div class="form-group my-3">
-          <label className="lead" for="street_address">
+          <label  for="street_address">
             ZIP Code
           </label>
           <input
-            className="form-control mt-2"
+            className="form-control mt-1"
             disabled={!editing}
             type="text"
             id="zip_code"
             name="zip_code"
-            placeholder="ZIP Code"
+            placeholder=""
             onChange={handleInputChange}
             value={formData.zip_code}
           />
         </div>
         <div className="row mt-4">
           <div className="col-9">
-            {" "}
-            {/* 75% of the space */}
             <button type="submit" className="btn btn-dark me-2 w-100" disabled={!editing}>
               Save Changes
             </button>
           </div>
           <div className="col-3">
-            {" "}
-            {/* 25% of the space */}
             <button type="button" onClick={toggleEditing} className={`btn ${editing ? "btn-danger" : "btn-dark"} w-100`}>
               {editing ? "Cancel" : "Edit"}
             </button>
