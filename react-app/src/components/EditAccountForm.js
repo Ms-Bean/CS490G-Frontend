@@ -55,6 +55,10 @@ const EditAccountForm = () => {
     setEditing(false);
   };
 
+  const toggleEditing = () => {
+    setEditing(!editing);
+  };
+
   const changeProfilePicture = () => {
     //... code to upload picture from computer
 
@@ -75,17 +79,7 @@ const EditAccountForm = () => {
         </div>
       </div>
 
-      <form onSubmit={submitEdit} className="w-75 mx-auto">
-        <button
-          type="button"
-          disabled={editing}
-          onClick={() => {
-            setEditing(true);
-          }}
-          className="btn btn-secondary mt-2"
-        >
-          Edit
-        </button>
+      <form onSubmit={submitEdit} className="mx-auto">
         <div class="form-group my-3">
           <label className="lead" for="username">
             Username
@@ -227,14 +221,24 @@ const EditAccountForm = () => {
             value={formData.zip_code}
           />
         </div>
-        <button type="submit" className={`btn btn-primary me-2 mb-3 ${!editing ? "d-none" : ""}`}>
-          Save Changes
-        </button>
-        <button type="button" onClick={() => setEditing(false)} className={`btn btn-danger mb-3 ${!editing ? "d-none" : ""}`}>
-          Cancel
-        </button>
+        <div className="row mt-4">
+          <div className="col-9">
+            {" "}
+            {/* 75% of the space */}
+            <button type="submit" className="btn btn-dark me-2 w-100" disabled={!editing}>
+              Save Changes
+            </button>
+          </div>
+          <div className="col-3">
+            {" "}
+            {/* 25% of the space */}
+            <button type="button" onClick={toggleEditing} className={`btn ${editing ? "btn-danger" : "btn-dark"} w-100`}>
+              {editing ? "Cancel" : "Edit"}
+            </button>
+          </div>
+        </div>
       </form>
-      <div className="col-md-7 mx-auto mb-3 d-flex justify-content-center">
+      <div className="col-md-7 mt-3 mx-auto d-flex justify-content-center">
         <button disabled={editing} className="btn btn-danger">
           Delete Account
         </button>

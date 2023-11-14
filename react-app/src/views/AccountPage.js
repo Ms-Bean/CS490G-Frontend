@@ -11,7 +11,7 @@ const AccountPage = () => {
 
     return (
         <div>
-            <nav className='navbar navbar-expand-lg navbar-dark bg-dark'>
+            <nav className='navbar navbar-expand navbar-dark bg-dark'>
                 <div className='container-fluid justify-content-center'>
                     <ul className='navbar-nav'>
                         {tabs.map((tab, id) => (
