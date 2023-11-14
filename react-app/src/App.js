@@ -10,6 +10,7 @@ import Onboarding from "./views/Onboarding";
 import AccountPage from "./views/AccountPage";
 import Dashboard from "./views/Dashboard";
 import ProfilePage from "./views/ProfilePage";
+import CoachSearch from "./views/CoachSearch";
 
 const App = () => {
 
@@ -33,6 +34,7 @@ const App = () => {
               <Route path="/account" element={<AccountPage/>}/>
               <Route path="/dashboard" element={<Dashboard/>}/>
               <Route path="/profile" element={<ProfilePage/>}/>
+              <Route path="/coaches" element={<CoachSearch/>}/>
             </Route>
             <Route path='/onboard' element={<Onboarding/>}/>
             <Route path='/registration' element={<RegisterPage/>}/>

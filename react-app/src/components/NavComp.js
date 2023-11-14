@@ -33,7 +33,7 @@ const NavComp = () => {
               <>
                 <Nav.Link href="/dashboard">Dashboard</Nav.Link>
                 <Nav.Link href="#">Goals</Nav.Link>
-                <Nav.Link href="#">Coaches</Nav.Link>
+                <Nav.Link href="/coaches">Coaches</Nav.Link>
                 <Nav.Link href="#">Workouts</Nav.Link>
                 <Nav.Link href="#">Messaging</Nav.Link>
                 <NavDropdown
