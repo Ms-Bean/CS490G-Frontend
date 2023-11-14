@@ -150,8 +150,22 @@ const CoachSearch = () => {
         ) : (
           results.map((coach, index) => (
             <Card key={index} className="mb-3">
-              <Card.Body>
+              <Card.Body className="pb-1">
                 <Card.Title>{coach.personal_info.first_name} {coach.personal_info.last_name}</Card.Title>
+                <Row>
+                <Col md={6}>
+                  <p><strong>About:</strong> {coach.personal_info.about_me || "Not provided"}</p>
+                  <p><strong>Experience:</strong> {coach.professional_info.experience_level} years</p>
+                  <p><strong>Hourly Rate:</strong> ${coach.professional_info.hourly_rate.toFixed(2)}</p>
+                  <p><strong>Accepting New Clients:</strong> {coach.professional_info.accepting_new_clients ? "Yes" : "No"}</p>
+                </Col>
+                <Col md={6}>
+                  <p><strong>Coaching History:</strong> {coach.professional_info.coaching_history || "Not provided"}</p>
+                  <p><strong>Goals:</strong> {coach.professional_info.goals.join(', ') || "Not specified"}</p>
+                  <p><strong>Rating:</strong> {coach.professional_info.rating ? `${coach.professional_info.rating}/5` : "Not rated"}</p>
+                  <p><strong>Location:</strong> {`${coach.location.city}, ${coach.location.state}`}</p>
+                </Col>
+              </Row>
               </Card.Body>
             </Card>
           ))
