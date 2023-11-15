@@ -37,7 +37,7 @@ const HomePage = () => {
         <Card.Body>
           <Card.Title>Dedicated Coaches</Card.Title>
           <Card.Text>
-            You don't have to do it alone! The path to your goal isn't necessarily straightforward so allow us to guide you there. Book an appointment today with a coach near you!
+            You don't have to do it alone! The path to your goal isn't necessarily straightforward so allow us to guide you there. <a href="/registration"> Book an appointment today</a> with a coach near you!
           </Card.Text>
         </Card.Body>
       </Card>
