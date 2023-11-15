@@ -4,51 +4,6 @@ import CarouselComp from "../components/CarouselComp";
 
 const HomePage = () => {
   return (
-<<<<<<< HEAD
-    <Container className="mt-5">
-      <CarouselComp/>
-      <br/>
-        <Card className="text-center bg-light">
-        <Card.Body>
-          <Card.Title>
-            <h1>Welcome to Moxi!</h1>
-          </Card.Title>
-          <Card.Text>Moxi is an all-in-one exercise and coaching app designed to help you reach you personal fitness goals.</Card.Text>
-          <Button variant="primary" href="/registration">
-            Get Started
-          </Button>
-        </Card.Body>
-      </Card>
-      <br/>
-      <CardGroup>
-      <Card>
-        <Card.Img variant="top" src={Barbell} />
-        <Card.Body>
-          <Card.Title>Personal Workout Plans</Card.Title>
-          <Card.Text>
-            Try one of our workout plans designed by professional trainers or create a plan precisely tailored to your needs.
-          </Card.Text>
-        </Card.Body>
-      </Card>
-      <Card>
-        <Card.Img variant="top" src={Coach} />
-        <Card.Body>
-          <Card.Title>Dedicated Coaches</Card.Title>
-          <Card.Text>
-            You don't have to do it alone! The path to your goal isn't necessarily straightforward so allow us to guide you there. <a href="/registration"> Book an appointment today</a> with a coach near you!
-          </Card.Text>
-        </Card.Body>
-      </Card>
-      <Card>
-        <Card.Img variant="top" src={LineGraph} />
-        <Card.Body>
-          <Card.Title>Track Progress</Card.Title>
-          <Card.Text>
-            Easily track your progress and reach your milestones right from the in-app dashboard!
-          </Card.Text>
-        </Card.Body>
-      </Card>
-=======
     <div>
       <CarouselComp />
       <div className="bg-light py-5 text-center">
@@ -78,8 +33,8 @@ const HomePage = () => {
           <Card.Body>
             <Card.Title>Dedicated Coaches</Card.Title>
             <Card.Text>
-              You don't have to do it alone! The path to your goal isn't necessarily straightforward so allow us to guide you there. Book an
-              appointment today with a coach near you!
+              You don't have to do it alone! The path to your goal isn't necessarily straightforward so allow us to guide you there. <a href="/registration">Book an
+              appointment today</a> with a coach near you!
             </Card.Text>
           </Card.Body>
         </Card>
@@ -90,8 +45,20 @@ const HomePage = () => {
             <Card.Text>Easily track your progress and reach your milestones right from the in-app dashboard!</Card.Text>
           </Card.Body>
         </Card>
->>>>>>> c0baa94ff012a1f6eb6f1968d574de76539f4c3a
       </CardGroup>
+        <Card>
+        <Card.Body>
+          <Card.Title>Become a Coach!</Card.Title>
+          <Card.Text>
+          Moxi provides trainers with an efficient and sophistcated way to manage appointments, bill clients, and track client progress. 
+            <br/><br/>
+            <b>The conditioning does not stop with appointments!</b> Moxi allows coaches to assign workout plans to their clients and communicate with them along the way.
+            This builds trust, retention, and better habits while coaches are not physically with their clients.
+            Becasue of this, trainers saw consistent progress amongst their clientele when they switched to Moxi. <br/><br/>
+            Do you have what it takes to be a Moxi trainer? <a href="/registration">Become a coach today!</a>
+          </Card.Text>
+        </Card.Body>
+      </Card>
       <br /> <br />
     </div>
   );
