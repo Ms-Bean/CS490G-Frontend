@@ -10,7 +10,7 @@ const CarouselComp = () => {
       <Carousel.Item interval={10000}>
         <img
             className="d-block w-100"
-            src={require("./static_images/s1.jpg")}
+            src="/static_images/s1.jpg"
             alt="Dwayne Johnson before and after"/>
         <Carousel.Caption>
           <div id="caption">
@@ -24,7 +24,7 @@ const CarouselComp = () => {
       <Carousel.Item interval={10000}>       
         <img
             className="d-block w-100"
-            src={require("./static_images/s2.jpg")}
+            src="/static_images/s2.jpg"
             alt="Shonda Rhimes before and after"/>
         <Carousel.Caption>
           <div id="caption">
@@ -38,7 +38,7 @@ const CarouselComp = () => {
       <Carousel.Item interval={10000}>
         <img
             className="d-block w-100"
-            src={require("./static_images/s3.jpg")}
+            src="/static_images/s3.jpg"
             alt="Kelly Osborne before and after"/>        
             <Carousel.Caption>
           <div id="caption">
