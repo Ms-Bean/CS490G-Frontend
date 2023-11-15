@@ -4,7 +4,7 @@ import '../css/CarouselComp.css'
 
 const CarouselComp = () => {
   return (
-    <div class="row row-centered">
+    <div class="row row-centered my-5">
       <div class="col-md-8 mx-auto">
         <Carousel>
       <Carousel.Item interval={10000}>
