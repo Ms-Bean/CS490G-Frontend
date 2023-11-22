@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Button, Card, Row, Col, Container, Alert, Spinner, Modal, Navbar, Nav, FormControl } from "react-bootstrap";
+import { Form, Button, Card, Row, Col, Container, Alert, Spinner, Modal, Navbar, Nav, FormControl, Dropdown } from "react-bootstrap";
 import StarRatings from "react-star-ratings";
 import { FaSearch } from "react-icons/fa";
 
@@ -21,6 +21,7 @@ const CoachSearch = () => {
   const [currentPage, setCurrentPage] = useState(1); // current page state
   const pageSize = 10;
   const [showModal, setShowModal] = useState(false);
+  const [sortOption, setSortOption] = useState({ key: "name", isDescending: false });
 
   const handleModalClose = () => setShowModal(false);
   const handleModalShow = () => setShowModal(true);
@@ -58,7 +59,11 @@ const CoachSearch = () => {
     setError(null);
 
     const headers = { Accept: "application/json", "Content-Type": "application/json" };
-    const body = JSON.stringify(createSearchRequestBody(searchParams));
+    const body = JSON.stringify({
+      ...createSearchRequestBody(searchParams),
+      sort_options: sortOption,
+    });
+
     try {
       const response = await fetch("http://localhost:3500/coaches/search", { method: "POST", headers: headers, body: body });
       if (!response.ok) throw new Error("Network response was not ok");
@@ -72,6 +77,10 @@ const CoachSearch = () => {
     }
   };
 
+  const handleSortChange = (key) => {
+    setSortOption({ ...sortOption, key });
+  };
+
   return (
     <div>
       <Navbar variant="dark" bg="dark" expand="lg" className="secondary-navbar">
@@ -79,7 +88,7 @@ const CoachSearch = () => {
           <Navbar.Brand>Coach Search</Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
-          <Nav className="me-auto" />
+            <Nav className="me-auto" />
 
             <Form inline className="d-flex" onSubmit={handleSubmit}>
               <FormControl
@@ -93,11 +102,21 @@ const CoachSearch = () => {
               <Button variant="secondary" type="submit">
                 <FaSearch />
               </Button>
-            <Button variant="secondary" onClick={handleModalShow} className="ms-2">
-              Filters
-            </Button>
-            </Form>
+              <Button variant="secondary" onClick={handleModalShow} className="ms-2">
+                Filters
+              </Button>
+              <Dropdown variant="secondary" className="ms-2">
+                <Dropdown.Toggle variant="secondary" id="dropdown-basic-button">
+                  Sort
+                </Dropdown.Toggle>
 
+                <Dropdown.Menu>
+                    <Dropdown.Item onClick={() => handleSortChange("rating")}>Rating</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleSortChange("hourly_rate")}>Hourly Rate</Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleSortChange("experience_level")}>Experience</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Form>
           </Navbar.Collapse>
         </Container>
       </Navbar>
