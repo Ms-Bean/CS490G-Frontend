@@ -20,7 +20,7 @@ const CoachSearch = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [sortOption, setSortOption] = useState({ key: "name", isDescending: false });
 
-  const pageSize = 6;
+  const pageSize = 9;
 
   const handleChange = (e) => {
     setSearchParams({ ...searchParams, [e.target.name]: e.target.value });
