@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Form, Button, Card, Row, Col, Container, Alert, Spinner, Modal, Navbar, Nav, FormControl, Dropdown } from "react-bootstrap";
-import { FaSearch } from "react-icons/fa";
+import React, { useState, useEffect } from 'react';
+import { Container, Spinner, Alert, Row } from 'react-bootstrap';
+import SearchNavbar from '../components/CoachSearch/SearchNavbar';
+import SearchFiltersModal from '../components/CoachSearch/SearchFiltersModal';
+import CoachCard from '../components/CoachSearch/CoachCard'; 
 
 const CoachSearch = () => {
   const [searchParams, setSearchParams] = useState({
@@ -95,125 +97,23 @@ const CoachSearch = () => {
 
   return (
     <div>
-      <Navbar variant="dark" bg="dark" expand="lg" className="secondary-navbar">
-        <Container>
-          <Navbar.Brand>Personal Trainer Search</Navbar.Brand>
-          <Navbar.Toggle aria-controls="navbarScroll" />
-          <Navbar.Collapse id="navbarScroll">
-            <Nav className="me-auto" />
-
-            <Form className="d-flex" onSubmit={handleSubmit}>
-              <FormControl
-                type="text"
-                placeholder="Search by name..."
-                name="name"
-                value={searchParams.name}
-                onChange={handleChange}
-                className="me-2"
-              />
-              <Button variant="secondary" type="submit">
-                <FaSearch />
-              </Button>
-              <Button variant="secondary" onClick={handleModalShow} className="ms-2">
-                Filters
-              </Button>
-              <Dropdown variant="secondary" className="ms-2">
-                <Dropdown.Toggle variant="secondary" id="dropdown-basic-button">
-                  Sort
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => handleSortChange("name")}>Name{getSortDirectionIcon("name")}</Dropdown.Item>
-                  <Dropdown.Item onClick={() => handleSortChange("hourly_rate")}>
-                    Hourly Rate{getSortDirectionIcon("hourly_rate")}
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={() => handleSortChange("experience_level")}>
-                    Experience{getSortDirectionIcon("experience_level")}
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </Form>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+      <SearchNavbar
+        searchParams={searchParams}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        handleModalShow={handleModalShow}
+        handleSortChange={handleSortChange}
+        getSortDirectionIcon={getSortDirectionIcon}
+      />
 
       <Container>
-        <Modal show={showModal} onHide={handleModalClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Search Filters</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form onSubmit={handleSubmit}>
-              {/* Name */}
-              <Form.Group controlId="formName" className="mb-3">
-                <Form.Label>Name</Form.Label>
-                <Form.Control type="text" placeholder="Enter name" name="name" value={searchParams.name} onChange={handleChange} />
-              </Form.Group>
-
-              {/* Hourly Rate */}
-              <Row>
-                <Col>
-                  <Form.Group controlId="formMinHourlyRate" className="mb-3">
-                    <Form.Label>Min Hourly Rate</Form.Label>
-                    <Form.Control
-                      type="number"
-                      placeholder="Min Hourly Rate"
-                      name="minHourlyRate"
-                      value={searchParams.minHourlyRate}
-                      onChange={handleChange}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col>
-                  <Form.Group controlId="formMaxHourlyRate" className="mb-3">
-                    <Form.Label>Max Hourly Rate</Form.Label>
-                    <Form.Control
-                      type="number"
-                      placeholder="Max Hourly Rate"
-                      name="maxHourlyRate"
-                      value={searchParams.maxHourlyRate}
-                      onChange={handleChange}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-
-              {/* Experience */}
-              <Row>
-                <Col>
-                  <Form.Group controlId="formMinExperience" className="mb-3">
-                    <Form.Label>Min Experience (Years)</Form.Label>
-                    <Form.Control
-                      type="number"
-                      placeholder="Min Experience"
-                      name="minExperience"
-                      value={searchParams.minExperience}
-                      onChange={handleChange}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col>
-                  <Form.Group controlId="formMaxExperience" className="mb-3">
-                    <Form.Label>Max Experience (Years)</Form.Label>
-                    <Form.Control
-                      type="number"
-                      placeholder="Max Experience"
-                      name="maxExperience"
-                      value={searchParams.maxExperience}
-                      onChange={handleChange}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-
-              <Button variant="primary" type="submit" className="me-2">
-                Search
-              </Button>
-              <Button variant="secondary" onClick={handleModalClose}>
-                Close
-              </Button>
-            </Form>
-          </Modal.Body>
-        </Modal>
+        <SearchFiltersModal
+          show={showModal}
+          handleClose={handleModalClose}
+          searchParams={searchParams}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+        />
 
         <Container className="mt-4">
           {isLoading ? (
@@ -229,32 +129,7 @@ const CoachSearch = () => {
           ) : (
             <Row>
               {results.map((coach, index) => (
-                <Col key={index} md={4} className="mb-4">
-                  <Card>
-                    <Card.Body className="pb-1">
-                      <Card.Title>
-                        {" "}
-                        {coach.personal_info.first_name} {coach.personal_info.last_name}
-                      </Card.Title>
-                      <Row>
-                        <Col md={6}>
-                          <p>
-                            <strong>Experience:</strong> {coach.professional_info.experience_level} years
-                          </p>
-                          <p>
-                            <strong>Hourly Rate:</strong> ${coach.professional_info.hourly_rate.toFixed(2)}
-                          </p>
-                          <p>
-                            <strong>Accepting New Clients:</strong> {coach.professional_info.accepting_new_clients ? "Yes" : "No"}
-                          </p>
-                          <p>
-                            <strong>Coaching History:</strong> {coach.professional_info.coaching_history || "Not provided"}
-                          </p>
-                        </Col>
-                      </Row>
-                    </Card.Body>
-                  </Card>
-                </Col>
+                <CoachCard key={index} coach={coach} />
               ))}
             </Row>
           )}
