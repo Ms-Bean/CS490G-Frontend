@@ -1,13 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button, Card, Row, Col, Container, Alert, Spinner, Modal, Navbar, Nav, FormControl, Dropdown } from "react-bootstrap";
-import StarRatings from "react-star-ratings";
 import { FaSearch } from "react-icons/fa";
 
 const CoachSearch = () => {
   const [searchParams, setSearchParams] = useState({
     name: "",
-    minRating: "",
-    maxRating: "",
     minHourlyRate: "",
     maxHourlyRate: "",
     minExperience: "",
@@ -18,10 +15,17 @@ const CoachSearch = () => {
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1); // current page state
+  const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
   const [showModal, setShowModal] = useState(false);
   const [sortOption, setSortOption] = useState({ key: "name", isDescending: false });
+  const getSortDirectionIcon = (key) => {
+    return sortOption.key === key
+      ? sortOption.isDescending
+        ? " ↓" // icon or text for descending
+        : " ↑" // icon or text for ascending
+      : "";
+  };
 
   const handleModalClose = () => setShowModal(false);
   const handleModalShow = () => setShowModal(true);
@@ -31,14 +35,12 @@ const CoachSearch = () => {
   };
 
   const createSearchRequestBody = (searchParams) => {
-    const [defaultMinRating, defaultMaxRating] = [1, 5];
-    const [defaultMinHourlyRate, defaultMaxHourlyRate] = [0, 1_000_000]; // TODO: We need to decide on a default max hourly rate
+    const [defaultMinHourlyRate, defaultMaxHourlyRate] = [0, 1_000_000];
     const [defaultMinExperienceLevel, defaultMaxExperienceLevel] = [0, 100];
 
     const pageInfo = { page_num: currentPage, page_size: pageSize };
     const filterOptions = {
       name: searchParams.name,
-      rating: { min: Number(searchParams.minRating) || defaultMinRating, max: Number(searchParams.maxRating) || defaultMaxRating },
       hourly_rate: {
         min: Number(searchParams.minHourlyRate) || defaultMinHourlyRate,
         max: Number(searchParams.maxHourlyRate) || defaultMaxHourlyRate,
@@ -53,22 +55,23 @@ const CoachSearch = () => {
     return { page_info: pageInfo, filter_options: filterOptions };
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const fetchCoaches = async () => {
     setIsLoading(true);
     setError(null);
 
     const headers = { Accept: "application/json", "Content-Type": "application/json" };
     const body = JSON.stringify({
       ...createSearchRequestBody(searchParams),
-      sort_options: sortOption,
+      sort_options: {
+        key: sortOption.key,
+        is_descending: sortOption.isDescending,
+      },
     });
 
     try {
       const response = await fetch("http://localhost:3500/coaches/search", { method: "POST", headers: headers, body: body });
       if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
-      console.log(data.coaches);
       setResults(data.coaches);
     } catch (error) {
       setError(error.message);
@@ -77,8 +80,20 @@ const CoachSearch = () => {
     }
   };
 
+  useEffect(() => {
+    fetchCoaches();
+  }, [sortOption]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    fetchCoaches();
+  };
+
   const handleSortChange = (key) => {
-    setSortOption({ ...sortOption, key });
+    setSortOption((prevSortOption) => ({
+      key: key,
+      isDescending: prevSortOption.key === key ? !prevSortOption.isDescending : false,
+    }));
   };
 
   return (
@@ -90,7 +105,7 @@ const CoachSearch = () => {
           <Navbar.Collapse id="navbarScroll">
             <Nav className="me-auto" />
 
-            <Form inline className="d-flex" onSubmit={handleSubmit}>
+            <Form className="d-flex" onSubmit={handleSubmit}>
               <FormControl
                 type="text"
                 placeholder="Search by name..."
@@ -109,11 +124,14 @@ const CoachSearch = () => {
                 <Dropdown.Toggle variant="secondary" id="dropdown-basic-button">
                   Sort
                 </Dropdown.Toggle>
-
                 <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => handleSortChange("rating")}>Rating</Dropdown.Item>
-                  <Dropdown.Item onClick={() => handleSortChange("hourly_rate")}>Hourly Rate</Dropdown.Item>
-                  <Dropdown.Item onClick={() => handleSortChange("experience_level")}>Experience</Dropdown.Item>
+                  <Dropdown.Item onClick={() => handleSortChange("name")}>Name{getSortDirectionIcon("name")}</Dropdown.Item>
+                  <Dropdown.Item onClick={() => handleSortChange("hourly_rate")}>
+                    Hourly Rate{getSortDirectionIcon("hourly_rate")}
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={() => handleSortChange("experience_level")}>
+                    Experience{getSortDirectionIcon("experience_level")}
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Form>
@@ -143,34 +161,6 @@ const CoachSearch = () => {
                 <Form.Label>State</Form.Label>
                 <Form.Control type="text" placeholder="State" name="state" value={searchParams.state} onChange={handleChange} />
               </Form.Group>
-
-              {/* Rating */}
-              <Row>
-                <Col>
-                  <Form.Group controlId="formMinRating" className="mb-3">
-                    <Form.Label>Min Rating</Form.Label>
-                    <Form.Control
-                      type="number"
-                      placeholder="Min Rating"
-                      name="minRating"
-                      value={searchParams.minRating}
-                      onChange={handleChange}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col>
-                  <Form.Group controlId="formMaxRating" className="mb-3">
-                    <Form.Label>Max Rating</Form.Label>
-                    <Form.Control
-                      type="number"
-                      placeholder="Max Rating"
-                      name="maxRating"
-                      value={searchParams.maxRating}
-                      onChange={handleChange}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
 
               {/* Hourly Rate */}
               <Row>
@@ -259,9 +249,6 @@ const CoachSearch = () => {
                   <Row>
                     <Col md={6}>
                       <p>
-                        <strong>About:</strong> {coach.personal_info.about_me || "Not provided"}
-                      </p>
-                      <p>
                         <strong>Experience:</strong> {coach.professional_info.experience_level} years
                       </p>
                       <p>
@@ -271,30 +258,8 @@ const CoachSearch = () => {
                         <strong>Accepting New Clients:</strong> {coach.professional_info.accepting_new_clients ? "Yes" : "No"}
                       </p>
                       <p>
-                        <strong>Location:</strong> {`${coach.location.city}, ${coach.location.state}`}
-                      </p>
-                    </Col>
-                    <Col md={6}>
-                      <p>
                         <strong>Coaching History:</strong> {coach.professional_info.coaching_history || "Not provided"}
                       </p>
-                      <p>
-                        <strong>Goals:</strong> {coach.professional_info.goals.join(", ") || "Not specified"}
-                      </p>
-                      <p>
-                        <strong>Rating: </strong>
-                        {coach.professional_info.rating ? (
-                          <StarRatings
-                            rating={coach.professional_info.rating}
-                            starRatedColor="orange"
-                            numberOfStars={5}
-                            starDimension="20px"
-                            starSpacing="2px"
-                          />
-                        ) : (
-                          "Not rated"
-                        )}
-                      </p>{" "}
                     </Col>
                   </Row>
                 </Card.Body>
