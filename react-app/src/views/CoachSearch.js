@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Button, Card, Row, Col, Container, Alert, Spinner } from "react-bootstrap";
+import { Form, Button, Card, Row, Col, Container, Alert, Spinner, Modal } from "react-bootstrap";
 import StarRatings from "react-star-ratings";
 
 const CoachSearch = () => {
@@ -19,6 +19,10 @@ const CoachSearch = () => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1); // current page state
   const pageSize = 10;
+  const [showModal, setShowModal] = useState(false);
+
+  const handleModalClose = () => setShowModal(false);
+  const handleModalShow = () => setShowModal(true);
 
   const handleChange = (e) => {
     setSearchParams({ ...searchParams, [e.target.name]: e.target.value });
@@ -69,117 +73,88 @@ const CoachSearch = () => {
 
   return (
     <Container>
-      <Card className="mt-5">
-        <Card.Body>
-          <Form onSubmit={handleSubmit}>
-            <Row className="mb-3">
-              <Col>
-                <Form.Group controlId="formName">
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control type="text" placeholder="Enter name" name="name" value={searchParams.name} onChange={handleChange} />
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group controlId="formCity">
-                  <Form.Label>City</Form.Label>
-                  <Form.Control type="text" placeholder="City" name="city" value={searchParams.city} onChange={handleChange} />
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group controlId="formState">
-                  <Form.Label>State</Form.Label>
-                  <Form.Control type="text" placeholder="State" name="state" value={searchParams.state} onChange={handleChange} />
-                </Form.Group>
-              </Col>
-            </Row>
+      <Button variant="primary" onClick={handleModalShow}>
+        Open Search Filters
+      </Button>
+      <Modal show={showModal} onHide={handleModalClose}>
+  <Modal.Header closeButton>
+    <Modal.Title>Search Filters</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <Form onSubmit={handleSubmit}>
+      {/* Name, City, and State */}
+      <Form.Group controlId="formName" className="mb-3">
+        <Form.Label>Name</Form.Label>
+        <Form.Control type="text" placeholder="Enter name" name="name" value={searchParams.name} onChange={handleChange} />
+      </Form.Group>
 
-            <Row className="mb-3">
-              <Col>
-                <Form.Group controlId="formMinRating">
-                  <Form.Label>Min Rating</Form.Label>
-                  <Form.Control
-                    type="number"
-                    placeholder="Min Rating"
-                    name="minRating"
-                    value={searchParams.minRating}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group controlId="formMaxRating">
-                  <Form.Label>Max Rating</Form.Label>
-                  <Form.Control
-                    type="number"
-                    placeholder="Max Rating"
-                    name="maxRating"
-                    value={searchParams.maxRating}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
+      <Form.Group controlId="formCity" className="mb-3">
+        <Form.Label>City</Form.Label>
+        <Form.Control type="text" placeholder="City" name="city" value={searchParams.city} onChange={handleChange} />
+      </Form.Group>
 
-            <Row className="mb-3">
-              <Col>
-                <Form.Group controlId="formMinHourlyRate">
-                  <Form.Label>Min Hourly Rate</Form.Label>
-                  <Form.Control
-                    type="number"
-                    placeholder="Min Hourly Rate"
-                    name="minHourlyRate"
-                    value={searchParams.minHourlyRate}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group controlId="formMaxHourlyRate">
-                  <Form.Label>Max Hourly Rate</Form.Label>
-                  <Form.Control
-                    type="number"
-                    placeholder="Max Hourly Rate"
-                    name="maxHourlyRate"
-                    value={searchParams.maxHourlyRate}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
+      <Form.Group controlId="formState" className="mb-3">
+        <Form.Label>State</Form.Label>
+        <Form.Control type="text" placeholder="State" name="state" value={searchParams.state} onChange={handleChange} />
+      </Form.Group>
 
-            <Row className="mb-3">
-              <Col>
-                <Form.Group controlId="formMinExperience">
-                  <Form.Label>Min Experience (Years)</Form.Label>
-                  <Form.Control
-                    type="number"
-                    placeholder="Min Experience"
-                    name="minExperience"
-                    value={searchParams.minExperience}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group controlId="formMaxExperience">
-                  <Form.Label>Max Experience (Years)</Form.Label>
-                  <Form.Control
-                    type="number"
-                    placeholder="Max Experience"
-                    name="maxExperience"
-                    value={searchParams.maxExperience}
-                    onChange={handleChange}
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
+      {/* Rating */}
+      <Row>
+        <Col>
+          <Form.Group controlId="formMinRating" className="mb-3">
+            <Form.Label>Min Rating</Form.Label>
+            <Form.Control type="number" placeholder="Min Rating" name="minRating" value={searchParams.minRating} onChange={handleChange} />
+          </Form.Group>
+        </Col>
+        <Col>
+          <Form.Group controlId="formMaxRating" className="mb-3">
+            <Form.Label>Max Rating</Form.Label>
+            <Form.Control type="number" placeholder="Max Rating" name="maxRating" value={searchParams.maxRating} onChange={handleChange} />
+          </Form.Group>
+        </Col>
+      </Row>
 
-            <Button variant="primary" type="submit">
-              Search
-            </Button>
-          </Form>
-        </Card.Body>
-      </Card>
+      {/* Hourly Rate */}
+      <Row>
+        <Col>
+          <Form.Group controlId="formMinHourlyRate" className="mb-3">
+            <Form.Label>Min Hourly Rate</Form.Label>
+            <Form.Control type="number" placeholder="Min Hourly Rate" name="minHourlyRate" value={searchParams.minHourlyRate} onChange={handleChange} />
+          </Form.Group>
+        </Col>
+        <Col>
+          <Form.Group controlId="formMaxHourlyRate" className="mb-3">
+            <Form.Label>Max Hourly Rate</Form.Label>
+            <Form.Control type="number" placeholder="Max Hourly Rate" name="maxHourlyRate" value={searchParams.maxHourlyRate} onChange={handleChange} />
+          </Form.Group>
+        </Col>
+      </Row>
+
+      {/* Experience */}
+      <Row>
+        <Col>
+          <Form.Group controlId="formMinExperience" className="mb-3">
+            <Form.Label>Min Experience (Years)</Form.Label>
+            <Form.Control type="number" placeholder="Min Experience" name="minExperience" value={searchParams.minExperience} onChange={handleChange} />
+          </Form.Group>
+        </Col>
+        <Col>
+          <Form.Group controlId="formMaxExperience" className="mb-3">
+            <Form.Label>Max Experience (Years)</Form.Label>
+            <Form.Control type="number" placeholder="Max Experience" name="maxExperience" value={searchParams.maxExperience} onChange={handleChange} />
+          </Form.Group>
+        </Col>
+      </Row>
+
+      <Button variant="primary" type="submit" className="me-2">
+        Search
+      </Button>
+      <Button variant="secondary" onClick={handleModalClose}>
+        Close
+      </Button>
+    </Form>
+  </Modal.Body>
+</Modal>
 
       <Container className="mt-4">
         {isLoading ? (
@@ -223,7 +198,13 @@ const CoachSearch = () => {
                     <p>
                       <strong>Rating: </strong>
                       {coach.professional_info.rating ? (
-                        <StarRatings rating={coach.professional_info.rating} starRatedColor="orange" numberOfStars={5} starDimension="20px" starSpacing="2px" />
+                        <StarRatings
+                          rating={coach.professional_info.rating}
+                          starRatedColor="orange"
+                          numberOfStars={5}
+                          starDimension="20px"
+                          starSpacing="2px"
+                        />
                       ) : (
                         "Not rated"
                       )}
