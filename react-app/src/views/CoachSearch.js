@@ -111,9 +111,9 @@ const CoachSearch = () => {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => handleSortChange("rating")}>Rating</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleSortChange("hourly_rate")}>Hourly Rate</Dropdown.Item>
-                    <Dropdown.Item onClick={() => handleSortChange("experience_level")}>Experience</Dropdown.Item>
+                  <Dropdown.Item onClick={() => handleSortChange("rating")}>Rating</Dropdown.Item>
+                  <Dropdown.Item onClick={() => handleSortChange("hourly_rate")}>Hourly Rate</Dropdown.Item>
+                  <Dropdown.Item onClick={() => handleSortChange("experience_level")}>Experience</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Form>
@@ -240,11 +240,15 @@ const CoachSearch = () => {
 
         <Container className="mt-4">
           {isLoading ? (
-            <Spinner animation="border" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </Spinner>
+            <div className="d-flex justify-content-center">
+              <Spinner animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </Spinner>
+            </div>
           ) : error ? (
-            <Alert variant="danger">{error}</Alert>
+            <Alert variant="danger">Something went wrong. Please try again later.</Alert>
+          ) : results.length === 0 ? (
+            <Alert variant="info">No coaches found. Try adjusting your search criteria.</Alert>
           ) : (
             results.map((coach, index) => (
               <Card key={index} className="mb-3">
