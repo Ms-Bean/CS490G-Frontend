@@ -11,6 +11,7 @@ const CoachSearch = () => {
     maxHourlyRate: "",
     minExperience: "",
     maxExperience: "",
+    acceptingNewClients: true, // By default, show coaches who are accepting new clients
   });
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -23,8 +24,10 @@ const CoachSearch = () => {
   const pageSize = 9;
 
   const handleChange = (e) => {
-    setSearchParams({ ...searchParams, [e.target.name]: e.target.value });
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    setSearchParams({ ...searchParams, [e.target.name]: value });
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -96,8 +99,10 @@ const CoachSearch = () => {
         min: Number(searchParams.minExperience) || defaultMinExperienceLevel,
         max: Number(searchParams.maxExperience) || defaultMaxExperienceLevel,
       },
+    // Include accepting_new_clients only if it's explicitly checked
+    ...(searchParams.acceptingNewClients && { accepting_new_clients: searchParams.acceptingNewClients }),
     };
-
+  
     return { page_info: pageInfo, filter_options: filterOptions };
   };
 
