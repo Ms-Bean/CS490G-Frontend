@@ -9,8 +9,6 @@ const CoachSearch = () => {
     maxHourlyRate: "",
     minExperience: "",
     maxExperience: "",
-    city: "",
-    state: "",
   });
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -49,7 +47,6 @@ const CoachSearch = () => {
         min: Number(searchParams.minExperience) || defaultMinExperienceLevel,
         max: Number(searchParams.maxExperience) || defaultMaxExperienceLevel,
       },
-      location: { city: searchParams.city, state: searchParams.state },
     };
 
     return { page_info: pageInfo, filter_options: filterOptions };
@@ -100,7 +97,7 @@ const CoachSearch = () => {
     <div>
       <Navbar variant="dark" bg="dark" expand="lg" className="secondary-navbar">
         <Container>
-          <Navbar.Brand>Coach Search</Navbar.Brand>
+          <Navbar.Brand>Personal Trainer Search</Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav className="me-auto" />
@@ -146,20 +143,10 @@ const CoachSearch = () => {
           </Modal.Header>
           <Modal.Body>
             <Form onSubmit={handleSubmit}>
-              {/* Name, City, and State */}
+              {/* Name */}
               <Form.Group controlId="formName" className="mb-3">
                 <Form.Label>Name</Form.Label>
                 <Form.Control type="text" placeholder="Enter name" name="name" value={searchParams.name} onChange={handleChange} />
-              </Form.Group>
-
-              <Form.Group controlId="formCity" className="mb-3">
-                <Form.Label>City</Form.Label>
-                <Form.Control type="text" placeholder="City" name="city" value={searchParams.city} onChange={handleChange} />
-              </Form.Group>
-
-              <Form.Group controlId="formState" className="mb-3">
-                <Form.Label>State</Form.Label>
-                <Form.Control type="text" placeholder="State" name="state" value={searchParams.state} onChange={handleChange} />
               </Form.Group>
 
               {/* Hourly Rate */}
@@ -240,31 +227,36 @@ const CoachSearch = () => {
           ) : results.length === 0 ? (
             <Alert variant="info">No coaches found. Try adjusting your search criteria.</Alert>
           ) : (
-            results.map((coach, index) => (
-              <Card key={index} className="mb-3">
-                <Card.Body className="pb-1">
-                  <Card.Title>
-                    {coach.personal_info.first_name} {coach.personal_info.last_name}
-                  </Card.Title>
-                  <Row>
-                    <Col md={6}>
-                      <p>
-                        <strong>Experience:</strong> {coach.professional_info.experience_level} years
-                      </p>
-                      <p>
-                        <strong>Hourly Rate:</strong> ${coach.professional_info.hourly_rate.toFixed(2)}
-                      </p>
-                      <p>
-                        <strong>Accepting New Clients:</strong> {coach.professional_info.accepting_new_clients ? "Yes" : "No"}
-                      </p>
-                      <p>
-                        <strong>Coaching History:</strong> {coach.professional_info.coaching_history || "Not provided"}
-                      </p>
-                    </Col>
-                  </Row>
-                </Card.Body>
-              </Card>
-            ))
+            <Row>
+              {results.map((coach, index) => (
+                <Col key={index} md={4} className="mb-4">
+                  <Card>
+                    <Card.Body className="pb-1">
+                      <Card.Title>
+                        {" "}
+                        {coach.personal_info.first_name} {coach.personal_info.last_name}
+                      </Card.Title>
+                      <Row>
+                        <Col md={6}>
+                          <p>
+                            <strong>Experience:</strong> {coach.professional_info.experience_level} years
+                          </p>
+                          <p>
+                            <strong>Hourly Rate:</strong> ${coach.professional_info.hourly_rate.toFixed(2)}
+                          </p>
+                          <p>
+                            <strong>Accepting New Clients:</strong> {coach.professional_info.accepting_new_clients ? "Yes" : "No"}
+                          </p>
+                          <p>
+                            <strong>Coaching History:</strong> {coach.professional_info.coaching_history || "Not provided"}
+                          </p>
+                        </Col>
+                      </Row>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
           )}
         </Container>
       </Container>
