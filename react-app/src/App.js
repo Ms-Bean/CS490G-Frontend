@@ -11,6 +11,7 @@ import AccountPage from "./views/AccountPage";
 import Dashboard from "./views/Dashboard";
 import ProfilePage from "./views/ProfilePage";
 import CoachSearch from "./views/CoachSearch";
+import WorkoutPlan from "./views/WorkoutPlan";
 
 const App = () => {
 
@@ -35,6 +36,7 @@ const App = () => {
               <Route path="/dashboard" element={<Dashboard/>}/>
               <Route path="/profile" element={<ProfilePage/>}/>
               <Route path="/coaches" element={<CoachSearch/>}/>
+              <Route path="workout_plan" element={<WorkoutPlan/>}/>
             </Route>
             <Route path='/onboard' element={<Onboarding/>}/>
             <Route path='/registration' element={<RegisterPage/>}/>
