@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.trainer-image {
+  border-radius: 50%; /* Circular shape */
+  width: 9vw; /* Responsive width */
+  height: 9vw; /* Height equal to the width for a perfect circle */
+  object-fit: cover; /* Ensures the image covers the area without stretching */
+}
