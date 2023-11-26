@@ -26,7 +26,8 @@ const WorkoutNavbar = () => {
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
                             <Dropdown.Item>Name</Dropdown.Item>
-                            <Dropdown.Item>Date</Dropdown.Item>
+                            <Dropdown.Item>Earliest</Dropdown.Item>
+                            <Dropdown.Item>Lastest</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                     <input className="btn btn-secondary mx-2" type="button" value="Filter By"/>
