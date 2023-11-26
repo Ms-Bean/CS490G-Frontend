@@ -5,42 +5,85 @@ const ClientProfile = () => {
   const [editing, setEditing] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [formData, setFormData] = useState({
-    experience: "",
-    cost_per_session: "",
-    availability: "",
+    hourly_rate: "",
+    experience_level: "",
+    accepting_new_clients: "",
+    coaching_history: "",
+    paypal_link: ""
   });
 
   useEffect(() => {
-    //fetch user's profile information
+    //Fetch client profile information
+    fetch("http://localhost:3500/get_user_profile", {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setFormData({
+          hourly_rate: data.response.coach_profile_info.hourly_rate,
+          availability: data.response.coach_profile_info.availability,
+          experience_level: data.response.coach_profile_info.experience_level,
+          accepting_new_clients: data.response.coach_profile_info.accepting_new_clients,
+          coaching_history: data.response.coach_profile_info.coaching_history,
+          paypal_link: data.response.coach_profile_info.paypal_link
+        });
+      });
+    setUploadSuccess(false);
   }, [uploadSuccess, editing]);
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    let parsedValue = value;
-    if (name === "cost_per_session") {
-      parsedValue = value ? parseFloat(value) : ""; // Parse field as a float if it's not empty
-    }
     setFormData({
       ...formData,
-      [name]: parsedValue,
+      [name]: value,
     });
+
     console.log(formData);
   };
 
   const submitEdit = async (e) => {
     e.preventDefault();
-    //rest call to edit user's profile
-
+    console.log(formData.about_me);
+    console.log(formData.target_weight);
+    console.log(formData.birthday);
+    try {
+      console.log("Edit Account");
+      console.log(formData.state);
+      const response = await fetch("http://localhost:3500/set_user_profile", {
+        method: "POST",
+        headers: {
+          // Moved data to body instead of headers
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          hourly_rate: formData.hourly_rate,
+          coaching_experience_level: formData.experience_level,
+          accepting_new_clients: formData.accepting_new_clients,
+          coaching_history: formData.coaching_history,
+          availability: formData.availability,
+          paypal_link: formData.paypal_link
+        }),
+        credentials: "include", // Include credentials with the request
+      });
+      if (response.ok) {
+        console.log("Edit Account Success");
+      } else {
+        console.error("Error occurred:", response.status);
+      }
+    } catch (err) {
+      console.log(err);
+    }
     setEditing(false);
   };
 
   
-  const changeProfilePicture = () => {
+  const changeProfilePicture = async (e) => {
     //... code to upload picture from computer
 
     //... rest call to update user's profile picture
 
-    //if upload was a success
+    //if upload was a success    
+
     setUploadSuccess(true);
   };
 
@@ -60,33 +103,21 @@ const ClientProfile = () => {
 
       <form onSubmit={submitEdit} className="w-75 mx-auto">
         <div class="form-group my-3">
-          <label for="experience">Experience</label>
-          <input
-            className="form-control mt-1"
-            disabled={!editing}
-            type="text"
-            id="experience"
-            name="experience"
-            placeholder="Not Set"
-            onChange={handleInputChange}
-            value={formData.experience}
-          />
-        </div>
-        <div class="form-group my-3">
-          <label for="cost_per_session">Cost Per Session</label>
+          <label for="weight">Hourly Rate</label>
           <input
             className="form-control mt-1"
             disabled={!editing}
             type="number"
-            id="cost_per_session"
-            name="cost_per_session"
+            step="any"
+            id="hourly_rate"
+            name="hourly_rate"
             placeholder="Not Set"
             onChange={handleInputChange}
-            value={formData.cost_per_session}
+            value={formData.hourly_rate}
           />
         </div>
         <div class="form-group my-3">
-          <label for="availability">Availability</label>
+          <label for="weight">Availability</label>
           <input
             className="form-control mt-1"
             disabled={!editing}
@@ -98,7 +129,46 @@ const ClientProfile = () => {
             value={formData.availability}
           />
         </div>
-        <div className="row mt-4">
+        <div class="form-group my-3">
+          <label for="weight">Coaching History</label>
+          <input
+            className="form-control mt-1"
+            disabled={!editing}
+            type="text"
+            id="coaching_history"
+            name="coaching_history"
+            placeholder="Not Set"
+            onChange={handleInputChange}
+            value={formData.coaching_history}
+          />
+        </div>
+        <div class="form-group my-3">
+          <label for="experience">Coaching experience Level</label>
+          <input
+            disabled={!editing}
+            className="form-select mt-1"
+            id="experience_level"
+            name="experience_level"
+            type="number"
+            value={formData.experience_level}
+            onChange={handleInputChange}
+            aria-label="Default select example"
+          />
+        </div>
+        <div class="form-group my-3">
+          <label for="weight">Paypal link</label>
+          <input
+            className="form-control mt-1"
+            disabled={!editing}
+            type="text"
+            id="paypal_link"
+            name="paypal_link"
+            placeholder="Not Set"
+            onChange={handleInputChange}
+            value={formData.paypal_link}
+          />
+        </div>
+        <div className="row my-4">
           <div className="col-8">
             <button type="submit" className="btn btn-dark me-2 w-100" disabled={!editing}>
               Save Changes
@@ -109,7 +179,7 @@ const ClientProfile = () => {
               {editing ? "Cancel" : "Edit"}
             </button>
           </div>
-        </div>{" "}
+        </div>
       </form>
     </div>
   );
