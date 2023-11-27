@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import TableData from './EditWorkoutForm';
 
 function EditWorkoutPlan() {
   const [show, setShow] = useState(false);
@@ -15,6 +16,7 @@ function EditWorkoutPlan() {
         </button>
 
         <Modal
+        size="lg"
         show={show}
         onHide={handleClose}
         backdrop="static"
@@ -25,7 +27,7 @@ function EditWorkoutPlan() {
             <Modal.Title>Edit Workout Plan</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            Edit Workout Plan form goes here
+            <TableData/>
         </Modal.Body>
         <Modal.Footer>
             <Button className='w-100' variant="dark">Save Changes</Button>
