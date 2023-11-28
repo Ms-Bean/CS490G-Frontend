@@ -4,14 +4,14 @@ import axios from 'axios';
 function EditWorkoutForm() {
     const [data, setData] = useState([])
 
-    const [exercise, setExercise] = useState('')
+    const [exercise, setExercise] = useState('Plank') //hard coded Plank for now, will be first exercise from bank in DB
     const [sets, setSets] = useState('')
     const [reps, setReps] = useState('')
     const [weight, setWeight] = useState('')
-    const [day, setDay] = useState('')
-    const [time, setTime] = useState('')
+    const [day, setDay] = useState('Sunday')
+    const [time, setTime] = useState()
 
-    const [addID, setAddID] = useState(0)
+    const [addID, setAddID] = useState(0) //used to update table with latest data after inserting
     const [editID, setEditID] = useState(-1)
     const [deleteID, setDeleteID] = useState()
 
@@ -22,6 +22,9 @@ function EditWorkoutForm() {
     const[uweight, usetWeight] = useState('')
     const[uday, usetDay] = useState('')
     const[utime, usetTime] = useState('')
+
+    const[showForm, setShowForm] = useState(false)
+    const[showAddButton, setShowAddButton] = useState(true)
     
     useEffect(()=>{
         axios.get('http://localhost:3600/workout_exercises') //use axios & temp db for now
@@ -31,7 +34,7 @@ function EditWorkoutForm() {
         })
         .catch(er => {
             console.log(er)});
-    }, [exercise, sets, reps, weight, day, time, editID, deleteID, addID])
+    }, [editID, deleteID, addID])
 
     const handleSubmit=(event) => {
         setAddID(1)
@@ -40,6 +43,8 @@ function EditWorkoutForm() {
         .then(res => {
             console.log(res)
             setAddID(0)
+            handleShowAddButton("true")
+            setDefualts()
         })
         .catch(er => console.log(er));
     }
@@ -78,6 +83,39 @@ function EditWorkoutForm() {
         })
         .catch(er=> console.log(er))
     }
+
+    const handleShowForm=(event) =>{
+        console.log('showForm =', event)
+        if (event === "false"){
+        setShowForm(false)}
+        else {
+        setShowForm(true)
+        handleShowAddButton("false")}
+    }
+
+    const handleShowAddButton=(event) =>{
+        console.log('showAddButton =', event)
+        if(event === "false"){
+        setShowAddButton(false)}
+        else {
+        setShowAddButton(true)
+        handleShowForm("false")}
+    }
+
+    const setDefualts=() =>{
+        setExercise('Plank')
+        setSets('')
+        setReps('')
+        setWeight('')
+        setTime('')
+        setDay('Sunday')
+    }
+
+    const handleCancel=() =>{
+        handleShowAddButton("true")
+        setDefualts()
+    }
+    
   return (
     <div className='container'>
       <table>
@@ -99,7 +137,7 @@ function EditWorkoutForm() {
                     <tr> 
                         <td></td>
                         <td>
-                            <select name="exercise" onChange={e => usetExercise(e.target.value)}>
+                            <select name="upexercise" onChange={e => usetExercise(e.target.value)}>
                                 <option value={uexercise}>{uexercise}</option>
                                 <option value="Plank">Plank</option>
                                 <option value="Bench Press">Bench Press</option>
@@ -110,8 +148,19 @@ function EditWorkoutForm() {
                         <td><input type="number" size="5" value={usets} onChange={e => usetSets(e.target.value)}/></td>
                         <td><input type="number" size="5" value={ureps} onChange={e => usetReps(e.target.value)}/></td>
                         <td><input type="number" size="5" value={uweight} onChange={e => usetWeight(e.target.value)}/></td>
-                        <td><input type="text" size="7" value={uday} onChange={e => usetDay(e.target.value)}/></td>
-                        <td><input type="text" size="7" value={utime} onChange={e => usetTime(e.target.value)}/></td>
+                        <td>
+                            <select name="upday" onChange={e => usetDay(e.target.value)}>
+                                <option value={uday}>{uday}</option>
+                                <option value="Sunday">Sunday</option>
+                                <option value="Monday">Monday</option>
+                                <option value="Tuesday">Tuesday</option>
+                                <option value="Wednesday">Wednesday</option>
+                                <option value="Thursday">Thursday</option>
+                                <option value="Friday">Friday</option>
+                                <option value="Saturday">Saturday</option>
+                            </select>
+                        </td>
+                        <td><input type="time" size="7" value={utime} onChange={e => usetTime(e.target.value)}/></td>
                         <td><button onClick={handleUpdate}>Update</button></td>
                     </tr>
                     :
@@ -131,21 +180,37 @@ function EditWorkoutForm() {
             }
         </tbody>
       </table>
+      <div>
+        {showForm && (
       <form onSubmit={handleSubmit}>
-        <select name="exercise" onChange={e => setExercise(e.target.value)}>
+        <select name="exercise" onChange={e => setExercise(e.target.value)} required>
             <option value="Plank">Plank</option>
             <option value="Bench Press">Bench Press</option>
             <option value="Jogging">Jogging</option>
             <option value="Sprinting">Sprinting</option>
         </select>
-        <input type="number" size="5" placeholder="Sets" onChange={e => setSets(e.target.value)}/>
+        <input type="number" size="5" placeholder="Sets" onChhange={e => setSets(e.target.value)}/>
         <input type="number" size="5" placeholder="Reps" onChange={e => setReps(e.target.value)}/>
         <input type="text" size="7" placeholder="Weight" onChange={e => setWeight(e.target.value)}/>
-        <input type="text" size="7" placeholder="Weekday" onChange={e => setDay(e.target.value)}/>
-        <input type="text" size="7" placeholder="Time" onChange={e => setTime(e.target.value)}/>
+        <select name="day" onChange={e => setDay(e.target.value)} required>
+            <option value="Sunday">Sunday</option>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+        </select>
+        <input type="time" size="7" placeholder="Time" onChange={e => setTime(e.target.value)}/>
         <button type="submit">Add</button>
-      </form>
+        <button onClick={handleCancel}>Cancel</button>
+        </form>
+        )}
+      </div>
+      {showAddButton && (<button id='add' value="true" onClick={(e => handleShowForm(e.target.value))}>+</button>)}
+        
     </div>
+      
   )
 }
 
