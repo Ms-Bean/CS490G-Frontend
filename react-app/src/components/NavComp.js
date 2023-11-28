@@ -35,7 +35,7 @@ const NavComp = () => {
                 <Nav.Link href="#">Goals</Nav.Link>
                 <Nav.Link href="/coaches">Coaches</Nav.Link>
                 <Nav.Link href="#">Workouts</Nav.Link>
-                <Nav.Link href="#">Messaging</Nav.Link>
+                <Nav.Link href="/messages">Messaging</Nav.Link>
                 <NavDropdown
                   eventkey={1} // eventKey={1} is deprecated
                   title={
