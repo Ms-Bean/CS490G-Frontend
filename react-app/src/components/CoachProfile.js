@@ -5,11 +5,10 @@ const ClientProfile = () => {
   const [editing, setEditing] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [formData, setFormData] = useState({
-    hourly_rate: "",
-    experience_level: "",
-    accepting_new_clients: "",
-    coaching_history: "",
-    paypal_link: ""
+    weight: "",
+    height: "",
+    experience: "",
+    budget: "",
   });
 
   useEffect(() => {
@@ -20,13 +19,22 @@ const ClientProfile = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
+        let b;
+        if(data.response.client_profile_info.budget === 0)
+          b = '$';
+        else if(data.response.client_profile_info.budget === 1)
+          b = '$$';
+        else if(data.response.client_profile_info.budget === 2)
+          b = '$$$';
         setFormData({
-          hourly_rate: data.response.coach_profile_info.hourly_rate,
-          availability: data.response.coach_profile_info.availability,
-          experience_level: data.response.coach_profile_info.experience_level,
-          accepting_new_clients: data.response.coach_profile_info.accepting_new_clients,
-          coaching_history: data.response.coach_profile_info.coaching_history,
-          paypal_link: data.response.coach_profile_info.paypal_link
+          about_me: data.response.client_profile_info.about_me,
+          birthday: data.response.client_profile_info.birthday ? data.response.client_profile_info.birthday.slice(0,10) : undefined,
+          medical_conditions: data.response.client_profile_info.medical_conditions,
+          target_weight: data.response.client_profile_info.target_weight,
+          weight: data.response.client_profile_info.weight,
+          height: data.response.client_profile_info.height,
+          experience_level: data.response.client_profile_info.experience_level,
+          budget: b,
         });
       });
     setUploadSuccess(false);
@@ -45,7 +53,6 @@ const ClientProfile = () => {
     e.preventDefault();
     console.log(formData.about_me);
     console.log(formData.target_weight);
-    console.log(formData.birthday);
     try {
       console.log("Edit Account");
       console.log(formData.state);
@@ -56,12 +63,15 @@ const ClientProfile = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          hourly_rate: formData.hourly_rate,
-          coaching_experience_level: formData.experience_level,
-          accepting_new_clients: formData.accepting_new_clients,
-          coaching_history: formData.coaching_history,
-          availability: formData.availability,
-          paypal_link: formData.paypal_link
+          about_me: formData.about_me,
+          experience_level: formData.experience_level,
+          height: formData.height,
+          weight: formData.weight,
+          medical_conditions: formData.medical_conditions,
+          budget: formData.budget !== undefined ? formData.budget.length : undefined,
+          goals: formData.goals,
+          target_weight: formData.target_weight,
+          birthday: formData.birthday
         }),
         credentials: "include", // Include credentials with the request
       });
@@ -103,70 +113,119 @@ const ClientProfile = () => {
 
       <form onSubmit={submitEdit} className="w-75 mx-auto">
         <div class="form-group my-3">
-          <label for="weight">Hourly Rate</label>
+          <label for="weight">About me</label>
+          <input
+            className="form-control mt-1"
+            disabled={!editing}
+            type="test"
+            id="about_me"
+            name="about_me"
+            placeholder="Not Set"
+            onChange={handleInputChange}
+            value={formData.about_me}
+          />
+        </div>
+        <div class="form-group my-3">
+          <label for="weight">Medical conditions</label>
+          <input
+            className="form-control mt-1"
+            disabled={!editing}
+            type="test"
+            id="medical_conditions"
+            name="medical_conditions"
+            placeholder="Not Set"
+            onChange={handleInputChange}
+            value={formData.medical_conditions}
+          />
+        </div>
+        <div class="form-group my-3">
+          <label for="weight">Birthday</label>
+          <input
+            className="form-control mt-1"
+            disabled={!editing}
+            type="date"
+            id="birthday"
+            name="birthday"
+            placeholder="Not Set"
+            onChange={handleInputChange}
+            value={formData.birthday}
+          />
+        </div>
+        <div class="form-group my-3">
+          <label for="weight">Target weight</label>
           <input
             className="form-control mt-1"
             disabled={!editing}
             type="number"
             step="any"
-            id="hourly_rate"
-            name="hourly_rate"
+            id="target_weight"
+            name="target_weight"
             placeholder="Not Set"
             onChange={handleInputChange}
-            value={formData.hourly_rate}
+            value={formData.target_weight}
           />
         </div>
         <div class="form-group my-3">
-          <label for="weight">Availability</label>
+          <label for="weight">Weight</label>
           <input
             className="form-control mt-1"
             disabled={!editing}
-            type="text"
-            id="availability"
-            name="availability"
+            type="number"
+            step="any"
+            id="weight"
+            name="weight"
             placeholder="Not Set"
             onChange={handleInputChange}
-            value={formData.availability}
+            value={formData.weight}
           />
         </div>
         <div class="form-group my-3">
-          <label for="weight">Coaching History</label>
+          <label for="Height">Height</label>
           <input
             className="form-control mt-1"
             disabled={!editing}
-            type="text"
-            id="coaching_history"
-            name="coaching_history"
+            type="number"
+            id="height"
+            name="height"
             placeholder="Not Set"
             onChange={handleInputChange}
-            value={formData.coaching_history}
+            value={formData.height}
           />
         </div>
         <div class="form-group my-3">
-          <label for="experience">Coaching experience Level</label>
-          <input
+          <label for="experience">Experience Level</label>
+          <select
             disabled={!editing}
             className="form-select mt-1"
             id="experience_level"
             name="experience_level"
-            type="number"
             value={formData.experience_level}
             onChange={handleInputChange}
             aria-label="Default select example"
-          />
+          >
+            <option selected>Select your experience level</option>
+            <option>Beginner</option>
+            <option>Intermediate</option>
+            <option>Advanced</option>
+          </select>
         </div>
         <div class="form-group my-3">
-          <label for="weight">Paypal link</label>
-          <input
-            className="form-control mt-1"
+          <label for="budget">Budget Per Session</label>
+          <select
             disabled={!editing}
-            type="text"
-            id="paypal_link"
-            name="paypal_link"
-            placeholder="Not Set"
+            className="form-select mt-1"
+            name="budget"
+            value={formData.budget}
             onChange={handleInputChange}
-            value={formData.paypal_link}
-          />
+            aria-label="Default select example"
+          >
+            <option value="" disabled>
+              Select your budget
+            </option>
+            <option>$</option>
+            <option>$$</option>
+            <option>$$$</option>
+          </select>
         </div>
         <div className="row my-4">
           <div className="col-8">
