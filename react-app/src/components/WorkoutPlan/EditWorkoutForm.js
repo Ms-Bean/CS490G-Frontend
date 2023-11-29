@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Button, ButtonGroup, Table } from 'react-bootstrap';
 
 function EditWorkoutForm() {
     const [data, setData] = useState([])
@@ -118,7 +119,7 @@ function EditWorkoutForm() {
     
   return (
     <div className='container'>
-      <table>
+      <Table hover>
         <thead>
             <tr>
                 <th>Action</th>
@@ -161,13 +162,15 @@ function EditWorkoutForm() {
                             </select>
                         </td>
                         <td><input type="time" size="7" value={utime} onChange={e => usetTime(e.target.value)}/></td>
-                        <td><button onClick={handleUpdate}>Update</button></td>
+                        <td><Button variant="success" onClick={handleUpdate}>Update</Button></td>
                     </tr>
                     :
                     <tr key={index}>
                         <td>
-                            <button onClick={() => handleEdit(workout_exercise.id)}>Edit</button>
-                            <button onClick={() => handleDelete(workout_exercise.id)}>Delete</button>
+                        <ButtonGroup>
+                            <Button variant="primary" onClick={() => handleEdit(workout_exercise.id)}>Edit</Button>
+                            <Button variant="danger" onClick={() => handleDelete(workout_exercise.id)}>Delete</Button>
+                        </ButtonGroup>
                         </td>
                         <td>{workout_exercise.exercise}</td>
                         <td>{workout_exercise.num_sets}</td>
@@ -179,7 +182,7 @@ function EditWorkoutForm() {
                 ))
             }
         </tbody>
-      </table>
+      </Table>
       <div>
         {showForm && (
       <form onSubmit={handleSubmit}>
@@ -189,10 +192,10 @@ function EditWorkoutForm() {
             <option value="Jogging">Jogging</option>
             <option value="Sprinting">Sprinting</option>
         </select>
-        <input type="number" size="5" placeholder="Sets" onChhange={e => setSets(e.target.value)}/>
+        <input type="number" size="5" placeholder="Sets" onChange={e => setSets(e.target.value)}/>
         <input type="number" size="5" placeholder="Reps" onChange={e => setReps(e.target.value)}/>
         <input type="text" size="7" placeholder="Weight" onChange={e => setWeight(e.target.value)}/>
-        <select name="day" onChange={e => setDay(e.target.value)} required>
+        <label>&nbsp;Day:&nbsp;</label><select name="day" onChange={e => setDay(e.target.value)} required>
             <option value="Sunday">Sunday</option>
             <option value="Monday">Monday</option>
             <option value="Tuesday">Tuesday</option>
@@ -201,13 +204,15 @@ function EditWorkoutForm() {
             <option value="Friday">Friday</option>
             <option value="Saturday">Saturday</option>
         </select>
-        <input type="time" size="7" placeholder="Time" onChange={e => setTime(e.target.value)}/>
-        <button type="submit">Add</button>
-        <button onClick={handleCancel}>Cancel</button>
+        <label>&nbsp;Time:&nbsp;</label><input type="time" size="7" placeholder="Time" onChange={e => setTime(e.target.value)}/>
+        <ButtonGroup>
+            <Button variant="success" type="submit">Add</Button>
+            <Button variant="secondary" onClick={handleCancel}>Cancel</Button>
+        </ButtonGroup>
         </form>
         )}
       </div>
-      {showAddButton && (<button id='add' value="true" onClick={(e => handleShowForm(e.target.value))}>+</button>)}
+      {showAddButton && (<div className="d-grid gap-2"> <Button variant="outline-dark" size="lg" id='add' value="true" onClick={(e => handleShowForm(e.target.value))}>+</Button> </div>)}
         
     </div>
       
