@@ -39,6 +39,14 @@ const DailySurveyForm = () => {
     const form = e.currentTarget;
     e.preventDefault();
 
+    // Reset the confirmation/error message when the user attempts to submit form
+    if (confirmationMessage) {
+      setConfirmationMessage("");
+    }
+    if (error) {
+      setError("");
+    }
+
     if (form.checkValidity() === false) {
       e.stopPropagation();
       setValidated(true); // Enable validation feedback on the form
@@ -166,20 +174,19 @@ const DailySurveyForm = () => {
               <Form.Group className="mb-3" controlId="formMood">
                 <Form.Label>Mood</Form.Label>
                 <InputGroup>
-                <InputGroup.Text>
-                    <FaRegSmileBeam  />
+                  <InputGroup.Text>
+                    <FaRegSmileBeam />
                   </InputGroup.Text>
 
-                <Form.Select required name="mood" onChange={handleInputChange} value={formData.mood}>
-                  <option value="">Select Mood</option>
-                  <option value="happy">Happy</option>
-                  <option value="sad">Sad</option>
-                  <option value="energetic">Energetic</option>
-                  <option value="tired">Tired</option>
-                </Form.Select>
-                <Form.Control.Feedback type="invalid">Please select your mood.</Form.Control.Feedback>
+                  <Form.Select required name="mood" onChange={handleInputChange} value={formData.mood}>
+                    <option value="">Select Mood</option>
+                    <option value="happy">Happy</option>
+                    <option value="sad">Sad</option>
+                    <option value="energetic">Energetic</option>
+                    <option value="tired">Tired</option>
+                  </Form.Select>
+                  <Form.Control.Feedback type="invalid">Please select your mood.</Form.Control.Feedback>
                 </InputGroup>
-
               </Form.Group>
 
               <Button variant="dark" type="submit" className="btn btn-dark my-2 w-100">
