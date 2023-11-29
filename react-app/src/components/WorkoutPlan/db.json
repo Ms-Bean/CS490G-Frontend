@@ -1,0 +1,13 @@
+{
+  "workout_exercises": [
+    {
+      "id": 1,
+      "exercise": "Bench Press",
+      "num_sets": "5",
+      "reps_per_set": "5",
+      "weight": "100",
+      "weekday": "Monday",
+      "time": "11:00am"
+    }
+  ]
+}
