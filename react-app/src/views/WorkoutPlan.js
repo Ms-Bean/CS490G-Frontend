@@ -20,7 +20,13 @@ const rowCount = Math.floor(tempData.length / colCount) + 1;
 
 const WorkoutPlan = () => {
 
+    const [workoutPlans, setWorkoutPlans] = useState(tempData);
+    const [sortByOption, setSortByOption] = useState(null);
     let index = 0;
+
+    const handleSortChange = (newSortOption) => {
+        setSortByOption(newSortOption);
+    }
 
     const renderRows = () => {
         let rows = [];
@@ -41,7 +47,7 @@ const WorkoutPlan = () => {
             if(index < tempData.length){
                 cols.push(
                     <div className="col-lg-3">
-                        {<WorkoutPlanCard workoutPlanName={tempData[index]} />}
+                        {<WorkoutPlanCard workoutPlanName={workoutPlans[index]} />}
                     </div>
                 )
                 index++;
@@ -53,7 +59,7 @@ const WorkoutPlan = () => {
 
     return (
         <div>
-            <WorkoutNavbar/>
+            <WorkoutNavbar handleSortChange={handleSortChange}/>
             <div className="container mt-3">
                 {renderRows()}
             </div>
