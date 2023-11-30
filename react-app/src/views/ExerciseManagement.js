@@ -45,7 +45,7 @@ const ExerciseManagement = () => {
     if (!selectedExercise.exercise_id) {
       return;
     }
-
+  
     try {
       const response = await fetch(`http://localhost:3500/update_exercise/${selectedExercise.exercise_id}`, {
         method: "PUT",
@@ -54,11 +54,17 @@ const ExerciseManagement = () => {
         credentials: "include",
       });
       if (!response.ok) throw new Error("Failed to update exercise");
+  
+      setExercises(exercises.map((ex) => {
+        return ex.exercise_id === selectedExercise.exercise_id ? selectedExercise : ex;
+      }));
+  
+      setShowModal(false);
     } catch (err) {
       // Handle error
     }
   };
-
+  
   const handleChange = (e) => {
     setSelectedExercise({ ...selectedExercise, [e.target.name]: e.target.value });
   };
