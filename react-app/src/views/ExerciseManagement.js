@@ -2,15 +2,34 @@ import React, { useState, useEffect } from "react";
 import { Container, Form, Button, Alert, Row, Modal } from "react-bootstrap";
 import ExerciseCard from "../components/ExerciseCard";
 import ExerciseNavbar from "../components/Exercises/ExerciseNavbar";
+import ExerciseModal from "../components/Exercises/ExerciseModal";
 
 const ExerciseManagement = () => {
   const [exercises, setExercises] = useState([]);
   const [selectedExercise, setSelectedExercise] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [selectedCardId, setSelectedCardId] = useState(null);
+
+  const handleCardSelect = (exerciseId) => {
+    setSelectedCardId(exerciseId);
+  };
+
+  const [modalMode, setModalMode] = useState("view"); // 'view' or 'edit'
   const [showModal, setShowModal] = useState(false);
-  const handleClose = () => setShowModal(false);
-  const handleShow = () => setShowModal(true);
+  const handleModalClose = () => setShowModal(false);
+
+  const handleInfo = (exercise) => {
+    setSelectedExercise(exercise);
+    setModalMode("view");
+    setShowModal(true);
+  };
+
+  const handleEdit = (exercise) => {
+    setSelectedExercise(exercise);
+    setModalMode("edit");
+    setShowModal(true);
+  };
 
   useEffect(() => {
     const fetchExercises = async () => {
@@ -55,11 +74,6 @@ const ExerciseManagement = () => {
     setSelectedExercise({ ...selectedExercise, [e.target.name]: e.target.value });
   };
 
-  const handleEdit = (exercise) => {
-    setSelectedExercise(exercise);
-    handleShow();
-  };
-
   return (
     <div>
       <ExerciseNavbar />
@@ -71,78 +85,27 @@ const ExerciseManagement = () => {
         ) : (
           <Row>
             {exercises.map((exercise) => (
-              <ExerciseCard key={exercise.exercise_id} exercise={exercise} onEdit={handleEdit} />
+              <ExerciseCard
+                key={exercise.exercise_id}
+                exercise={exercise}
+                onEdit={handleEdit}
+                onInfo={handleInfo}
+                onSelect={() => handleCardSelect(exercise.exercise_id)}
+                isSelected={selectedCardId === exercise.exercise_id}
+              />
             ))}
           </Row>
         )}
 
-        <Modal show={showModal} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Update Exercise</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form onSubmit={handleSubmit}>
-              <Form.Group className="mb-3">
-                <Form.Label>Exercise Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter exercise name"
-                  name="name"
-                  value={selectedExercise.name || ""}
-                  onChange={handleChange}
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Description</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  placeholder="Enter exercise description"
-                  name="description"
-                  value={selectedExercise.description || ""}
-                  onChange={handleChange}
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Difficulty (0-10)</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Enter difficulty level"
-                  name="difficulty"
-                  value={selectedExercise.difficulty || 0}
-                  onChange={handleChange}
-                  min={0}
-                  max={10}
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Video Link</Form.Label>
-                <Form.Control
-                  type="url"
-                  placeholder="Enter video link"
-                  name="video_link"
-                  value={selectedExercise.video_link || ""}
-                  onChange={handleChange}
-                />
-              </Form.Group>
-
-              <Button variant="primary" type="submit">
-                Update Exercise
-              </Button>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Close
-            </Button>
-            <Button variant="primary" type="submit">
-              Save Changes
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        <ExerciseModal
+          showModal={showModal}
+          handleClose={handleModalClose}
+          selectedExercise={selectedExercise}
+          modalMode={modalMode}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+          setModalMode={setModalMode}
+        />
       </Container>
     </div>
   );
