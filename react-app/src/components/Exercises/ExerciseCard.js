@@ -1,38 +1,23 @@
 import React from "react";
-import { Card, Col, Button } from "react-bootstrap";
+import { Card, Col, Button, ButtonGroup } from "react-bootstrap";
 
-const ExerciseCard = ({ exercise, onEdit, onInfo, onSelect, isSelected, onDelete }) => {
-  const truncateText = (text, maxLength) => {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + "...";
-    }
-    return text;
-  };
-
-  const cardClass = isSelected ? "selected-card" : "";
-
+const ExerciseCard = ({ exercise, onEdit, onInfo }) => {
   return (
-    <Col md={3} className={`mb-4 ${cardClass}`} onClick={onSelect}>
-      <Card>
+    <Col md={3} className="mb-4">
+      <Card className="bg-light" style={{ height: "20em" }}>
         <Card.Body>
-          <Card.Title>
-            <strong>{exercise.name}</strong>
-          </Card.Title>
-          {exercise.description && <Card.Text>Description: {truncateText(exercise.description, 50)}</Card.Text>}
-          {isSelected && (
-            <>
-              <Button variant="secondary" onClick={() => onInfo(exercise)} className="me-2 w-auto">
-                Info
-              </Button>
-              <Button variant="primary" onClick={() => onEdit(exercise)} className="me-2 w-auto">
-                Edit
-              </Button>
-              <Button variant="danger" onClick={() => onDelete(exercise.exercise_id)} className="me-2 w-auto">
-                Delete
-              </Button>
-            </>
-          )}
+          <Card.Title>{exercise.name}</Card.Title>
         </Card.Body>
+        <Card.Footer>
+          <ButtonGroup className="w-100">
+            <Button variant="secondary" onClick={() => onInfo(exercise)} className="">
+              Info
+            </Button>
+            <Button variant="primary" onClick={() => onEdit(exercise)} className="">
+              Edit
+            </Button>
+          </ButtonGroup>
+        </Card.Footer>
       </Card>
     </Col>
   );

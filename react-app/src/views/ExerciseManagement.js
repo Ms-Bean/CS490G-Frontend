@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Form, Button, Alert, Row, Modal } from "react-bootstrap";
+import { Container, Alert, Row } from "react-bootstrap";
 import ExerciseCard from "../components/Exercises/ExerciseCard";
 import ExerciseNavbar from "../components/Exercises/ExerciseNavbar";
 import ExerciseModal from "../components/Exercises/ExerciseModal";
@@ -9,32 +9,15 @@ const ExerciseManagement = () => {
   const [selectedExercise, setSelectedExercise] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [selectedCardId, setSelectedCardId] = useState(null);
-
-
-  const handleCardSelect = (exerciseId) => {
-    // Toggle selection: If the clicked card is already selected, unselect it. Otherwise, select it.
-    if (selectedCardId === exerciseId) {
-      setSelectedCardId(null);
-    } else {
-      setSelectedCardId(exerciseId);
-    }
-  };
-
   const [modalMode, setModalMode] = useState("view"); // 'view' or 'edit'
   const [showModal, setShowModal] = useState(false);
-  const handleModalClose = () => setShowModal(false);
 
-  const handleInfo = (exercise) => {
-    setSelectedExercise(exercise);
-    setModalMode("view");
-    setShowModal(true);
-  };
+  const toggleModal = () => setShowModal(!showModal);
 
-  const handleEdit = (exercise) => {
+  const handleInfoOrEdit = (exercise, mode) => {
     setSelectedExercise(exercise);
-    setModalMode("edit");
-    setShowModal(true);
+    setModalMode(mode); // 'view' or 'edit'
+    toggleModal();
   };
 
   useEffect(() => {
@@ -51,14 +34,12 @@ const ExerciseManagement = () => {
         setIsLoading(false);
       }
     };
-
     fetchExercises();
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedExercise.exercise_id) {
-      alert("Please select an exercise to update");
       return;
     }
 
@@ -70,59 +51,34 @@ const ExerciseManagement = () => {
         credentials: "include",
       });
       if (!response.ok) throw new Error("Failed to update exercise");
-      alert("Exercise updated successfully!");
     } catch (err) {
-      alert(err.message);
-    }
-  };
-
-  const handleDelete = async (exerciseId) => {
-    console.log("Deleting exercise with ID:", exerciseId);
-    try {
-      const response = await fetch(`http://localhost:3500/delete_exercise/${exerciseId}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-      if (!response.ok) throw new Error("Failed to delete exercise");
-      alert("Exercise deleted successfully!");
-      // Update the state to reflect the deletion
-      setExercises(exercises.filter((ex) => ex.exercise_id !== exerciseId));
-    } catch (err) {
-      alert(err.message);
+      // Handle error
     }
   };
 
   const handleChange = (e) => {
     setSelectedExercise({ ...selectedExercise, [e.target.name]: e.target.value });
   };
-  
+
   return (
     <div>
       <ExerciseNavbar />
       <Container className="mt-4">
-        {isLoading ? (
-          <p>Loading exercises...</p>
-        ) : error ? (
-          <Alert variant="danger">{error}</Alert>
-        ) : (
-          <Row>
-            {exercises.map((exercise) => (
-              <ExerciseCard
-                key={exercise.exercise_id}
-                exercise={exercise}
-                onEdit={handleEdit}
-                onInfo={handleInfo}
-                onDelete={handleDelete}
-                onSelect={() => handleCardSelect(exercise.exercise_id)}
-                isSelected={selectedCardId === exercise.exercise_id}
-              />
-            ))}
-          </Row>
-        )}
+        {isLoading ? <p>Loading exercises...</p> : error && <Alert variant="danger">{error}</Alert>}
+        <Row>
+          {exercises.map((exercise) => (
+            <ExerciseCard
+              key={exercise.exercise_id}
+              exercise={exercise}
+              onEdit={() => handleInfoOrEdit(exercise, "edit")}
+              onInfo={() => handleInfoOrEdit(exercise, "view")}
+            />
+          ))}
+        </Row>
 
         <ExerciseModal
           showModal={showModal}
-          handleClose={handleModalClose}
+          handleClose={toggleModal}
           selectedExercise={selectedExercise}
           modalMode={modalMode}
           handleChange={handleChange}

@@ -1,7 +1,22 @@
-import React from "react";
+import React,{ useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 
 const ExerciseModal = ({ showModal, handleClose, selectedExercise, modalMode, handleChange, handleSubmit, setModalMode }) => {
+  const [exercises, setExercises] = useState([]);
+
+  const handleDelete = async (exerciseId) => {
+    try {
+      const response = await fetch(`http://localhost:3500/delete_exercise/${exerciseId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("Failed to delete exercise");
+      setExercises(exercises.filter((ex) => ex.exercise_id !== exerciseId));
+    } catch (err) {
+      // Handle error
+    }
+  };
+
   return (
     <Modal show={showModal} onHide={handleClose}>
       <Modal.Header closeButton>
@@ -84,9 +99,14 @@ const ExerciseModal = ({ showModal, handleClose, selectedExercise, modalMode, ha
           </Button>
         )}{" "}
         {modalMode === "edit" && (
-          <Button variant="primary" type="submit" onClick={handleSubmit} className="btn-dark me-2 w-100">
-            Save Changes
-          </Button>
+          <>
+            <Button variant="primary" type="submit" onClick={handleSubmit} className="btn-dark me-2 w-100">
+              Save Changes
+            </Button>
+            <Button variant="danger" onClick={() => handleDelete(selectedExercise.exercise_id)} className="me-2 w-100">
+              Delete
+            </Button>
+          </>
         )}
       </Modal.Footer>
     </Modal>
