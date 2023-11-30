@@ -17,7 +17,7 @@ const MessagePage = () => {
   const fetchUserList = async () => {
     try {
       // Use the authenticated user's ID from the useAuth hook
-      const response = await fetch(`http://localhost:3500/messages/${userId}`);
+      const response = await fetch(`http://localhost:3500/messages/${user.user_id}`);
       if (!response.ok) {
         throw new Error(`Failed to fetch user list. Status: ${response.status}`);
       }
@@ -39,8 +39,7 @@ const MessagePage = () => {
 
   const fetchMessages = async (userId) => {
     try {
-      // Assuming you have a function that fetches messages for a specific user
-      const response = await fetch(`http://localhost:3500/messages/${userId}`); // Replace with your actual endpoint
+      const response = await fetch(`http://localhost:3500/messages/${userId}`);
 
       if (!response.ok) {
         throw new Error(`Failed to fetch messages. Status: ${response.status}`);
@@ -54,7 +53,6 @@ const MessagePage = () => {
   };
 
   const handleUserClick = (userId) => {
-    // Set the selected user and fetch messages for that user
     setSelectedUserId(userId);
     fetchMessages(userId);
   };
@@ -90,7 +88,6 @@ const MessagePage = () => {
               {selectedUserId ? (
                 <>
                   <p>Selected User: {selectedUserId}</p>
-                  {/* Assuming CarouselComp needs to be updated to use the new messages structure */}
                   <CarouselComp messages={messages} />
                 </>
               ) : (
