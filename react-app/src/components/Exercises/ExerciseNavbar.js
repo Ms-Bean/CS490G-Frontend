@@ -3,7 +3,23 @@ import { Navbar, Nav, Form, FormControl, Button, Dropdown, Container } from "rea
 import { FaSearch } from "react-icons/fa";
 import ExerciseAddModal from "./ExerciseAddModal";
 
-const ExerciseNavbar = () => {
+const ExerciseNavbar = ({ onSearch, onSort, onToggleSortDirection, sortKey, sortDirection }) => {
+  const handleSearchChange = (e) => {
+    onSearch(e.target.value);
+  };
+
+  const handleSortOptionClick = (key) => {
+    if (sortKey === key) {
+      onToggleSortDirection();
+    } else {
+      onSort(key);
+    }
+  };
+
+  const getSortDirectionSymbol = (key) => {
+    return sortKey === key ? (sortDirection === "ascending" ? " ↑" : " ↓") : "";
+  };
+
   return (
     <Navbar variant="dark" bg="dark" expand="lg" className="secondary-navbar">
       <Container>
@@ -16,20 +32,20 @@ const ExerciseNavbar = () => {
           <Nav className="me-auto" />
 
           <Form className="d-flex">
-            <FormControl type="text" placeholder="Search by name..." name="name" className="me-2" />
-            <Button variant="secondary" type="submit">
+            <FormControl type="text" placeholder="Search by name..." name="name" className="me-2" onChange={handleSearchChange} />
+            <Button variant="secondary">
               <FaSearch />
             </Button>
             <Button variant="secondary" className="ms-2">
               Filters
             </Button>
-            <Dropdown variant="secondary" className="ms-2">
+            <Dropdown variant="secondary" className="ms-2" onSelect={handleSortOptionClick}>
               <Dropdown.Toggle variant="secondary" id="dropdown-basic-button">
                 Sort
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item>Name</Dropdown.Item>
-                <Dropdown.Item>Difficulty</Dropdown.Item>
+                <Dropdown.Item eventKey="name">Name{getSortDirectionSymbol("name")}</Dropdown.Item>
+                <Dropdown.Item eventKey="difficulty">Difficulty{getSortDirectionSymbol("difficulty")}</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </Form>

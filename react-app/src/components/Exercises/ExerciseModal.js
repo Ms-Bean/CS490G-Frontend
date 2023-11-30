@@ -1,8 +1,9 @@
-import React,{ useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 
 const ExerciseModal = ({ showModal, handleClose, selectedExercise, modalMode, handleChange, handleSubmit, setModalMode }) => {
   const [exercises, setExercises] = useState([]);
+  const [goals, setGoals] = useState([]);
 
   const handleDelete = async (exerciseId) => {
     try {
@@ -16,6 +17,23 @@ const ExerciseModal = ({ showModal, handleClose, selectedExercise, modalMode, ha
       // Handle error
     }
   };
+
+  useEffect(() => {
+    const fetchGoals = async () => {
+      try {
+        const response = await fetch("http://localhost:3500/goals");
+        if (!response.ok) throw new Error("Failed to fetch goals");
+        const data = await response.json();
+        setGoals(data);
+      } catch (err) {
+        // Handle error
+      }
+    };
+
+    if (showModal) {
+      fetchGoals();
+    }
+  }, [showModal]);
 
   return (
     <Modal show={showModal} onHide={handleClose}>
@@ -62,6 +80,18 @@ const ExerciseModal = ({ showModal, handleClose, selectedExercise, modalMode, ha
             </Form.Group>
 
             <Form.Group className="mb-3">
+              <Form.Label>Goal</Form.Label>
+              <Form.Select name="goal_id" value={selectedExercise.goal_id || ""} onChange={handleChange}>
+                <option value="">Select a goal</option>
+                {goals.map((goal) => (
+                  <option key={goal.goal_id} value={goal.goal_id}>
+                    {goal.name}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
               <Form.Label>Video Link</Form.Label>
               <Form.Control
                 type="url"
@@ -82,6 +112,9 @@ const ExerciseModal = ({ showModal, handleClose, selectedExercise, modalMode, ha
             </p>
             <p>
               <strong>Difficulty:</strong> {selectedExercise.difficulty}
+            </p>
+            <p>
+              <strong>Goals:</strong> {selectedExercise.goal_name}
             </p>
             <p>
               <strong>Video Link:</strong>{" "}
