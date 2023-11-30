@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Col, Button } from "react-bootstrap";
 
-const ExerciseCard = ({ exercise, onEdit, onInfo, onSelect, isSelected }) => {
+const ExerciseCard = ({ exercise, onEdit, onInfo, onSelect, isSelected, onDelete }) => {
   const truncateText = (text, maxLength) => {
     if (text.length > maxLength) {
       return text.substring(0, maxLength) + "...";
@@ -27,7 +27,7 @@ const ExerciseCard = ({ exercise, onEdit, onInfo, onSelect, isSelected }) => {
               <Button variant="primary" onClick={() => onEdit(exercise)} className="me-2 w-auto">
                 Edit
               </Button>
-              <Button variant="danger" className="me-2 w-auto">
+              <Button variant="danger" onClick={() => onDelete(exercise.exercise_id)} className="me-2 w-auto">
                 Delete
               </Button>
             </>

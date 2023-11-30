@@ -12,8 +12,14 @@ const ExerciseManagement = () => {
   const [selectedCardId, setSelectedCardId] = useState(null);
 
   const handleCardSelect = (exerciseId) => {
-    setSelectedCardId(exerciseId);
+    // Toggle selection: If the clicked card is already selected, unselect it. Otherwise, select it.
+    if (selectedCardId === exerciseId) {
+      setSelectedCardId(null);
+    } else {
+      setSelectedCardId(exerciseId);
+    }
   };
+  
 
   const [modalMode, setModalMode] = useState("view"); // 'view' or 'edit'
   const [showModal, setShowModal] = useState(false);
@@ -70,6 +76,22 @@ const ExerciseManagement = () => {
     }
   };
 
+  const handleDelete = async (exerciseId) => {
+    console.log('Deleting exercise with ID:', exerciseId); 
+    try {
+      const response = await fetch(`http://localhost:3500/delete_exercise/${exerciseId}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("Failed to delete exercise");
+      alert("Exercise deleted successfully!");
+      // Update the state to reflect the deletion
+      setExercises(exercises.filter(ex => ex.exercise_id !== exerciseId));
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
   const handleChange = (e) => {
     setSelectedExercise({ ...selectedExercise, [e.target.name]: e.target.value });
   };
@@ -90,6 +112,7 @@ const ExerciseManagement = () => {
                 exercise={exercise}
                 onEdit={handleEdit}
                 onInfo={handleInfo}
+                onDelete={handleDelete}
                 onSelect={() => handleCardSelect(exercise.exercise_id)}
                 isSelected={selectedCardId === exercise.exercise_id}
               />
