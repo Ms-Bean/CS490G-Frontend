@@ -16,7 +16,7 @@ function EditWorkoutPlan() {
         </button>
 
         <Modal
-        size="lg"
+        size="xl"
         show={show}
         onHide={handleClose}
         backdrop="static"
