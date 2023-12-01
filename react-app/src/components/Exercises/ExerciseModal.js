@@ -8,6 +8,15 @@ const ViewExerciseModal = ({ selectedExercise, handleClose }) => (
     <p><strong>Description:</strong> {selectedExercise.description}</p>
     <p><strong>Difficulty:</strong> {selectedExercise.difficulty}</p>
     <p><strong>Goals:</strong> {selectedExercise.goal_name}</p>
+    <p><strong>Created By:</strong> {selectedExercise.user_who_created_it}</p>
+    <p>
+      <strong>Muscle Groups: </strong> 
+      {selectedExercise.muscle_groups ? selectedExercise.muscle_groups.split(',').join(', ') : 'None'}
+    </p>
+    <p>
+      <strong>Equipment: </strong> 
+      {selectedExercise.equipment_items ? selectedExercise.equipment_items.split(',').join(', ') : 'None'}
+    </p>
     <p><strong>Video Link:</strong>{" "}
       <a href={selectedExercise.video_link} target="_blank" rel="noopener noreferrer">
         View Video
@@ -15,6 +24,7 @@ const ViewExerciseModal = ({ selectedExercise, handleClose }) => (
     </p>
   </div>
 );
+
 
 const EditExerciseModal = ({ selectedExercise, handleChange, handleSubmit, goals }) => (
   <Form onSubmit={handleSubmit}>
