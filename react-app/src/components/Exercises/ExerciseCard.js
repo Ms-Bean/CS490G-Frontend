@@ -1,23 +1,26 @@
-import React from "react";
+import React, { useContext } from 'react';
 import { Card, Col, Button, ButtonGroup } from "react-bootstrap";
+import { ExerciseContext } from "../../context/exerciseContext";
 
-const ExerciseCard = ({ exercise, onEdit, onInfo }) => {
+const ExerciseCard = ({ exercise, isAdmin }) => {
+  const { handleInfoOrEdit } = useContext(ExerciseContext);
+
   return (
     <Col md={3} className="mb-4">
       <Card className="bg-light" style={{ height: "20em" }}>
         <Card.Body>
           <Card.Title>{exercise.name}</Card.Title>
         </Card.Body>
-        <Card.Footer>
-          <ButtonGroup className="w-100">
-            <Button variant="secondary" onClick={() => onInfo(exercise)} className="">
-              Info
-            </Button>
-            <Button variant="primary" onClick={() => onEdit(exercise)} className="">
+        <ButtonGroup className="w-100 p-2">
+          <Button variant="secondary" onClick={() => handleInfoOrEdit(exercise, "view")}>
+            Info
+          </Button>
+          {isAdmin && (
+            <Button variant="primary" onClick={() => handleInfoOrEdit(exercise, "edit")}>
               Edit
             </Button>
-          </ButtonGroup>
-        </Card.Footer>
+          )}
+        </ButtonGroup>
       </Card>
     </Col>
   );

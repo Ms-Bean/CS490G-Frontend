@@ -3,7 +3,7 @@ import { Navbar, Nav, Form, FormControl, Button, Dropdown, Container } from "rea
 import { FaSearch } from "react-icons/fa";
 import ExerciseAddModal from "./ExerciseAddModal";
 
-const ExerciseNavbar = ({ onSearch, onSort, onToggleSortDirection, sortKey, sortDirection }) => {
+const ExerciseNavbar = ({ onSearch, onSort, onToggleSortDirection, sortKey, sortDirection, isAdmin }) => {
   const handleSearchChange = (e) => {
     onSearch(e.target.value);
   };
@@ -25,7 +25,7 @@ const ExerciseNavbar = ({ onSearch, onSort, onToggleSortDirection, sortKey, sort
       <Container>
         <Navbar.Brand>
           Exercise Bank
-          <ExerciseAddModal />
+          {isAdmin && <ExerciseAddModal />}
         </Navbar.Brand>
 
         <Navbar.Collapse id="navbarScroll">

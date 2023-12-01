@@ -19,6 +19,7 @@ import CoachDashboard from "./views/CoachDashboard";
 import WorkoutPlan from "./views/WorkoutPlan";
 import SelectWorkoutPlan from "./views/SelectWorkoutPlan";
 
+import { ExerciseProvider } from "./context/exerciseContext";
 
 const App = () => {
 
@@ -48,7 +49,7 @@ const App = () => {
               <Route path="/select_workout_plan" element={<SelectWorkoutPlan/>}/>
               <Route path="workout_plan" element={<WorkoutPlan/>}/>
               <Route path="/daily_survey" element={<DailySurvey/>}/>
-              <Route path="/exercise_management" element={<ExerciseManagement/>}/>
+              <Route path="/exercise_management" element={<ExerciseProvider><ExerciseManagement/></ExerciseProvider>}/>
             </Route>
             <Route path='/onboard' element={<Onboarding/>}/>
             <Route path='/registration' element={<RegisterPage/>}/>
