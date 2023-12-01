@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Card, Row, Col } from "react-bootstrap";
+import { Container, Card, Row, Col, Spinner, Alert } from "react-bootstrap";
 import CarouselComp from "../components/Messaging";
 import { useAuth } from "../hooks/useAuth";
 
@@ -8,53 +8,40 @@ const MessagePage = () => {
   const [userList, setUserList] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch the list of users when the component mounts
-    fetchUserList();
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:3500/messages/list", {
+          method: "GET",
+          credentials: "include",
+        });
+
+        if (response.ok) {
+          const responseData = await response.json();
+          console.log("Messages List:", responseData.coachesList);
+          setMessages(responseData.coachesList);
+        } else {
+          console.error("Error fetching messages list:", response.statusText);
+          setError("Error fetching messages");
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        setError("Error");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // Fetch data when the component mounts
+    fetchData();
   }, [user]);
-
-  const fetchUserList = async () => {
-    try {
-      // Use the authenticated user's ID from the useAuth hook
-      const response = await fetch(`http://localhost:3500/messages/${user.user_id}`);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch user list. Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      // Assuming the response structure is an array of objects with user_id and other_user_id properties
-      const userList = data.map(entry => ({
-        user_id: entry.user_id,
-        other_user_id: entry.other_user_id,
-        name: entry.name, // Add the name property from the API response
-      }));
-
-      setUserList(userList);
-    } catch (error) {
-      console.error("Error fetching user list:", error);
-    }
-  };
-
-  const fetchMessages = async (userId) => {
-    try {
-      const response = await fetch(`http://localhost:3500/messages/${userId}`);
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch messages. Status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setMessages(data.messages);
-    } catch (error) {
-      console.error("Error fetching messages:", error);
-    }
-  };
 
   const handleUserClick = (userId) => {
     setSelectedUserId(userId);
-    fetchMessages(userId);
+    // Additional logic if needed
   };
 
   return (
@@ -85,13 +72,19 @@ const MessagePage = () => {
               <Card.Title>
                 <h1>Messages</h1>
               </Card.Title>
-              {selectedUserId ? (
+              {loading && <Spinner animation="border" />}
+              {error && <Alert variant="danger">{error}</Alert>}
+              {!loading && !error && (
                 <>
-                  <p>Selected User: {selectedUserId}</p>
-                  <CarouselComp messages={messages} />
+                  {selectedUserId ? (
+                    <>
+                      <p>Selected User: {selectedUserId}</p>
+                      <CarouselComp messages={messages} />
+                    </>
+                  ) : (
+                    <p>Select a user to view messages.</p>
+                  )}
                 </>
-              ) : (
-                <p>Select a user to view messages.</p>
               )}
             </Card.Body>
           </Card>
