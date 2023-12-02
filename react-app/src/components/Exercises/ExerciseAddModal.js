@@ -138,10 +138,7 @@ const ExerciseAddModal = () => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={toggleModal}>
-            Cancel
-          </Button>
-          <Button variant="primary" type="submit" form="add-exercise-form">
+          <Button className="w-100 p-2" variant="primary" type="submit" form="add-exercise-form">
             Add Exercise
           </Button>
         </Modal.Footer>

@@ -4,6 +4,7 @@ import { ExerciseContext } from "../../context/exerciseContext";
 import ViewExerciseModal from "./ExerciseViewModal";
 import EditExerciseModal from "./ExerciseEditModal";
 import { fetchGoals, fetchMuscleGroups, fetchEquipmentItems } from "./../../services/exerciseServices.js";
+import ConfirmDialog from "./ConfirmDialog.js";
 
 const ExerciseModal = ({ isAdmin }) => {
   const { exercises, setExercises, fetchExercises } = useContext(ExerciseContext);
@@ -11,6 +12,8 @@ const ExerciseModal = ({ isAdmin }) => {
   const [muscleGroups, setMuscleGroups] = useState([]);
   const [equipmentItems, setEquipmentItems] = useState([]);
   const [error, setError] = useState("");
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [confirmDialogMessage, setConfirmDialogMessage] = useState("");
   const { selectedExercise, setSelectedExercise, showModal, setShowModal, modalMode, setModalMode, fetchExerciseDetails } =
     useContext(ExerciseContext);
 
@@ -64,14 +67,39 @@ const ExerciseModal = ({ isAdmin }) => {
 
   const handleDelete = async () => {
     try {
-      const response = await deleteExercise(selectedExercise.exercise_id);
-      if (!response.ok) throw new Error("Unable to delete exercise");
-      setExercises(exercises.filter((ex) => ex.exercise_id !== selectedExercise.exercise_id));
-      fetchExercises();
-      setShowModal(false);
+      const references = await checkExerciseReferences(selectedExercise.exercise_id);
+      if (references && references.length > 0) {
+        setConfirmDialogMessage(`This exercise is referenced in other tables:\n\n${references.join("\n")}`);
+        setShowConfirmDialog(true);
+      } else {
+        proceedWithDelete();
+      }
     } catch (err) {
       setError(err.message);
     }
+  };
+
+  const checkExerciseReferences = async (exerciseId) => {
+    try {
+      const response = await fetch(`http://localhost:3500/exercise/${exerciseId}/references`, {
+        method: "GET",
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("Failed to check exercise references");
+      const data = await response.json();
+      return data; // This should be an array of messages or an empty array
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const proceedWithDelete = async () => {
+    const response = await deleteExercise(selectedExercise.exercise_id);
+    if (!response.ok) throw new Error("Unable to delete exercise");
+    setExercises(exercises.filter((ex) => ex.exercise_id !== selectedExercise.exercise_id));
+    fetchExercises();
+    setShowModal(false);
+    setShowConfirmDialog(false);
   };
 
   useEffect(() => {
@@ -92,7 +120,15 @@ const ExerciseModal = ({ isAdmin }) => {
     }
   }, [modalMode]);
 
-  return (
+  return (<>
+          <ConfirmDialog
+          show={showConfirmDialog}
+          handleClose={() => setShowConfirmDialog(false)}
+          handleConfirm={proceedWithDelete}
+          title="Confirm Delete"
+        >
+          {confirmDialogMessage}
+        </ConfirmDialog>
     <Modal show={showModal} onHide={() => setShowModal(false)}>
       <Modal.Header closeButton>
         <Modal.Title>{modalMode === "edit" ? "Edit Exercise" : "Exercise Information"}</Modal.Title>
@@ -112,6 +148,7 @@ const ExerciseModal = ({ isAdmin }) => {
         ) : (
           <ViewExerciseModal selectedExercise={selectedExercise} handleClose={() => setShowModal(false)} />
         )}
+
       </Modal.Body>
       {isAdmin && (
         <Modal.Footer>
@@ -133,6 +170,7 @@ const ExerciseModal = ({ isAdmin }) => {
         </Modal.Footer>
       )}
     </Modal>
+    </>
   );
 };
 
