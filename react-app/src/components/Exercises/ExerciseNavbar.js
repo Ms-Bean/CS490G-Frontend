@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { Navbar, Nav, Form, FormControl, Button, Dropdown, Container } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import ExerciseAddModal from "./ExerciseAddModal";
+import ExerciseFilterModal from "./ExerciseFilterModal";
 
-const ExerciseNavbar = ({ onSearch, onSort, onToggleSortDirection, sortKey, sortDirection, isAdmin }) => {
+const ExerciseNavbar = ({ onSearch, onSort, onToggleSortDirection, sortKey, sortDirection, isAdmin, onFilter }) => {
+  const [showFilterModal, setShowFilterModal] = useState(false);
+
+  const handleFilterClick = () => {
+    setShowFilterModal(true);
+  };
+
+
   const handleSearchChange = (e) => {
     onSearch(e.target.value);
   };
@@ -36,9 +44,10 @@ const ExerciseNavbar = ({ onSearch, onSort, onToggleSortDirection, sortKey, sort
             <Button variant="secondary">
               <FaSearch />
             </Button>
-            <Button variant="secondary" className="ms-2">
+            <Button variant="secondary" className="ms-2" onClick={handleFilterClick}>
               Filters
             </Button>
+            <ExerciseFilterModal show={showFilterModal} onHide={() => setShowFilterModal(false)} onApplyFilter={onFilter} />
             <Dropdown variant="secondary" className="ms-2" onSelect={handleSortOptionClick}>
               <Dropdown.Toggle variant="secondary" id="dropdown-basic-button">
                 Sort
@@ -51,8 +60,10 @@ const ExerciseNavbar = ({ onSearch, onSort, onToggleSortDirection, sortKey, sort
           </Form>
         </Navbar.Collapse>
       </Container>
+      
     </Navbar>
   );
 };
+
 
 export default ExerciseNavbar;

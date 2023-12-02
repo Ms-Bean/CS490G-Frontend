@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:3500"; 
+const BASE_URL = "http://localhost:3500";
 
 const fetchFromAPI = async (endpoint) => {
   try {
@@ -19,7 +19,7 @@ const fetchGoals = async () => {
 
 const fetchMuscleGroups = async () => {
   const muscleGroupsData = await fetchFromAPI("muscle-groups");
-  return muscleGroupsData.map(muscleGroup => {
+  return muscleGroupsData.map((muscleGroup) => {
     const key = Object.keys(muscleGroup)[0];
     return { value: key, label: muscleGroup[key] };
   });
@@ -27,7 +27,7 @@ const fetchMuscleGroups = async () => {
 
 const fetchEquipmentItems = async () => {
   const equipmentData = await fetchFromAPI("equipment");
-  return equipmentData.map(equipmentItem => {
+  return equipmentData.map((equipmentItem) => {
     const key = Object.keys(equipmentItem)[0];
     return { value: key, label: equipmentItem[key] };
   });
