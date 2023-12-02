@@ -1,24 +1,24 @@
 import React, { useState } from "react";
 import { Dropdown } from "react-bootstrap";
-import { FaSearch, FaPlusCircle} from "react-icons/fa";
+import { FaSearch} from "react-icons/fa";
 import NewWorkoutPlan from "./NewWorkoutPlan";
 
-const WorkoutNavbar = ({handleSortChange}) => {
+const WorkoutNavbar = ({handleSortChange, handleUploadSuccessChange}) => {
 
 
     return (
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
             <div className="container">
                 <div className="navbar-brand">
                     Workout Plan
-                    <NewWorkoutPlan/>
+                    <NewWorkoutPlan handleUploadSuccessChange={handleUploadSuccessChange}/>
                 </div>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <form class="d-flex ms-auto" role="search">
-                        <input class="form-control" type="search" placeholder="Search By Workout" aria-label="Search"/>
+                <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                    <form className="d-flex ms-auto" role="search">
+                        <input className="form-control" type="search" placeholder="Search By Workout" aria-label="Search"/>
                         <button className="btn btn-secondary ms-2" type="submit">
                             <FaSearch />
                         </button>

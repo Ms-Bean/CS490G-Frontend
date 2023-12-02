@@ -2,14 +2,14 @@ import React from "react";
 import EditWorkoutPlan from "./EditWorkoutPlan";
 import WorkoutPlanInfo from "./WorkoutPlanInfo";
 
-const WorkoutPlanCard = ({workoutPlanName}) => {
+const WorkoutPlanCard = ({workoutPlanName, workoutPlanId}) => {
     return(
-        <div class="card bg-light" style={{height : "20em"}}>
-            <div class="card-body">
-                <h5 class="card-title">{workoutPlanName}</h5>
+        <div className="card bg-light" style={{height : "20em"}}>
+            <div className="card-body">
+                <h5 className="card-title">{workoutPlanName}</h5>
             </div>
             <div className="card-footer d-flex justify-content-center border border-0 bg-light">
-                    <WorkoutPlanInfo workoutPlanName={workoutPlanName}/>
+                    <WorkoutPlanInfo workoutPlanName={workoutPlanName} workoutPlanId={workoutPlanId}/>
                     <EditWorkoutPlan/>
                 </div>
         </div>

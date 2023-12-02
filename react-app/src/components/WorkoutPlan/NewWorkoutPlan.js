@@ -1,162 +1,97 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { FaPlusCircle} from "react-icons/fa";
-import TagInputs from '../TagInputs';
+import { useAuth } from '../../hooks/useAuth';
 
-const exerciseBank = [
-    'Squats',
-    'Push-ups',
-    'Lunges',
-    'Deadlifts',
-    'Plank',
-    'Burpees',
-    'Pull-ups',
-    'Mountain Climbers',
-    'Bench Press',
-    'Russian Twists',
-    'Box Jumps',
-    'Dumbbell Rows',
-    'Leg Press',
-    'Plank Jacks',
-    'Tricep Dips',
-    'Jumping Lunges',
-    'Hammer Curls',
-    'Side Plank',
-    'Wall Sits',
-    'Calf Raises',
-    'Battle Ropes',
-    'Kettlebell Swings',
-    'High Knees',
-    'Bicycle Crunches',
-    'Jump Rope',
-    'Reverse Crunches',
-    'Dumbbell Lunges',
-    'Inverted Rows',
-    'Romanian Deadlifts',
-    'Medicine Ball Slams',
-    'Dumbbell Bench Press',
-    'Skater Lunges',
-    'Dumbbell Shoulder Press',
-    'Flutter Kicks',
-    'Single-Leg Romanian Deadlifts',
-    'Tuck Jumps',
-    'Seated Leg Press',
-    'Chin-ups',
-    'Walking Lunges',
-    'Side Lunges',
-    'Russian Deadlifts',
-    'Reverse Lunges',
-    'Bent-over Rows',
-    'Jumping Jacks',
-    'Lat Pulldowns',
-    'Standing Calf Raises',
-    'Hollow Body Hold'
-];
+const NewWorkoutPlan = ({handleUploadSuccessChange}) => {
 
-const fitnessGoalsBank = [
-    'Lose Weight',
-    'Build Muscle',
-    'Improve Endurance',
-    'Increase Flexibility',
-    'Enhance Core Strength',
-    'Improve Cardiovascular Health',
-    'Achieve a Healthy BMI',
-    'Enhance Athletic Performance',
-    'Reduce Body Fat Percentage',
-    'Improve Posture',
-    'Increase Energy Levels',
-    'Enhance Mental Well-being',
-    'Improve Balance and Coordination',
-    'Develop a Consistent Exercise Routine',
-    'Improve Joint Health',
-    'Enhance Functional Fitness',
-    'Master a New Sport or Physical Activity',
-    'Achieve Specific Strength Goals (e.g., Bench Press, Squat)',
-    'Train for a Fitness Event (e.g., 5K, Marathon, Triathlon)',
-    'Increase Flexibility Through Yoga or Stretching',
-    'Improve Body Composition',
-    'Build Definition and Tone',
-    'Reduce Stress Levels Through Exercise',
-    'Improve Sleep Quality',
-    'Enhance Overall Health and Wellness',
-    'Boost Metabolism',
-    'Maintain Healthy Blood Pressure',
-    'Improve Digestive Health Through Exercise',
-    'Build a Positive Body Image',
-    'Promote Longevity and Aging Well',
-    'Enhance Immune System Function',
-    'Achieve a Balanced and Healthy Lifestyle'
-];
+    const {user} = useAuth();
+    const [show, setShow] = useState(false);
+    const [error, setError] = useState("");
+    //In form just in case we add more values
+    const [formData, setFormData] = useState(
+        {
+            name : ""
+        }
+    )
 
-function NewWorkoutPlan() {
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
 
-  const [show, setShow] = useState(false);
-  const [formData, setFormData] = useState(
-    {
-        name : "",
-        exercises : [],
-        fitnes_goals : [],
-        thumbnail : ""
+    const submitWorkoutPlan = async () => {
+        try{
+            console.log(formData.name);
+            const data = {
+                name : formData.name,
+                author_id : user.user_id,
+            }
+            console.log(data);
+            const response = await fetch(`http://localhost:3500/workout_plan/new`, {
+                method: "POST",
+                headers: {
+                  // Moved data to body instead of headers
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+                credentials: "include", // Include credentials with the request
+            });
+            console.log(response);
+            if (!response.ok) {
+                setError("Failed to Create Workout Plan")
+                throw new Error(`Failed to create workout plan. Status: ${response.status}`);
+            }
+            setShow(false);
+            handleUploadSuccessChange();
+        } catch(err){
+            console.log(err);
+        }
     }
-  )
-  const [uploadSuccess, setUploadSuccess] = useState(false);
 
-  useEffect(() => {
-    //fetch users workout plans
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
-    //also fetch exercise bank and fitness goal bank
+    return (
+        <>
+            <div onClick={handleShow} className="d-inline ms-3" data-bs-toggle="modal" style={{cursor : "pointer"}}>
+                <FaPlusCircle className='mb-1' size={22} style={{color : "#6CB4EE"}}/>
+            </div>
 
-  }, [uploadSuccess]);
-
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  return (
-    <>
-        <div onClick={handleShow} className="d-inline ms-3" data-bs-toggle="modal" style={{cursor : "pointer"}}>
-            <FaPlusCircle size={22} style={{color : "#6CB4EE"}}/>
-        </div>
-
-        <Modal
-        show={show}
-        onHide={handleClose}
-        backdrop="static"
-        keyboard={false}
-        centered
-        >
-        <Modal.Header closeButton>
-            <Modal.Title>New Workout Plan</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-            <div className='w-100'>
+            <Modal
+            show={show}
+            onHide={handleClose}
+            backdrop="static"
+            keyboard={false}
+            centered
+            >
+            <Modal.Header closeButton>
+                <Modal.Title>New Workout Plan</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                {error ? 
+                <div className="alert alert-danger" role="alert">
+                    {error}
+                </div>
+                :
+                <>
+                </>
+                }
                 <form>
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" aria-describedby="name" placeholder='Name for Workout'/>
-                    </div>
-                    <div class="mb-3">
-                        <label for="exercises" class="form-label">Exercises</label>
-                        <TagInputs placeholder="Type a Workout" workBank={exerciseBank}/>
-                    </div>
-                    <div class="mb-3">
-                        <label for="fitness_goals" class="form-label">Fitness Goals</label>
-                        <TagInputs placeholder="Type a Fitness Goal" workBank={fitnessGoalsBank}/>
-                    </div>
-                    <div class="mb-3">
-                        <label for="thumbnail" class="form-label">Thumbnail</label>
-                        <input type="file" class="form-control" id="thumbnail" aria-describedby="thumbnail"/>
+                    <div className="mb-3">
+                        <label htmlFor="name" className="form-label ms-1">Name</label>
+                        <input onChange={handleInputChange} type="text" className="form-control" id="name" name="name" aria-describedby="name" placeholder='Name for Workout'/>
                     </div>
                 </form>
-            </div>
-        </Modal.Body>
-        <Modal.Footer>
-            <Button className='w-100' variant="dark">Save</Button>
-        </Modal.Footer>
-        </Modal>
-    </>
-  );
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={submitWorkoutPlan} className='w-100' variant="dark">Save</Button>
+            </Modal.Footer>
+            </Modal>
+
+        </>
+    );
 }
 
 export default NewWorkoutPlan;
