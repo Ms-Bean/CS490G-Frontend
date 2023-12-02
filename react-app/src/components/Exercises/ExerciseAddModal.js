@@ -1,20 +1,60 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
+import Select from "react-select";
 import { useAuth } from "../../hooks/useAuth";
 import { FaPlusCircle } from "react-icons/fa";
+import { fetchGoals, fetchMuscleGroups, fetchEquipmentItems } from "./../../services/exerciseServices.js";
+import { ExerciseContext } from "../../context/exerciseContext.js";
 
 const ExerciseAddModal = () => {
   const { user } = useAuth();
   const [exercises, setExercises] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [goals, setGoals] = useState([]);
+  const [muscleGroups, setMuscleGroups] = useState([]);
+  const [equipmentItems, setEquipmentItems] = useState([]);
+  const [selectedMuscleGroups, setSelectedMuscleGroups] = useState([]);
+  const [selectedEquipmentItems, setSelectedEquipmentItems] = useState([]);
+  const { fetchExercises } = useContext(ExerciseContext);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const fetchedGoals = await fetchGoals();
+        const fetchedMuscleGroups = await fetchMuscleGroups();
+        const fetchedEquipmentItems = await fetchEquipmentItems();
+        setGoals(fetchedGoals);
+        setMuscleGroups(fetchedMuscleGroups);
+        setEquipmentItems(fetchedEquipmentItems);
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    };
+    loadData();
+  }, []);
+
+  const handleMuscleGroupChange = (selectedOptions) => {
+    setSelectedMuscleGroups(selectedOptions);
+  };
+
+  const handleEquipmentChange = (selectedOptions) => {
+    setSelectedEquipmentItems(selectedOptions);
+  };
 
   const toggleModal = () => setShowModal(!showModal);
 
   const handleSave = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
+
+    // Format the selected muscle groups and equipment items
+    const muscleGroups = selectedMuscleGroups.map((group) => group.value);
+    const equipmentItems = selectedEquipmentItems.map((item) => item.value);
+
     const newExerciseData = {
       ...Object.fromEntries(formData.entries()),
+      muscleGroups,
+      equipmentItems,
       user_who_created_it: user.user_id,
     };
 
@@ -30,10 +70,9 @@ const ExerciseAddModal = () => {
       const addedExercise = await response.json();
       setExercises([...exercises, addedExercise]);
       toggleModal();
-      // Replace alert with a more integrated notification system if possible
+      fetchExercises();
       alert("New exercise added successfully!");
     } catch (err) {
-      // Replace alert with a more integrated error display if possible
       alert(err.message);
     }
   };
@@ -68,6 +107,33 @@ const ExerciseAddModal = () => {
             <Form.Group className="mb-3">
               <Form.Label>Video Link</Form.Label>
               <Form.Control type="url" placeholder="Enter video link" name="video_link" />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Goal</Form.Label>
+              <Select options={goals.map((goal) => ({ value: goal.goal_id, label: goal.name }))} name="goal_id" />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Muscle Groups</Form.Label>
+              <Select
+                isMulti
+                options={muscleGroups.map((group) => ({ value: group.value, label: group.label }))}
+                value={selectedMuscleGroups}
+                onChange={handleMuscleGroupChange}
+                name="muscleGroups"
+              />{" "}
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Equipment</Form.Label>
+              <Select
+                isMulti
+                options={equipmentItems.map((item) => ({ value: item.value, label: item.label }))}
+                value={selectedEquipmentItems}
+                onChange={handleEquipmentChange}
+                name="equipmentItems"
+              />{" "}
             </Form.Group>
           </Form>
         </Modal.Body>

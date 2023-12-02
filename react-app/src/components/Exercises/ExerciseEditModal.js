@@ -5,25 +5,23 @@ import Select from "react-select";
 const EditExerciseModal = ({ selectedExercise, setSelectedExercise, handleChange, handleSubmit, goals, muscleGroups, equipmentItems }) => {
   const goalOptions = goals.map((goal) => ({ value: goal.goal_id, label: goal.name }));
 
-  const muscleGroupOptions = muscleGroups.map((group) => {
-    const muscleGroupName = Object.keys(group)[0];
-    return { value: muscleGroupName, label: muscleGroupName };
-  });
-
-  const equipmentItemOptions = equipmentItems.map((item) => {
-    const equipmentName = Object.keys(item)[0];
-    return { value: equipmentName, label: equipmentName };
-  });
-
   const handleSelectChange = (name, selectedOptions) => {
-    console.log("handleSelectChange", name, selectedOptions);
-    const updatedValues = selectedOptions.map((item) => item.value);
+    console.log("Selected Options for " + name + ":", selectedOptions);
+    
+    // Map selectedOptions to an array of objects with value and label
+    const updatedValues = selectedOptions 
+      ? selectedOptions.map((item) => ({ value: item.value, label: item.label }))
+      : [];
+  
+    console.log("updatedValues", updatedValues);
     setSelectedExercise((prevExercise) => ({
       ...prevExercise,
       [name]: updatedValues,
     }));
+    
+    console.log("Updated Values for " + name + ":", selectedOptions);
   };
-
+  
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Group className="mb-3">
@@ -70,17 +68,17 @@ const EditExerciseModal = ({ selectedExercise, setSelectedExercise, handleChange
           onChange={(option) => handleChange({ target: { name: "goal_id", value: option.value } })}
           options={goalOptions}
           placeholder="Select a goal"
-        />
+        /> 
       </Form.Group>
 
       <Form.Group className="mb-3">
         <Form.Label>Muscle Groups</Form.Label>
         <Select
           isMulti
-          name="muscleGroups"
-          onChange={(selectedOptions) => handleSelectChange("muscleGroups", selectedOptions)}
-          options={muscleGroupOptions}
-          value={muscleGroupOptions.find((option) => option.value === selectedExercise.muscle_groups)}
+          name="muscle_groups"
+          onChange={(selectedOptions) => handleSelectChange("muscle_groups", selectedOptions)}
+          options={muscleGroups.map((group) => ({ value: group.value, label: group.label }))}
+          value={selectedExercise.muscle_groups}
         />
       </Form.Group>
 
@@ -88,10 +86,10 @@ const EditExerciseModal = ({ selectedExercise, setSelectedExercise, handleChange
         <Form.Label>Equipment</Form.Label>
         <Select
           isMulti
-          name="equipmentItems"
-          onChange={(selectedOptions) => handleSelectChange("equipmentItems", selectedOptions)}
-          options={equipmentItemOptions}
-          value={equipmentItemOptions.find((option) => option.value === selectedExercise.equipment_items)}
+          name="equipment_items"
+          onChange={(selectedOptions) => handleSelectChange("equipment_items", selectedOptions)}
+          options={equipmentItems.map((item) => ({ value: item.value, label: item.label }))}
+          value={selectedExercise.equipment_items} 
         />
       </Form.Group>
 

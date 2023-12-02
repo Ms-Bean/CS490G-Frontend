@@ -3,6 +3,7 @@ import { Modal, Button, Alert } from "react-bootstrap";
 import { ExerciseContext } from "../../context/exerciseContext";
 import ViewExerciseModal from "./ExerciseViewModal";
 import EditExerciseModal from "./ExerciseEditModal";
+import { fetchGoals, fetchMuscleGroups, fetchEquipmentItems } from "./../../services/exerciseServices.js";
 
 const ExerciseModal = ({ isAdmin }) => {
   const { exercises, setExercises, fetchExercises } = useContext(ExerciseContext);
@@ -13,41 +14,13 @@ const ExerciseModal = ({ isAdmin }) => {
   const { selectedExercise, setSelectedExercise, showModal, setShowModal, modalMode, setModalMode, fetchExerciseDetails } =
     useContext(ExerciseContext);
 
-  const fetchGoals = async () => {
-    try {
-      const response = await fetch("http://localhost:3500/goals");
-      const data = await response.json();
-      setGoals(data);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const fetchMuscleGroups = async () => {
-    try {
-      const response = await fetch("http://localhost:3500/muscle-groups");
-      const data = await response.json();
-      setMuscleGroups(data);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-  const fetchEquipmentItems = async () => {
-    try {
-      const response = await fetch("http://localhost:3500/equipment");
-      const data = await response.json();
-      setEquipmentItems(data);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-
-  const handleChange = (event) => { 
+  const handleChange = (event) => {
     const { name, value } = event.target;
     setSelectedExercise((prev) => ({ ...prev, [name]: value }));
   };
 
   const updateExercise = async () => {
+    console.log("Updating exercise:", selectedExercise);
     const response = await fetch(`http://localhost:3500/update_exercise/${selectedExercise.exercise_id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -58,6 +31,7 @@ const ExerciseModal = ({ isAdmin }) => {
   };
 
   const handleSubmit = async (e) => {
+    console.log("Submitting exercise:", selectedExercise);
     e.preventDefault();
     if (!selectedExercise.exercise_id) {
       setError("No exercise selected.");
@@ -102,9 +76,19 @@ const ExerciseModal = ({ isAdmin }) => {
 
   useEffect(() => {
     if (modalMode === "edit") {
-      fetchGoals();
-      fetchMuscleGroups();
-      fetchEquipmentItems();
+      const loadData = async () => {
+        try {
+          const fetchedGoals = await fetchGoals();
+          const fetchedMuscleGroups = await fetchMuscleGroups();
+          const fetchedEquipmentItems = await fetchEquipmentItems();
+          setGoals(fetchedGoals);
+          setMuscleGroups(fetchedMuscleGroups);
+          setEquipmentItems(fetchedEquipmentItems);
+        } catch (error) {
+          setError(error.message);
+        }
+      };
+      loadData();
     }
   }, [modalMode]);
 
