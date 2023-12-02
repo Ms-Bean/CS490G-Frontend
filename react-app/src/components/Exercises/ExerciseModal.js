@@ -1,20 +1,21 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Modal, Button, Alert } from 'react-bootstrap';
-import { ExerciseContext } from '../../context/exerciseContext';
-import ViewExerciseModal from './ExerciseViewModal';
-import EditExerciseModal from './ExerciseEditModal';
+import React, { useState, useEffect, useContext } from "react";
+import { Modal, Button, Alert } from "react-bootstrap";
+import { ExerciseContext } from "../../context/exerciseContext";
+import ViewExerciseModal from "./ExerciseViewModal";
+import EditExerciseModal from "./ExerciseEditModal";
 
 const ExerciseModal = ({ isAdmin }) => {
   const { exercises, setExercises, fetchExercises } = useContext(ExerciseContext);
   const [goals, setGoals] = useState([]);
   const [muscleGroups, setMuscleGroups] = useState([]);
   const [equipmentItems, setEquipmentItems] = useState([]);
-  const [error, setError] = useState('');
-  const { selectedExercise, setSelectedExercise, showModal, setShowModal, modalMode, setModalMode } = useContext(ExerciseContext);
+  const [error, setError] = useState("");
+  const { selectedExercise, setSelectedExercise, showModal, setShowModal, modalMode, setModalMode, fetchExerciseDetails } =
+    useContext(ExerciseContext);
 
   const fetchGoals = async () => {
     try {
-      const response = await fetch('http://localhost:3500/goals');
+      const response = await fetch("http://localhost:3500/goals");
       const data = await response.json();
       setGoals(data);
     } catch (err) {
@@ -24,36 +25,34 @@ const ExerciseModal = ({ isAdmin }) => {
 
   const fetchMuscleGroups = async () => {
     try {
-      const response = await fetch('http://localhost:3500/muscle-groups');
+      const response = await fetch("http://localhost:3500/muscle-groups");
       const data = await response.json();
-      setMuscleGroups(data.map(item => ({ label: item.muscle_group, value: item.muscle_group })));
+      setMuscleGroups(data);
     } catch (err) {
       setError(err.message);
     }
   };
-
   const fetchEquipmentItems = async () => {
     try {
-      const response = await fetch('http://localhost:3500/equipment');
+      const response = await fetch("http://localhost:3500/equipment");
       const data = await response.json();
-      setEquipmentItems(data.map(item => ({ label: item.equipment_item, value: item.equipment_item })));
+      setEquipmentItems(data);
     } catch (err) {
       setError(err.message);
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    const updatedValue = (name === 'muscleGroups' || name === 'equipmentItems') ? value.map(option => option.value) : value;
-    setSelectedExercise(prev => ({ ...prev, [name]: updatedValue }));
+  const handleChange = (event) => { 
+    const { name, value } = event.target;
+    setSelectedExercise((prev) => ({ ...prev, [name]: value }));
   };
 
   const updateExercise = async () => {
     const response = await fetch(`http://localhost:3500/update_exercise/${selectedExercise.exercise_id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(selectedExercise),
-      credentials: 'include',
+      credentials: "include",
     });
     return response;
   };
@@ -61,21 +60,21 @@ const ExerciseModal = ({ isAdmin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedExercise.exercise_id) {
-      setError('No exercise selected.');
+      setError("No exercise selected.");
       return;
     }
 
     try {
       const response = await updateExercise();
-      if (!response.ok) throw new Error('Failed to update exercise');
+      if (!response.ok) throw new Error("Failed to update exercise");
       if (response.status === 403) {
-        setError('You do not have permission to update this exercise');
+        setError("You do not have permission to update this exercise");
         return;
       }
 
-      setExercises(exercises.map(ex => ex.exercise_id === selectedExercise.exercise_id ? selectedExercise : ex));
-      fetchExercises();
-      setModalMode('view');
+      setExercises(exercises.map((ex) => (ex.exercise_id === selectedExercise.exercise_id ? selectedExercise : ex)));
+      fetchExerciseDetails(selectedExercise);
+      setModalMode("view");
     } catch (err) {
       setError(err.message);
     }
@@ -83,8 +82,8 @@ const ExerciseModal = ({ isAdmin }) => {
 
   const deleteExercise = async (exerciseId) => {
     const response = await fetch(`http://localhost:3500/delete_exercise/${exerciseId}`, {
-      method: 'DELETE',
-      credentials: 'include',
+      method: "DELETE",
+      credentials: "include",
     });
     return response;
   };
@@ -92,8 +91,8 @@ const ExerciseModal = ({ isAdmin }) => {
   const handleDelete = async () => {
     try {
       const response = await deleteExercise(selectedExercise.exercise_id);
-      if (!response.ok) throw new Error('Unable to delete exercise');
-      setExercises(exercises.filter(ex => ex.exercise_id !== selectedExercise.exercise_id));
+      if (!response.ok) throw new Error("Unable to delete exercise");
+      setExercises(exercises.filter((ex) => ex.exercise_id !== selectedExercise.exercise_id));
       fetchExercises();
       setShowModal(false);
     } catch (err) {
@@ -102,7 +101,7 @@ const ExerciseModal = ({ isAdmin }) => {
   };
 
   useEffect(() => {
-    if (modalMode === 'edit') {
+    if (modalMode === "edit") {
       fetchGoals();
       fetchMuscleGroups();
       fetchEquipmentItems();
@@ -119,6 +118,7 @@ const ExerciseModal = ({ isAdmin }) => {
         {modalMode === "edit" ? (
           <EditExerciseModal
             selectedExercise={selectedExercise}
+            setSelectedExercise={setSelectedExercise}
             handleChange={handleChange}
             handleSubmit={handleSubmit}
             goals={goals}

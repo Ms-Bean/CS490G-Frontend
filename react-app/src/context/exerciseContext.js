@@ -26,8 +26,24 @@ export const ExerciseProvider = ({ children }) => {
     }
   };
 
-  const handleInfoOrEdit = (exercise, mode) => {
-    setSelectedExercise(exercise);
+  const fetchExerciseDetails = async (exercise) => {
+    try {
+      const response = await fetch(`http://localhost:3500/exercise/${exercise.exercise_id}`, {
+        method: "GET",
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("Failed to fetch exercise details");
+      const data = await response.json();
+      setSelectedExercise(data);
+      clearError();
+    } catch (err) {
+      setError(err.message || "An error occurred while fetching exercise details.");
+    }
+  };
+
+  const handleInfoOrEdit = (exerciseId, mode) => {
+    // console.log("exerciseId", exerciseId);
+    fetchExerciseDetails(exerciseId);
     setModalMode(mode);
     setShowModal(true);
   };
@@ -49,6 +65,7 @@ export const ExerciseProvider = ({ children }) => {
         setModalMode,
         handleInfoOrEdit,
         fetchExercises,
+        fetchExerciseDetails,
         error,
         clearError,
       }}

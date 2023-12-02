@@ -1,6 +1,19 @@
-import React from 'react';
+import React from "react";
 
-const ViewExerciseModal = ({ selectedExercise }) => (
+const ViewExerciseModal = ({ selectedExercise }) => {
+  let muscleGroups = [];
+  let equipmentItems = [];
+
+  try {
+    muscleGroups = selectedExercise.muscle_groups ? JSON.parse(selectedExercise.muscle_groups) : [];
+    equipmentItems = selectedExercise.equipment_items ? JSON.parse(selectedExercise.equipment_items) : [];
+  } catch (error) {
+    console.error("Error parsing muscle groups or equipment items:", error);
+  }
+
+  const extractNames = (items) => items.map((item) => Object.keys(item)[0]).join(", ");
+
+  return (
     <div>
       <p>
         <strong>Name:</strong> {selectedExercise.name}
@@ -16,11 +29,11 @@ const ViewExerciseModal = ({ selectedExercise }) => (
       </p>
       <p>
         <strong>Muscle Groups: </strong>
-        {selectedExercise.muscle_groups ? selectedExercise.muscle_groups.split(",").join(", ") : "None"}
+        {muscleGroups.length > 0 ? extractNames(muscleGroups) : "None"}
       </p>
       <p>
         <strong>Equipment: </strong>
-        {selectedExercise.equipment_items ? selectedExercise.equipment_items.split(",").join(", ") : "None"}
+        {equipmentItems.length > 0 ? extractNames(equipmentItems) : "None"}
       </p>
       <p>
         <strong>Video Link:</strong>{" "}
@@ -30,5 +43,6 @@ const ViewExerciseModal = ({ selectedExercise }) => (
       </p>
     </div>
   );
+};
 
 export default ViewExerciseModal;
