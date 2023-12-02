@@ -1,200 +1,134 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Modal, Button, Form, Alert } from "react-bootstrap";
-import { ExerciseContext } from "../../context/exerciseContext";
-
-const ViewExerciseModal = ({ selectedExercise, handleClose }) => (
-  <div>
-    <p><strong>Name:</strong> {selectedExercise.name}</p>
-    <p><strong>Description:</strong> {selectedExercise.description}</p>
-    <p><strong>Difficulty:</strong> {selectedExercise.difficulty}</p>
-    <p><strong>Goals:</strong> {selectedExercise.goal_name}</p>
-    <p><strong>Created By:</strong> {selectedExercise.user_who_created_it}</p>
-    <p>
-      <strong>Muscle Groups: </strong> 
-      {selectedExercise.muscle_groups ? selectedExercise.muscle_groups.split(',').join(', ') : 'None'}
-    </p>
-    <p>
-      <strong>Equipment: </strong> 
-      {selectedExercise.equipment_items ? selectedExercise.equipment_items.split(',').join(', ') : 'None'}
-    </p>
-    <p><strong>Video Link:</strong>{" "}
-      <a href={selectedExercise.video_link} target="_blank" rel="noopener noreferrer">
-        View Video
-      </a>
-    </p>
-  </div>
-);
-
-
-const EditExerciseModal = ({ selectedExercise, handleChange, handleSubmit, goals }) => (
-  <Form onSubmit={handleSubmit}>
-    <Form.Group className="mb-3">
-      <Form.Label>Exercise Name</Form.Label>
-      <Form.Control
-        type="text"
-        placeholder="Enter exercise name"
-        name="name"
-        value={selectedExercise.name || ""}
-        onChange={handleChange}
-      />
-    </Form.Group>
-
-    <Form.Group className="mb-3">
-      <Form.Label>Description</Form.Label>
-      <Form.Control
-        as="textarea"
-        rows={3}
-        placeholder="Enter exercise description"
-        name="description"
-        value={selectedExercise.description || ""}
-        onChange={handleChange}
-      />
-    </Form.Group>
-
-    <Form.Group className="mb-3">
-      <Form.Label>Difficulty (0-10)</Form.Label>
-      <Form.Control
-        type="number"
-        placeholder="Enter difficulty level"
-        name="difficulty"
-        value={selectedExercise.difficulty || 0}
-        onChange={handleChange}
-        min={0}
-        max={10}
-      />
-    </Form.Group>
-
-    <Form.Group className="mb-3">
-      <Form.Label>Goal</Form.Label>
-      <Form.Select name="goal_id" value={selectedExercise.goal_id || ""} onChange={handleChange}>
-        <option value="">Select a goal</option>
-        {goals.map((goal) => (
-          <option key={goal.goal_id} value={goal.goal_id}>
-            {goal.name}
-          </option>
-        ))}
-      </Form.Select>
-    </Form.Group>
-
-    <Form.Group className="mb-3">
-      <Form.Label>Video Link</Form.Label>
-      <Form.Control
-        type="url"
-        placeholder="Enter video link"
-        name="video_link"
-        value={selectedExercise.video_link || ""}
-        onChange={handleChange}
-      />
-    </Form.Group>
-  </Form>
-);
+import React, { useState, useEffect, useContext } from 'react';
+import { Modal, Button, Alert } from 'react-bootstrap';
+import { ExerciseContext } from '../../context/exerciseContext';
+import ViewExerciseModal from './ExerciseViewModal';
+import EditExerciseModal from './ExerciseEditModal';
 
 const ExerciseModal = ({ isAdmin }) => {
   const { exercises, setExercises, fetchExercises } = useContext(ExerciseContext);
   const [goals, setGoals] = useState([]);
-  const [error, setError] = useState("");
+  const [muscleGroups, setMuscleGroups] = useState([]);
+  const [equipmentItems, setEquipmentItems] = useState([]);
+  const [error, setError] = useState('');
   const { selectedExercise, setSelectedExercise, showModal, setShowModal, modalMode, setModalMode } = useContext(ExerciseContext);
 
-  const handleChange = (e) => {
-    setSelectedExercise({ ...selectedExercise, [e.target.name]: e.target.value });
-  };
-
-  const handleClose = () => {
-    setShowModal(false);
-    setError("");
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!selectedExercise.exercise_id) {
-      setError("No exercise selected."); // Set an error if no exercise is selected
-      return;
-    }
-
+  const fetchGoals = async () => {
     try {
-      const response = await fetch(`http://localhost:3500/update_exercise/${selectedExercise.exercise_id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(selectedExercise),
-        credentials: "include",
-      });
-      if (!response.ok) throw new Error("Failed to update exercise");
-
-      // backend returns 403 when permission denied due to user role
-      if (response.status === 403) {
-        setError("You do not have permission to update this exercise");
-        return;
-      }
-
-      setExercises(
-        exercises.map((ex) => {
-          return ex.exercise_id === selectedExercise.exercise_id ? selectedExercise : ex;
-        })
-      );
-
-      if (response.ok) {
-        fetchExercises(); // Re-fetch exercises to update the list
-        setModalMode("view"); // Switch back to view mode
-      }
+      const response = await fetch('http://localhost:3500/goals');
+      const data = await response.json();
+      setGoals(data);
     } catch (err) {
       setError(err.message);
     }
   };
 
-  const handleDelete = async (exerciseId) => {
+  const fetchMuscleGroups = async () => {
     try {
-      const response = await fetch(`http://localhost:3500/delete_exercise/${exerciseId}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-      if (!response.ok) throw new Error("Unable to delete exercise");
-      setExercises(exercises.filter((ex) => ex.exercise_id !== exerciseId));
-      if (response.ok) {
-        fetchExercises(); // Re-fetch exercises to update the list
-        setShowModal(false); // Close the modal
+      const response = await fetch('http://localhost:3500/muscle-groups');
+      const data = await response.json();
+      setMuscleGroups(data.map(item => ({ label: item.muscle_group, value: item.muscle_group })));
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const fetchEquipmentItems = async () => {
+    try {
+      const response = await fetch('http://localhost:3500/equipment');
+      const data = await response.json();
+      setEquipmentItems(data.map(item => ({ label: item.equipment_item, value: item.equipment_item })));
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    const updatedValue = (name === 'muscleGroups' || name === 'equipmentItems') ? value.map(option => option.value) : value;
+    setSelectedExercise(prev => ({ ...prev, [name]: updatedValue }));
+  };
+
+  const updateExercise = async () => {
+    const response = await fetch(`http://localhost:3500/update_exercise/${selectedExercise.exercise_id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(selectedExercise),
+      credentials: 'include',
+    });
+    return response;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!selectedExercise.exercise_id) {
+      setError('No exercise selected.');
+      return;
+    }
+
+    try {
+      const response = await updateExercise();
+      if (!response.ok) throw new Error('Failed to update exercise');
+      if (response.status === 403) {
+        setError('You do not have permission to update this exercise');
+        return;
       }
+
+      setExercises(exercises.map(ex => ex.exercise_id === selectedExercise.exercise_id ? selectedExercise : ex));
+      fetchExercises();
+      setModalMode('view');
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const deleteExercise = async (exerciseId) => {
+    const response = await fetch(`http://localhost:3500/delete_exercise/${exerciseId}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+    return response;
+  };
+
+  const handleDelete = async () => {
+    try {
+      const response = await deleteExercise(selectedExercise.exercise_id);
+      if (!response.ok) throw new Error('Unable to delete exercise');
+      setExercises(exercises.filter(ex => ex.exercise_id !== selectedExercise.exercise_id));
+      fetchExercises();
+      setShowModal(false);
     } catch (err) {
       setError(err.message);
     }
   };
 
   useEffect(() => {
-    const fetchGoals = async () => {
-      try {
-        const response = await fetch("http://localhost:3500/goals");
-        if (!response.ok) throw new Error("Failed to fetch goals");
-        const data = await response.json();
-        setGoals(data);
-      } catch (err) {
-        setError(err.message);
-      }
-    };
-
-    if (showModal) {
-      // Only fetch goals if modal is open
+    if (modalMode === 'edit') {
       fetchGoals();
+      fetchMuscleGroups();
+      fetchEquipmentItems();
     }
-  }, [showModal]);
+  }, [modalMode]);
 
   return (
-    <Modal show={showModal} onHide={handleClose}>
+    <Modal show={showModal} onHide={() => setShowModal(false)}>
       <Modal.Header closeButton>
         <Modal.Title>{modalMode === "edit" ? "Edit Exercise" : "Exercise Information"}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {error && <Alert variant="danger">{error}</Alert>} {/* Display error message */}
+        {error && <Alert variant="danger">{error}</Alert>}
         {modalMode === "edit" ? (
-          <EditExerciseModal 
-            selectedExercise={selectedExercise} 
-            handleChange={handleChange} 
-            handleSubmit={handleSubmit} 
-            goals={goals} 
+          <EditExerciseModal
+            selectedExercise={selectedExercise}
+            handleChange={handleChange}
+            handleSubmit={handleSubmit}
+            goals={goals}
+            muscleGroups={muscleGroups}
+            equipmentItems={equipmentItems}
           />
         ) : (
-          <ViewExerciseModal selectedExercise={selectedExercise} handleClose={handleClose} />
+          <ViewExerciseModal selectedExercise={selectedExercise} handleClose={() => setShowModal(false)} />
         )}
       </Modal.Body>
-
       {isAdmin && (
         <Modal.Footer>
           {modalMode === "view" && (
