@@ -1,13 +1,34 @@
 {
   "workout_exercises": [
     {
-      "id": 1,
-      "exercise": "Bench Press",
-      "num_sets": "5",
-      "reps_per_set": "5",
-      "weight": "100",
+      "workout_plan_exercise_id": "1",
+      "workout_plan_id": "10",
+      "exercise_id": "100",
       "weekday": "Monday",
-      "time": "11:00am"
+      "time": "10:00",
+      "reps_per_set": "5",
+      "num_sets": "5",
+      "weight": "25"
+    },
+    {
+      "workout_plan_exercise_id": "2",
+      "workout_plan_id": "10",
+      "exercise_id": "200",
+      "weekday": "Monday",
+      "time": "11:00",
+      "reps_per_set": "10",
+      "num_sets": "5",
+      "weight": "75"
+    },
+    {
+      "workout_plan_exercise_id": "3",
+      "workout_plan_id": "10",
+      "exercise_id": "300",
+      "weekday": "Monday",
+      "time": "12:00",
+      "reps_per_set": "5",
+      "num_sets": "10",
+      "weight": "150"
     }
   ]
 }

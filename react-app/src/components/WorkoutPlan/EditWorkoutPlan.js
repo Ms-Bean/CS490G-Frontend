@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import TableData from './EditWorkoutForm';
 
-function EditWorkoutPlan() {
+function EditWorkoutPlan({workoutPlanName, workoutPlanId}) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -27,7 +27,7 @@ function EditWorkoutPlan() {
             <Modal.Title>Edit Workout Plan</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <TableData/>
+            <TableData workoutPlanName={workoutPlanName} workoutPlanId={workoutPlanId}/>
         </Modal.Body>
         <Modal.Footer>
             <Button className='w-100' variant="dark">Save Changes</Button>

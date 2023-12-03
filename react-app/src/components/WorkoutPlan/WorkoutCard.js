@@ -10,7 +10,7 @@ const WorkoutPlanCard = ({workoutPlanName, workoutPlanId}) => {
             </div>
             <div className="card-footer d-flex justify-content-center border border-0 bg-light">
                     <WorkoutPlanInfo workoutPlanName={workoutPlanName} workoutPlanId={workoutPlanId}/>
-                    <EditWorkoutPlan/>
+                    <EditWorkoutPlan workoutPlanName={workoutPlanName} workoutPlanId={workoutPlanId}/>
                 </div>
         </div>
     )
