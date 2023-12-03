@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Row, Col } from "react-bootstrap";
+import { Card, Col, Button, ButtonGroup } from "react-bootstrap";
 
 const CoachCard = ({ coach }) => {
   // Function to truncate text with a maximum length
@@ -11,15 +11,13 @@ const CoachCard = ({ coach }) => {
   };
 
   return (
-    <Col md={4} className="mb-4">
-      <Card>
-        <Card.Body className="pb-1">
+    <Col md={3} className="mb-4">
+      <Card className="bg-light" style={{ height: "20em" }}>
+        <Card.Body>
           <Card.Title>
-            <strong>
-              {coach.personal_info.first_name} {coach.personal_info.last_name}
-            </strong>
+            {coach.personal_info.first_name} {coach.personal_info.last_name}
           </Card.Title>
-          <p>
+          {/* <p>
             <strong>Experience:</strong> {coach.professional_info.experience_level} years
           </p>
           <p>
@@ -30,8 +28,11 @@ const CoachCard = ({ coach }) => {
           </p>
           <p>
             <strong>Coaching History:</strong> {truncateText(coach.professional_info.coaching_history || "Not provided", 50)}
-          </p>
+          </p> */}
         </Card.Body>
+        <ButtonGroup className="w-100 p-2">
+          <Button variant="secondary">Info</Button>
+        </ButtonGroup>
       </Card>
     </Col>
   );

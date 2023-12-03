@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useMemo, useContext } from "react";
+import ReactPaginate from 'react-paginate';
 import { Container, Alert, Row } from "react-bootstrap";
 import ExerciseCard from "../components/Exercises/ExerciseCard";
 import ExerciseNavbar from "../components/Exercises/ExerciseNavbar";
 import ExerciseModal from "../components/Exercises/ExerciseModal";
 import { ExerciseContext } from "../context/exerciseContext";
+import "./../css/ExerciseBank.css";
 
 const ExerciseManagement = () => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -14,6 +16,8 @@ const ExerciseManagement = () => {
   const [sortDirection, setSortDirection] = useState("ascending");
   const [filters, setFilters] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 12; // You can set this to any number you prefer
 
   useEffect(() => {
     const fetchRole = async () => {
@@ -53,7 +57,7 @@ const ExerciseManagement = () => {
 
     if (filters.goals && filters.goals.length > 0) {
       // console.log("Current filters.goals:", filters.goals); // Debugging log
-      filtered = filtered.filter(exercise => {
+      filtered = filtered.filter((exercise) => {
         // console.log("Checking exercise:", exercise.exercise_id, exercise.goal_name,); // Debugging log
         return filters.goals.includes(exercise.goal_name);
       });
@@ -88,6 +92,16 @@ const ExerciseManagement = () => {
     setFilters(filterData);
   };
 
+  const paginatedExercises = useMemo(() => {
+    const offset = currentPage * itemsPerPage;
+    return filteredAndSortedExercises.slice(offset, offset + itemsPerPage);
+  }, [filteredAndSortedExercises, currentPage, itemsPerPage]);
+
+  // Handle page change
+  const handlePageClick = (event) => {
+    setCurrentPage(event.selected);
+  };
+
   return (
     <div>
       <ExerciseNavbar
@@ -106,14 +120,24 @@ const ExerciseManagement = () => {
       )}
       <Container className="mt-4">
         <Row>
-          {!isLoading && filteredAndSortedExercises.length === 0 ? (
-            <Alert variant="info">
-              No exercises found matching the specified criteria.
-            </Alert>
+          {!isLoading && paginatedExercises.length === 0 ? (
+            <Alert variant="info">No exercises found matching the specified criteria.</Alert>
           ) : (
-            filteredAndSortedExercises.map((exercise) => <ExerciseCard key={exercise.exercise_id} exercise={exercise} isAdmin={isAdmin} />)
+            paginatedExercises.map((exercise) => <ExerciseCard key={exercise.exercise_id} exercise={exercise} isAdmin={isAdmin} />)
           )}
         </Row>
+
+        <ReactPaginate
+          previousLabel={"Previous"}
+          nextLabel={"Next"}
+          breakLabel={"..."}
+          pageCount={Math.ceil(filteredAndSortedExercises.length / itemsPerPage)}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageClick}
+          containerClassName={"pagination"}
+          activeClassName={"active"}
+        />
 
         <ExerciseModal isAdmin={isAdmin} />
       </Container>

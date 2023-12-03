@@ -21,7 +21,7 @@ const CoachSearch = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [sortOption, setSortOption] = useState({ key: "name", isDescending: false });
 
-  const pageSize = 9;
+  const pageSize = 12;
 
   const handleChange = (e) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
@@ -178,7 +178,6 @@ const CoachSearch = () => {
         getSortDirectionIcon={(key) => (sortOption.key === key ? (sortOption.isDescending ? " ↓" : " ↑") : "")}
       />
 
-      <Container>
         <SearchFiltersModal
           show={showModal}
           handleClose={handleModalClose}
@@ -206,7 +205,6 @@ const CoachSearch = () => {
         </Container>
 
         {totalPages > 1 && renderPagination()}
-      </Container>
     </div>
   );
 };
