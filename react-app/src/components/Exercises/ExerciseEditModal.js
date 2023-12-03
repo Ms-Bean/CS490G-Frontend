@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Form } from "react-bootstrap";
 import Select from "react-select";
+import { ExerciseContext } from "../../context/exerciseContext";
 
-const EditExerciseModal = ({ selectedExercise, setSelectedExercise, handleSubmit, goals, muscleGroups, equipmentItems }) => {
+const EditExerciseModal = ({ handleSubmit }) => {
+  const { selectedExercise, setSelectedExercise, goals, muscleGroups, equipmentItems } = useContext(ExerciseContext);
   const goalOptions = goals.map((goal) => ({ value: goal.goal_id, label: goal.name }));
 
-  
   const handleChange = (event) => {
     const { name, value } = event.target;
     setSelectedExercise((prev) => ({ ...prev, [name]: value }));
@@ -13,21 +14,19 @@ const EditExerciseModal = ({ selectedExercise, setSelectedExercise, handleSubmit
 
   const handleSelectChange = (name, selectedOptions) => {
     console.log("Selected Options for " + name + ":", selectedOptions);
-    
+
     // Map selectedOptions to an array of objects with value and label
-    const updatedValues = selectedOptions 
-      ? selectedOptions.map((item) => ({ value: item.value, label: item.label }))
-      : [];
-  
+    const updatedValues = selectedOptions ? selectedOptions.map((item) => ({ value: item.value, label: item.label })) : [];
+
     console.log("updatedValues", updatedValues);
     setSelectedExercise((prevExercise) => ({
       ...prevExercise,
       [name]: updatedValues,
     }));
-    
+
     console.log("Updated Values for " + name + ":", selectedOptions);
   };
-  
+
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Group className="mb-3">
@@ -74,7 +73,7 @@ const EditExerciseModal = ({ selectedExercise, setSelectedExercise, handleSubmit
           onChange={(option) => handleChange({ target: { name: "goal_id", value: option.value } })}
           options={goalOptions}
           placeholder="Select a goal"
-        /> 
+        />
       </Form.Group>
 
       <Form.Group className="mb-3">
@@ -95,7 +94,7 @@ const EditExerciseModal = ({ selectedExercise, setSelectedExercise, handleSubmit
           name="equipment_items"
           onChange={(selectedOptions) => handleSelectChange("equipment_items", selectedOptions)}
           options={equipmentItems.map((item) => ({ value: item.value, label: item.label }))}
-          value={selectedExercise.equipment_items} 
+          value={selectedExercise.equipment_items}
         />
       </Form.Group>
 

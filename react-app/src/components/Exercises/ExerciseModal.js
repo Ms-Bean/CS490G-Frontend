@@ -10,7 +10,6 @@ const ExerciseModal = ({ isAdmin }) => {
     exercises,
     setExercises,
     selectedExercise,
-    setSelectedExercise,
     showModal,
     setShowModal,
     modalMode,
@@ -19,9 +18,6 @@ const ExerciseModal = ({ isAdmin }) => {
     fetchExerciseDetails,
     error,
     setError,
-    goals,
-    muscleGroups,
-    equipmentItems,
   } = useContext(ExerciseContext);
 
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
@@ -61,7 +57,7 @@ const ExerciseModal = ({ isAdmin }) => {
       setError(err.message);
     }
   };
-  
+
   const deleteExercise = async (exerciseId) => {
     const response = await fetch(`http://localhost:3500/delete_exercise/${exerciseId}`, {
       method: "DELETE",
@@ -134,14 +130,7 @@ const ExerciseModal = ({ isAdmin }) => {
         <Modal.Body>
           {error && <Alert variant="danger">{error}</Alert>}
           {modalMode === "edit" ? (
-            <EditExerciseModal
-              selectedExercise={selectedExercise}
-              setSelectedExercise={setSelectedExercise}
-              handleSubmit={handleSubmit}
-              goals={goals}
-              muscleGroups={muscleGroups}
-              equipmentItems={equipmentItems}
-            />
+            <EditExerciseModal handleSubmit={handleSubmit} />
           ) : (
             <ViewExerciseModal selectedExercise={selectedExercise} handleClose={() => setShowModal(false)} />
           )}
@@ -152,7 +141,7 @@ const ExerciseModal = ({ isAdmin }) => {
               <Button variant="primary" onClick={() => setModalMode("edit")} className="btn-dark me-2 w-100">
                 Edit
               </Button>
-            )}{" "}
+            )}
             {modalMode === "edit" && (
               <>
                 <Button variant="primary" type="submit" onClick={handleSubmit} className="btn-dark me-2 w-100">
