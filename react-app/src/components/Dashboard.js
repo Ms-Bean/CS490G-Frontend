@@ -14,7 +14,8 @@ const CoachDashboard = () => {
     x:[],
     calories_burned_y:[],
     calories_consumed_y:[],
-    water_intake_y:[]
+    water_intake_y:[],
+    weight_y:[]
   });
 
   useEffect(() => {
@@ -35,12 +36,15 @@ const CoachDashboard = () => {
         let calories_burned_y = [];
         let calories_consumed_y = [];
         let water_intake_y = [];
+        let weight_y = [];
         for(let i = 0; i < data.daily_surveys.length; i++)
         {
           daily_survey_x.push(data.daily_surveys[i].date.slice(0, 10));
           calories_burned_y.push(data.daily_surveys[i].calories_burned);
           water_intake_y.push(data.daily_surveys[i].water_intake);
           calories_consumed_y.push(data.daily_surveys[i].calories_consumed);
+          weight_y.push(data.daily_surveys[i].weight);
+
           if(i < data.daily_surveys.length - 1)
           {
             let nextdate = new Date(data.daily_surveys[i+1].date.slice(0,10) + "T00:00:00");
@@ -51,6 +55,7 @@ const CoachDashboard = () => {
               calories_burned_y.push(undefined);
               calories_consumed_y.push(undefined);
               water_intake_y.push(undefined);
+              weight_y.push(undefined);
             }
           }
         }
@@ -58,9 +63,10 @@ const CoachDashboard = () => {
           x: daily_survey_x,
           calories_burned_y: calories_burned_y,
           calories_consumed_y: calories_consumed_y,
-          water_intake_y: water_intake_y
+          water_intake_y: water_intake_y,
+          weight_y: weight_y
         })
-
+        
 
         for(let i = 0; i < data.days.length; i++)
         {
@@ -70,6 +76,7 @@ const CoachDashboard = () => {
           }
           else
             document.getElementById("day" + i + "weekday").innerHTML=data.days[i].weekday.toUpperCase().charAt(0) + data.days[i].weekday.slice(1);
+
 
           for(let j = 0; j < data.days[i].exercises.length; j++)
           {
@@ -264,6 +271,21 @@ const CoachDashboard = () => {
                 borderWidth:4,
                 backgroundColor: "blue",
                 borderColor:'blue'
+              }
+            ],
+          }}
+        />
+        <Line
+          data={{
+          labels: chart_data.x,
+          datasets: [
+            {
+                label: "Weight",
+                data: chart_data.weight_y,
+                fill: false,
+                borderWidth:4,
+                backgroundColor: "purple",
+                borderColor:'purple'
               }
             ],
           }}
