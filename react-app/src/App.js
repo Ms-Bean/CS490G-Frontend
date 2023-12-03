@@ -49,11 +49,11 @@ const App = () => {
               <Route path="/select_workout_plan" element={<SelectWorkoutPlan/>}/>
               <Route path="workout_plan" element={<WorkoutPlan/>}/>
               <Route path="/daily_survey" element={<DailySurvey/>}/>
-              <Route path="/exercise_management" element={<ExerciseProvider><ExerciseManagement/></ExerciseProvider>}/>
             </Route>
             <Route path='/onboard' element={<Onboarding/>}/>
             <Route path='/registration' element={<RegisterPage/>}/>
             <Route path="/login" element={<LoginPage />} exact/>
+            <Route path="/exercise_management" element={<ExerciseProvider><ExerciseManagement/></ExerciseProvider>}/>
           </Routes>
       </BrowserRouter>
     </div>

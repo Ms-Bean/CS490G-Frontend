@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Modal, Button, Form, Alert, Row, Col } from "react-bootstrap";
 import Select from "react-select";
-import { fetchGoals, fetchMuscleGroups, fetchEquipmentItems } from "./../../services/exerciseServices.js";
 import { ExerciseContext } from "../../context/exerciseContext";
 
 const FilterModal = ({ show, onHide, onApplyFilter }) => {
-  const [filters, setFilters] = useState({
-    difficultyMin: "",
-    difficultyMax: "",
+  const initialFilters = {
+    difficultyMin: "0",
+    difficultyMax: "10",
     muscleGroups: [],
     goals: [],
     equipmentItems: [],
-  });
+  };
+  const [filters, setFilters] = useState(initialFilters);
   const { goals, muscleGroups, equipmentItems } = useContext(ExerciseContext);
   const [error, setError] = useState("");
 
@@ -33,10 +33,25 @@ const FilterModal = ({ show, onHide, onApplyFilter }) => {
   };
 
   const applyFilter = () => {
+    console.log("goal", filters.goals);
     if (validateFilters()) {
       onApplyFilter(filters);
       onHide();
     }
+  };
+
+  const resetFilters = () => {
+    const resetFilterValues = {
+      difficultyMin: "",
+      difficultyMax: "",
+      muscleGroups: [],
+      goals: [],
+      equipmentItems: [],
+    };
+
+    setFilters(resetFilterValues);
+    onApplyFilter(resetFilterValues);
+    onHide();
   };
 
   return (
@@ -51,6 +66,8 @@ const FilterModal = ({ show, onHide, onApplyFilter }) => {
             <Form.Group as={Col} className="mb-3">
               <Form.Label>Difficulty (Min)</Form.Label>
               <Form.Control
+                min={0}
+                max={10}
                 type="number"
                 placeholder="Minimum difficulty"
                 value={filters.difficultyMin}
@@ -60,6 +77,8 @@ const FilterModal = ({ show, onHide, onApplyFilter }) => {
             <Form.Group as={Col} className="mb-3">
               <Form.Label>Difficulty (Max)</Form.Label>
               <Form.Control
+                min={0}
+                max={10}
                 type="number"
                 placeholder="Maximum difficulty"
                 value={filters.difficultyMax}
@@ -82,6 +101,7 @@ const FilterModal = ({ show, onHide, onApplyFilter }) => {
               isMulti
               options={muscleGroups.map((group) => ({ value: group.value, label: group.label }))}
               onChange={(selectedOptions) => handleSelectChange("muscleGroups", selectedOptions)}
+              value={muscleGroups.filter((group) => filters.muscleGroups.includes(group.value))}
             />
           </Form.Group>
 
@@ -91,13 +111,14 @@ const FilterModal = ({ show, onHide, onApplyFilter }) => {
               isMulti
               options={equipmentItems.map((item) => ({ value: item.value, label: item.label }))}
               onChange={(selectedOptions) => handleSelectChange("equipmentItems", selectedOptions)}
+              value={equipmentItems.filter((item) => filters.equipmentItems.includes(item.value))}
             />
           </Form.Group>
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={onHide}>
-          Close
+        <Button variant="secondary" onClick={resetFilters}>
+          Reset Filters
         </Button>
         <Button variant="primary" onClick={applyFilter}>
           Apply Filters

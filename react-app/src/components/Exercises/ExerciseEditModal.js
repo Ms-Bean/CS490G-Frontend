@@ -2,8 +2,14 @@ import React from "react";
 import { Form } from "react-bootstrap";
 import Select from "react-select";
 
-const EditExerciseModal = ({ selectedExercise, setSelectedExercise, handleChange, handleSubmit, goals, muscleGroups, equipmentItems }) => {
+const EditExerciseModal = ({ selectedExercise, setSelectedExercise, handleSubmit, goals, muscleGroups, equipmentItems }) => {
   const goalOptions = goals.map((goal) => ({ value: goal.goal_id, label: goal.name }));
+
+  
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setSelectedExercise((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSelectChange = (name, selectedOptions) => {
     console.log("Selected Options for " + name + ":", selectedOptions);

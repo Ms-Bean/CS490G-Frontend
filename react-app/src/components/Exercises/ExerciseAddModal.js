@@ -5,6 +5,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { FaPlusCircle } from "react-icons/fa";
 import { fetchGoals, fetchMuscleGroups, fetchEquipmentItems } from "./../../services/exerciseServices.js";
 import { ExerciseContext } from "../../context/exerciseContext.js";
+import ConfirmDialog from "./ConfirmDialog.js";
 
 const ExerciseAddModal = () => {
   const { user } = useAuth();
@@ -16,6 +17,7 @@ const ExerciseAddModal = () => {
   const [selectedMuscleGroups, setSelectedMuscleGroups] = useState([]);
   const [selectedEquipmentItems, setSelectedEquipmentItems] = useState([]);
   const { fetchExercises } = useContext(ExerciseContext);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -69,9 +71,9 @@ const ExerciseAddModal = () => {
 
       const addedExercise = await response.json();
       setExercises([...exercises, addedExercise]);
-      toggleModal();
       fetchExercises();
-      alert("New exercise added successfully!");
+      setShowModal(false);
+      setShowSuccessDialog(true);
     } catch (err) {
       alert(err.message);
     }
@@ -140,6 +142,17 @@ const ExerciseAddModal = () => {
         <Modal.Footer>
           <Button className="w-100 p-2" variant="primary" type="submit" form="add-exercise-form">
             Add Exercise
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal show={showSuccessDialog} onHide={() => setShowSuccessDialog(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Success</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>New exercise added successfully!</Modal.Body>
+        <Modal.Footer>
+          <Button className="w-100 bg-dark" variant="primary" onClick={() => setShowSuccessDialog(false)}>
+            OK
           </Button>
         </Modal.Footer>
       </Modal>

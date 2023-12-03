@@ -12,7 +12,6 @@ export const ExerciseProvider = ({ children }) => {
   const [goals, setGoals] = useState([]);
   const [muscleGroups, setMuscleGroups] = useState([]);
   const [equipmentItems, setEquipmentItems] = useState([]);
-  const clearError = () => setError("");
 
   useEffect(() => {
     const loadFilterData = async () => {
@@ -37,7 +36,7 @@ export const ExerciseProvider = ({ children }) => {
       if (!response.ok) throw new Error("Failed to fetch exercises");
       const data = await response.json();
       setExercises(data);
-      clearError();
+      setError("");
     } catch (err) {
       setError(err.message || "An error occurred while fetching exercises."); // Set error message
     }
@@ -68,7 +67,7 @@ export const ExerciseProvider = ({ children }) => {
       }
 
       setSelectedExercise(data);
-      clearError();
+      setError("");
     } catch (err) {
       setError(err.message || "An error occurred while fetching exercise details.");
     }
@@ -99,7 +98,7 @@ export const ExerciseProvider = ({ children }) => {
         fetchExercises,
         fetchExerciseDetails,
         error,
-        clearError,
+        setError,
         goals,
         muscleGroups,
         equipmentItems,

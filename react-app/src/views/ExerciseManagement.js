@@ -35,7 +35,6 @@ const ExerciseManagement = () => {
   const filteredAndSortedExercises = useMemo(() => {
     let filtered = exercises.filter((exercise) => exercise.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
-    console.log(filters.difficultyMin, filters.difficultyMax);
     if (filters.difficultyMin !== undefined && filters.difficultyMax !== undefined) {
       filtered = filtered.filter(
         (exercise) => exercise.difficulty >= filters.difficultyMin && exercise.difficulty <= filters.difficultyMax
@@ -49,9 +48,12 @@ const ExerciseManagement = () => {
     }
 
     if (filters.goals && filters.goals.length > 0) {
-      filtered = filtered.filter(
-        (exercise) => exercise.goal_name === filters.goals // Assuming goals is a single string per exercise
-      );
+      // console.log("Current filters.goals:", filters.goals); // Debugging log
+      filtered = filtered.filter(exercise => {
+        // console.log("Checking exercise:", exercise.exercise_id, exercise.goal_name,); // Debugging log
+        return filters.goals.includes(exercise.goal_name);
+      });
+      // console.log("Filtered exercises:", filtered); // Debugging log
     }
 
     if (filters.equipmentItems && filters.equipmentItems.length > 0) {
@@ -98,9 +100,13 @@ const ExerciseManagement = () => {
       )}
       <Container className="mt-4">
         <Row>
-          {filteredAndSortedExercises.map((exercise) => (
-            <ExerciseCard key={exercise.exercise_id} exercise={exercise} isAdmin={isAdmin} />
-          ))}
+          {filteredAndSortedExercises.length > 0 ? (
+            filteredAndSortedExercises.map((exercise) => <ExerciseCard key={exercise.exercise_id} exercise={exercise} isAdmin={isAdmin} />)
+          ) : (
+            <Alert variant="warning" className="mt-3">
+              No exercises found matching the specified criteria.
+            </Alert>
+          )}
         </Row>
 
         <ExerciseModal isAdmin={isAdmin} />
