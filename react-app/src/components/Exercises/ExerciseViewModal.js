@@ -8,12 +8,12 @@ const ViewExerciseModal = ({ selectedExercise }) => {
 
   const getYouTubeVideoId = (url) => {
     if (!url) return null;
-  
-    const regExp = /https:\/\/www\.youtube\.com\/watch\?v=(\d+)/;
+
+    const regExp = /https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/;
     const match = url.match(regExp);
     return match ? match[1] : null;
   };
-  
+
   const videoId = getYouTubeVideoId(selectedExercise.video_link);
 
   const options = {
@@ -26,22 +26,22 @@ const ViewExerciseModal = ({ selectedExercise }) => {
   return (
     <Container>
       <Container className="youtube-container mb-2">
-      <p>{videoId && <YouTube videoId={videoId} opts={options} />}</p>
+        <p>{videoId && <YouTube videoId={videoId} opts={options} />}</p>
       </Container>
-      <p>
-        <strong>Description:</strong> {selectedExercise.description}
+      <p className="my-2">
+        {selectedExercise.description}
       </p>
-      <p>
+      <p className="my-0">
         <strong>Difficulty:</strong> {selectedExercise.difficulty}
       </p>
-      <p>
+      <p className="my-0">
         <strong>Fitness Goals:</strong> {selectedExercise.goal_name}
       </p>
-      <p>
+      <p className="my-0">
         <strong>Muscle Groups: </strong>
         {selectedExercise.muscle_groups?.length > 0 ? extractLabels(selectedExercise.muscle_groups) : "None"}
       </p>
-      <p>
+      <p className="my-0">
         <strong>Equipment: </strong>
         {selectedExercise.equipment_items?.length > 0 ? extractLabels(selectedExercise.equipment_items) : "None"}
       </p>

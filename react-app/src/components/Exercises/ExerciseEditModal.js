@@ -98,7 +98,7 @@ const EditExerciseModal = ({ handleSubmit }) => {
         />
       </Form.Group>
 
-      <Form.Group className="mb-3">
+      <Form.Group className="mb-0">
         <Form.Label>Video Link</Form.Label>
         <Form.Control
           type="url"

@@ -5,7 +5,6 @@ import { useAuth } from "../../hooks/useAuth";
 import { FaPlusCircle } from "react-icons/fa";
 import { fetchGoals, fetchMuscleGroups, fetchEquipmentItems } from "./../../services/exerciseServices.js";
 import { ExerciseContext } from "../../context/exerciseContext.js";
-import ConfirmDialog from "./ConfirmDialog.js";
 
 const ExerciseAddModal = () => {
   const { user } = useAuth();
@@ -18,6 +17,7 @@ const ExerciseAddModal = () => {
   const [selectedEquipmentItems, setSelectedEquipmentItems] = useState([]);
   const { fetchExercises } = useContext(ExerciseContext);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const loadData = async () => {
@@ -75,7 +75,7 @@ const ExerciseAddModal = () => {
       setShowModal(false);
       setShowSuccessDialog(true);
     } catch (err) {
-      alert(err.message);
+      setErrorMessage(err.message);
     }
   };
 
@@ -84,7 +84,19 @@ const ExerciseAddModal = () => {
       <div onClick={toggleModal} className="d-inline" style={{ cursor: "pointer" }}>
         <FaPlusCircle className="align-self-center" size={22} style={{ color: "white" }} />
       </div>
-
+      {errorMessage && (
+        <Modal show={true} onHide={() => setErrorMessage("")}>
+          <Modal.Header closeButton>
+            <Modal.Title>Error</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{errorMessage}</Modal.Body>
+          <Modal.Footer>
+            <Button className="w-100 bg-dark" variant="primary" onClick={() => setErrorMessage("")}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
       <Modal show={showModal} onHide={toggleModal}>
         <Modal.Header closeButton>
           <Modal.Title>Add Exercise</Modal.Title>
@@ -127,7 +139,7 @@ const ExerciseAddModal = () => {
               />{" "}
             </Form.Group>
 
-            <Form.Group className="mb-3">
+            <Form.Group className="mb-0">
               <Form.Label>Equipment</Form.Label>
               <Select
                 isMulti

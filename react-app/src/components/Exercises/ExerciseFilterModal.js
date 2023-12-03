@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Modal, Button, Form, Alert, Row, Col } from "react-bootstrap";
+import { Modal, Button, Form, Alert, Row, Col, ButtonGroup } from "react-bootstrap";
 import Select from "react-select";
 import { ExerciseContext } from "../../context/exerciseContext";
 
@@ -105,7 +105,7 @@ const FilterModal = ({ show, onHide, onApplyFilter }) => {
             />
           </Form.Group>
 
-          <Form.Group className="mb-3">
+          <Form.Group className="mb-0">
             <Form.Label>Equipment Items</Form.Label>
             <Select
               isMulti
@@ -117,12 +117,14 @@ const FilterModal = ({ show, onHide, onApplyFilter }) => {
         </Form>
       </Modal.Body>
       <Modal.Footer>
+        <ButtonGroup className="w-100">
         <Button variant="secondary" onClick={resetFilters}>
           Reset Filters
         </Button>
-        <Button variant="primary" onClick={applyFilter}>
+        <Button className="btn-dark" onClick={applyFilter}>
           Apply Filters
         </Button>
+        </ButtonGroup>
       </Modal.Footer>
     </Modal>
   );

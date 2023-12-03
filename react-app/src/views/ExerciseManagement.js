@@ -107,7 +107,7 @@ const ExerciseManagement = () => {
       <Container className="mt-4">
         <Row>
           {!isLoading && filteredAndSortedExercises.length === 0 ? (
-            <Alert variant="warning" className="mt-3">
+            <Alert variant="info">
               No exercises found matching the specified criteria.
             </Alert>
           ) : (
