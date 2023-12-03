@@ -2,10 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import {CategoryScale} from 'chart.js'; 
 import Chart from 'chart.js/auto';
-Chart.register(CategoryScale);
+import {useParams} from "react-router-dom";
+
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+let client_id = urlParams.get("client_id");
 
 const CoachDashboard = () => {
-  
+  console.log(client_id);
   const [chart_data, set_chart_data] = useState({
     x:[],
     calories_burned_y:[],
@@ -16,10 +20,17 @@ const CoachDashboard = () => {
   useEffect(() => {
     fetch("http://localhost:3500/get_client_dashboard_info", {
       credentials: "include",
+      headers: {
+        client_id: client_id
+      }
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        if(data.message)
+        {
+          document.getElementById("wrapper").innerHTML="You do not have permission to view this page";
+          return;
+        }
         let daily_survey_x = [];
         let calories_burned_y = [];
         let calories_consumed_y = [];
@@ -112,7 +123,7 @@ const CoachDashboard = () => {
   }, []);
 
     return (
-      <>
+      <div id="wrapper">
       <h1>This week's history</h1>
       <br></br>
       <div class="row"> 
@@ -258,7 +269,7 @@ const CoachDashboard = () => {
           }}
         />
         </div>
-      </>
+      </div>
     );
 };
 
