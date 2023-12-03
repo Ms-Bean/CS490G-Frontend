@@ -68,9 +68,11 @@ const ExerciseManagement = () => {
 
     if (sortKey) {
       filtered.sort((a, b) => {
+        let valA = a[sortKey].toLowerCase();
+        let valB = b[sortKey].toLowerCase();
         let comparison = 0;
-        if (a[sortKey] < b[sortKey]) comparison = -1;
-        if (a[sortKey] > b[sortKey]) comparison = 1;
+        if (valA < valB) comparison = -1;
+        if (valA > valB) comparison = 1;
         return sortDirection === "ascending" ? comparison : comparison * -1;
       });
     }

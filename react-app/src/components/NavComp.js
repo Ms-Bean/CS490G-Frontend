@@ -29,15 +29,15 @@ const NavComp = () => {
 
         <Navbar.Toggle  aria-controls="navbarScroll" />
         <Navbar.Collapse  id="navbarScroll">
-          <Nav className="ms-auto">
+          <Nav className="ms-auto nav-links">
             {user ? (
               <>
-                <Nav.Link className="align-self-center" href="/dashboard">Dashboard</Nav.Link>
-                <Nav.Link className="align-self-center" href="/workout_plan">Workouts</Nav.Link>
-                <Nav.Link className="align-self-center" href="/exercise_management">Exercises</Nav.Link>
-                <Nav.Link className="align-self-center" href="#">Goals</Nav.Link>
-                <Nav.Link className="align-self-center" href="/coaches">Coaches</Nav.Link>
-                <Nav.Link className="align-self-center" href="/messages">Messaging</Nav.Link>
+                <Nav.Link href="/dashboard">Dashboard</Nav.Link>
+                <Nav.Link href="/workout_plan">Workouts</Nav.Link>
+                <Nav.Link href="/exercise_management">Exercises</Nav.Link>
+                <Nav.Link href="#">Goals</Nav.Link>
+                <Nav.Link href="/coaches">Coaches</Nav.Link>
+                <Nav.Link href="/messages">Messaging</Nav.Link>
                 <NavDropdown className="align-self-center"
                   title={<Image className="thumbnail-image" roundedCircle  src="/profilepic.jpg" alt="Profile Picture" />}
                   id="basic-nav-dropdown"
@@ -56,9 +56,9 @@ const NavComp = () => {
               </>
             ) : (
               <>
-                <Nav.Link className="align-self-center" href="/exercise_management">Exercises</Nav.Link>
-                <Nav.Link className="align-self-center" href="/login">Login</Nav.Link>
-                <Nav.Link className="align-self-center" href="/registration">Register</Nav.Link>
+                <Nav.Link href="/exercise_management">Exercises</Nav.Link>
+                <Nav.Link href="/login">Login</Nav.Link>
+                <Nav.Link href="/registration">Register</Nav.Link>
               </>
             )}
           </Nav>
