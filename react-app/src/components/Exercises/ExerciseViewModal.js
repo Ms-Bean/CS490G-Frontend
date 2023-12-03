@@ -24,13 +24,10 @@ const ViewExerciseModal = ({ selectedExercise }) => {
   };
 
   return (
-    <div>
-      <Container className="youtube-container">
-      {videoId && <YouTube videoId={videoId} opts={options} />}
+    <Container>
+      <Container className="youtube-container mb-2">
+      <p>{videoId && <YouTube videoId={videoId} opts={options} />}</p>
       </Container>
-      <p>
-        <strong>Name:</strong> {selectedExercise.name}
-      </p>
       <p>
         <strong>Description:</strong> {selectedExercise.description}
       </p>
@@ -48,7 +45,7 @@ const ViewExerciseModal = ({ selectedExercise }) => {
         <strong>Equipment: </strong>
         {selectedExercise.equipment_items?.length > 0 ? extractLabels(selectedExercise.equipment_items) : "None"}
       </p>
-    </div>
+    </Container>
   );
 };
 

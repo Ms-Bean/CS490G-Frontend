@@ -129,7 +129,7 @@ const ExerciseModal = ({ isAdmin }) => {
         }}
       >
         <Modal.Header closeButton>
-          <Modal.Title>{modalMode === "edit" ? "Edit Exercise" : "Exercise Information"}</Modal.Title>
+          <Modal.Title>{modalMode === "edit" ? "Edit Exercise" : selectedExercise.name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {error && <Alert variant="danger">{error}</Alert>}
