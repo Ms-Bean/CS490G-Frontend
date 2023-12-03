@@ -12,7 +12,14 @@ import Dashboard from "./views/Dashboard";
 import ProfilePage from "./views/ProfilePage";
 import MessagePage from "./views/MessagePage";
 import CoachSearch from "./views/CoachSearch";
+import DailySurvey from "./views/DailySurvey";
+import ExerciseManagement from "./views/ExerciseManagement";
 
+import CoachDashboard from "./views/CoachDashboard";
+import WorkoutPlan from "./views/WorkoutPlan";
+import SelectWorkoutPlan from "./views/SelectWorkoutPlan";
+
+import { ExerciseProvider } from "./context/exerciseContext";
 
 const App = () => {
 
@@ -38,10 +45,15 @@ const App = () => {
               <Route path="/profile" element={<ProfilePage/>}/>
               <Route path="/coaches" element={<CoachSearch/>}/>
               <Route path="/messages" element={<MessagePage/>}/>
+              <Route path="/coach_dashboard" element={<CoachDashboard />}/>
+              <Route path="/select_workout_plan" element={<SelectWorkoutPlan/>}/>
+              <Route path="workout_plan" element={<WorkoutPlan/>}/>
+              <Route path="/daily_survey" element={<DailySurvey/>}/>
             </Route>
             <Route path='/onboard' element={<Onboarding/>}/>
             <Route path='/registration' element={<RegisterPage/>}/>
             <Route path="/login" element={<LoginPage />} exact/>
+            <Route path="/exercise_management" element={<ExerciseProvider><ExerciseManagement/></ExerciseProvider>}/>
           </Routes>
       </BrowserRouter>
     </div>

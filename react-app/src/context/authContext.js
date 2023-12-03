@@ -32,13 +32,11 @@ export const AuthContextProvide = ({ children }) => {
                 setItem(data.user);
                 dispatch({type : 'LOGIN', payload : data.user});
             }
-            console.log("useEffect: User state in AuthContext.js:", data.user);
-            console.log("useEffect: Local storage:", localStorage.getItem("user"));
+            // console.log("useEffect: User state in AuthContext.js:", data.user);
+            // console.log("useEffect: Local storage:", localStorage.getItem("user"));
             setIsLoading(false);
             });
         }, []);
-
-    console.log('AuthContext state: ', state);
 
     return(
         <AuthContext.Provider value={{...state, dispatch, isLoading}}>

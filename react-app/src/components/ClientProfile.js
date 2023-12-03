@@ -12,9 +12,33 @@ const ClientProfile = () => {
   });
 
   useEffect(() => {
-    //fetch user's profile information
-  }, [uploadSuccess]);
-
+    //Fetch client profile information
+    fetch("http://localhost:3500/get_user_profile", {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        let b;
+        if(data.response.client_profile_info.budget === 0)
+          b = '$';
+        else if(data.response.client_profile_info.budget === 1)
+          b = '$$';
+        else if(data.response.client_profile_info.budget === 2)
+          b = '$$$';
+        setFormData({
+          about_me: data.response.client_profile_info.about_me,
+          birthday: data.response.client_profile_info.birthday ? data.response.client_profile_info.birthday.slice(0,10) : undefined,
+          medical_conditions: data.response.client_profile_info.medical_conditions,
+          target_weight: data.response.client_profile_info.target_weight,
+          weight: data.response.client_profile_info.weight,
+          height: data.response.client_profile_info.height,
+          experience_level: data.response.client_profile_info.experience_level,
+          budget: b,
+        });
+      });
+    setUploadSuccess(false);
+  }, [uploadSuccess, editing]);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -27,25 +51,55 @@ const ClientProfile = () => {
 
   const submitEdit = async (e) => {
     e.preventDefault();
-    //rest call to edit user's profile
-
+    console.log(formData.about_me);
+    console.log(formData.target_weight);
+    try {
+      console.log("Edit Account");
+      console.log(formData.state);
+      const response = await fetch("http://localhost:3500/set_user_profile", {
+        method: "POST",
+        headers: {
+          // Moved data to body instead of headers
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          about_me: formData.about_me,
+          experience_level: formData.experience_level,
+          height: formData.height,
+          weight: formData.weight,
+          medical_conditions: formData.medical_conditions,
+          budget: formData.budget !== undefined ? formData.budget.length : undefined,
+          goals: formData.goals,
+          target_weight: formData.target_weight,
+          birthday: formData.birthday
+        }),
+        credentials: "include", // Include credentials with the request
+      });
+      if (response.ok) {
+        console.log("Edit Account Success");
+      } else {
+        console.error("Error occurred:", response.status);
+      }
+    } catch (err) {
+      console.log(err);
+    }
     setEditing(false);
   };
 
   
-  const changeProfilePicture = () => {
+  const changeProfilePicture = async (e) => {
     //... code to upload picture from computer
 
     //... rest call to update user's profile picture
 
-    //if upload was a success
+    //if upload was a success    
+
     setUploadSuccess(true);
   };
 
   const toggleEditing = () => {
     setEditing(!editing);
   };
-
   return (
     <div className="container my-2">
       <div className="my-3">
@@ -59,11 +113,65 @@ const ClientProfile = () => {
 
       <form onSubmit={submitEdit} className="w-75 mx-auto">
         <div class="form-group my-3">
+          <label for="weight">About me</label>
+          <input
+            className="form-control mt-1"
+            disabled={!editing}
+            type="test"
+            id="about_me"
+            name="about_me"
+            placeholder="Not Set"
+            onChange={handleInputChange}
+            value={formData.about_me}
+          />
+        </div>
+        <div class="form-group my-3">
+          <label for="weight">Medical conditions</label>
+          <input
+            className="form-control mt-1"
+            disabled={!editing}
+            type="test"
+            id="medical_conditions"
+            name="medical_conditions"
+            placeholder="Not Set"
+            onChange={handleInputChange}
+            value={formData.medical_conditions}
+          />
+        </div>
+        <div class="form-group my-3">
+          <label for="weight">Birthday</label>
+          <input
+            className="form-control mt-1"
+            disabled={!editing}
+            type="date"
+            id="birthday"
+            name="birthday"
+            placeholder="Not Set"
+            onChange={handleInputChange}
+            value={formData.birthday}
+          />
+        </div>
+        <div class="form-group my-3">
+          <label for="weight">Target weight</label>
+          <input
+            className="form-control mt-1"
+            disabled={!editing}
+            type="number"
+            step="any"
+            id="target_weight"
+            name="target_weight"
+            placeholder="Not Set"
+            onChange={handleInputChange}
+            value={formData.target_weight}
+          />
+        </div>
+        <div class="form-group my-3">
           <label for="weight">Weight</label>
           <input
             className="form-control mt-1"
             disabled={!editing}
             type="number"
+            step="any"
             id="weight"
             name="weight"
             placeholder="Not Set"
@@ -89,8 +197,9 @@ const ClientProfile = () => {
           <select
             disabled={!editing}
             className="form-select mt-1"
-            name="experience"
-            value={formData.experience}
+            id="experience_level"
+            name="experience_level"
+            value={formData.experience_level}
             onChange={handleInputChange}
             aria-label="Default select example"
           >

@@ -46,3 +46,45 @@
 .dropdown-toggle::after {
   display: none !important; 
 }
+
+.navbar {
+  border-bottom: 1px solid #f8f8f8;
+  opacity: 1;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.navbar-brand {
+  font-size: 1.75em; 
+  /* font-weight: bold; */
+}
+
+.main-navbar .navbar-brand .brand {
+  font-size: 1.50em; 
+  font-weight: 400;
+  position: relative;
+  top: -4px;
+}
+
+.navbar-nav {
+  font-size: 1em; 
+  font-weight: 400;
+}
+
+.nav-links .nav-link {
+  align-self: center;
+}
+
+.nav-link:hover,
+.nav-link:focus {
+  border-bottom: 2px solid #454545;
+}
+
+.main-navbar .navbar-brand img {
+  margin-right:5px;
+  max-height: 35px;
+}
+
+.thumbnail-image {
+  max-height: 30px;
+}
