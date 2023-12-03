@@ -4,11 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { Navbar, Nav, Container, NavDropdown, Image } from "react-bootstrap";
 import { useAuth } from "../hooks/useAuth";
 import { useLogout } from "../hooks/useLogout";
-import profPic from "./static_images/default-avatar-profile-icon-of-social-media-user-vector.jpg";
 
 const NavComp = () => {
-  const {user} = useAuth();
-  const {logout} = useLogout();
+  const { user } = useAuth();
+  const { logout } = useLogout();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -21,39 +20,45 @@ const NavComp = () => {
   };
 
   return (
-    <Navbar bg="light" variant="light">
+    <Navbar className="main-navbar py-0" expand="lg">
       <Container>
-        <Navbar.Brand href="/">
-          <h1>Moxi</h1>
+        <Navbar.Brand href="/" className="d-flex align-items-center">
+          <Image src="/logo_moxi.png" alt="Logo" />
+          <div className="brand">moxi</div>
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+
+        <Navbar.Toggle  aria-controls="navbarScroll" />
+        <Navbar.Collapse  id="navbarScroll">
           <Nav className="ms-auto">
-            {user && (
+            {user ? (
               <>
-                <Nav.Link href="/dashboard">Dashboard</Nav.Link>
-                <Nav.Link href="#">Goals</Nav.Link>
-                <Nav.Link href="/coaches">Coaches</Nav.Link>
-                <Nav.Link href="/workout_plan">Workouts</Nav.Link>
-                <Nav.Link href="/messages">Messaging</Nav.Link>
-                <NavDropdown
-                  eventkey={1} // eventKey={1} is deprecated
-                  title={
-                      <Image className="thumbnail-image" roundedCircle src={profPic} alt="Profile Picture" height="25" width="25" />
-                  }
+                <Nav.Link className="align-self-center" href="/dashboard">Dashboard</Nav.Link>
+                <Nav.Link className="align-self-center" href="/workout_plan">Workouts</Nav.Link>
+                <Nav.Link className="align-self-center" href="/exercise_management">Exercises</Nav.Link>
+                <Nav.Link className="align-self-center" href="#">Goals</Nav.Link>
+                <Nav.Link className="align-self-center" href="/coaches">Coaches</Nav.Link>
+                <Nav.Link className="align-self-center" href="/messages">Messaging</Nav.Link>
+                <NavDropdown className="align-self-center"
+                  title={<Image className="thumbnail-image" roundedCircle  src="/profilepic.jpg" alt="Profile Picture" />}
                   id="basic-nav-dropdown"
                 >
-                  <NavDropdown.Item onClick={() => navigate('/profile')} href="#">Profile</NavDropdown.Item>
-                  <NavDropdown.Item onClick={() => navigate('/account')} href="#">Account</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => navigate("/profile")}>
+                    Profile
+                  </NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => navigate("/account")}>
+                    Account
+                  </NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
+                  <NavDropdown.Item onClick={handleLogout}>
+                    Logout
+                  </NavDropdown.Item>
                 </NavDropdown>
               </>
-            )}
-            {!user && (
+            ) : (
               <>
-                <Nav.Link href="/login">Login</Nav.Link>
-                <Nav.Link href="/registration">Register</Nav.Link>
+                <Nav.Link className="align-self-center" href="/exercise_management">Exercises</Nav.Link>
+                <Nav.Link className="align-self-center" href="/login">Login</Nav.Link>
+                <Nav.Link className="align-self-center" href="/registration">Register</Nav.Link>
               </>
             )}
           </Nav>

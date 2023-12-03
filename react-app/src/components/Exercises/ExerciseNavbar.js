@@ -11,7 +11,6 @@ const ExerciseNavbar = ({ onSearch, onSort, onToggleSortDirection, sortKey, sort
     setShowFilterModal(true);
   };
 
-
   const handleSearchChange = (e) => {
     onSearch(e.target.value);
   };
@@ -31,14 +30,12 @@ const ExerciseNavbar = ({ onSearch, onSort, onToggleSortDirection, sortKey, sort
   return (
     <Navbar variant="dark" bg="dark" expand="lg" className="secondary-navbar">
       <Container>
-        <Navbar.Brand>
-          Exercise Bank
-          {isAdmin && <ExerciseAddModal />}
-        </Navbar.Brand>
+        <Navbar.Brand href="#">Exercise Bank</Navbar.Brand>
+        {isAdmin && <ExerciseAddModal />}
 
+        <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto" />
-
           <Form className="d-flex">
             <FormControl type="text" placeholder="Search by name..." name="name" className="me-2" onChange={handleSearchChange} />
             <Button variant="secondary">
@@ -60,10 +57,8 @@ const ExerciseNavbar = ({ onSearch, onSort, onToggleSortDirection, sortKey, sort
           </Form>
         </Navbar.Collapse>
       </Container>
-      
     </Navbar>
   );
 };
-
 
 export default ExerciseNavbar;

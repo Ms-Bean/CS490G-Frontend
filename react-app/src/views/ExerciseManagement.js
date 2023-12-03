@@ -13,9 +13,11 @@ const ExerciseManagement = () => {
   const [sortKey, setSortKey] = useState("");
   const [sortDirection, setSortDirection] = useState("ascending");
   const [filters, setFilters] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchRole = async () => {
+      setIsLoading(true); // Set loading to true when the fetch starts
       try {
         const response = await fetch("http://localhost:3500/get_role", {
           method: "GET",
@@ -26,6 +28,8 @@ const ExerciseManagement = () => {
         setIsAdmin(data.message === "admin");
       } catch (err) {
         setError(err.message);
+      } finally {
+        setIsLoading(false); // Set loading to false when the fetch finishes
       }
     };
     fetchRole();
@@ -93,19 +97,19 @@ const ExerciseManagement = () => {
         isAdmin={isAdmin}
         onFilter={handleFilter}
       />
-      {error && (
+      {!isLoading && error && (
         <Alert variant="danger" className="mt-3">
           {error}
         </Alert>
       )}
       <Container className="mt-4">
         <Row>
-          {filteredAndSortedExercises.length > 0 ? (
-            filteredAndSortedExercises.map((exercise) => <ExerciseCard key={exercise.exercise_id} exercise={exercise} isAdmin={isAdmin} />)
-          ) : (
+          {!isLoading && filteredAndSortedExercises.length === 0 ? (
             <Alert variant="warning" className="mt-3">
               No exercises found matching the specified criteria.
             </Alert>
+          ) : (
+            filteredAndSortedExercises.map((exercise) => <ExerciseCard key={exercise.exercise_id} exercise={exercise} isAdmin={isAdmin} />)
           )}
         </Row>
 

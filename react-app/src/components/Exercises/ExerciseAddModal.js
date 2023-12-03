@@ -81,8 +81,8 @@ const ExerciseAddModal = () => {
 
   return (
     <>
-      <div onClick={toggleModal} className="d-inline ms-3" style={{ cursor: "pointer" }}>
-        <FaPlusCircle size={22} style={{ color: "#6CB4EE" }} />
+      <div onClick={toggleModal} className="d-inline" style={{ cursor: "pointer" }}>
+        <FaPlusCircle className="align-self-center" size={22} style={{ color: "white" }} />
       </div>
 
       <Modal show={showModal} onHide={toggleModal}>
