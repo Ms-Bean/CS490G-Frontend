@@ -1,13 +1,12 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, Col, Button, ButtonGroup } from "react-bootstrap";
 
 const CoachCard = ({ coach }) => {
-  // Function to truncate text with a maximum length
-  const truncateText = (text, maxLength) => {
-    if (text.length > maxLength) {
-      return text.substring(0, maxLength) + "...";
-    }
-    return text;
+  const navigate = useNavigate();
+
+  const handleInfoClick = () => {
+    navigate(`/coach_id=${coach.coach_id}`); // Navigate to coach's user page
   };
 
   return (
@@ -31,7 +30,9 @@ const CoachCard = ({ coach }) => {
           </p> */}
         </Card.Body>
         <ButtonGroup className="w-100 p-2">
-          <Button variant="secondary">Info</Button>
+          <Button variant="secondary" onClick={handleInfoClick}>
+            Info
+          </Button>
         </ButtonGroup>
       </Card>
     </Col>

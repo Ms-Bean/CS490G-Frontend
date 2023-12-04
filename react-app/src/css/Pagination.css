@@ -81,3 +81,9 @@
   border-top-right-radius: 0.2rem;
   border-bottom-right-radius: 0.2rem;
 }
+
+.site-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 70vh;
+}

@@ -2,11 +2,11 @@ import React from "react";
 import { Navbar, Nav, Form, FormControl, Button, Dropdown, Container } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 
-const SearchNavbar = ({ searchParams, handleChange, handleSubmit, handleModalShow, handleSortChange, getSortDirectionIcon }) => {
+const CoachNavbar = ({ searchParams, handleChange, handleSubmit, handleModalShow, handleSortChange, getSortDirectionIcon }) => {
   return (
     <Navbar variant="dark" bg="dark" expand="lg" className="secondary-navbar">
       <Container>
-        <Navbar.Brand>Personal Trainer Search</Navbar.Brand>
+        <Navbar.Brand>Personal Trainers</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto" />
@@ -47,4 +47,4 @@ const SearchNavbar = ({ searchParams, handleChange, handleSubmit, handleModalSho
   );
 };
 
-export default SearchNavbar;
+export default CoachNavbar;
