@@ -1,57 +1,16 @@
 .youtube-container {
-    position: relative;
-    width: 100%;
-    padding-top: 56.25%; /* Aspect ratio of 16:9 */
-    overflow: hidden;
-  }
-  
-  .youtube-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-
-  /* Pagination container */
-.pagination {
-  display: flex;
-  list-style: none;
-  padding: 0;
-  justify-content: center;
-  margin-top: 20px;
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* Aspect ratio of 16:9 */
+  overflow: hidden;
 }
 
-/* Pagination items (numbers, next, previous) */
-.pagination li {
-  margin: 0 5px;
-}
-
-/* Pagination links */
-.pagination li a {
-  border: 1px solid #ddd;
-  padding: 5px 10px;
-  text-decoration: none;
-  color: #007bff;
-  cursor: pointer;
-}
-
-/* Hover effect on pagination links */
-.pagination li a:hover {
-  background-color: #eee;
-}
-
-/* Active page */
-.pagination li.active a {
-  background-color: #007bff;
-  color: white;
-  border-color: #007bff;
-}
-
-/* Disabled links (for future use) */
-.pagination li.disabled a {
-  color: grey;
-  cursor: not-allowed;
+.youtube-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  overflow: hidden;
 }

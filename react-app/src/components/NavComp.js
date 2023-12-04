@@ -35,7 +35,6 @@ const NavComp = () => {
                 <Nav.Link href="/dashboard">Dashboard</Nav.Link>
                 <Nav.Link href="/workout_plan">Workouts</Nav.Link>
                 <Nav.Link href="/exercise_management">Exercises</Nav.Link>
-                <Nav.Link href="#">Goals</Nav.Link>
                 <Nav.Link href="/coaches">Coaches</Nav.Link>
                 <Nav.Link href="/messages">Messaging</Nav.Link>
                 <NavDropdown className="align-self-center"

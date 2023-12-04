@@ -14,7 +14,7 @@ import MessagePage from "./views/MessagePage";
 import CoachSearch from "./views/CoachSearch";
 import DailySurvey from "./views/DailySurvey";
 import ExerciseManagement from "./views/ExerciseManagement";
-
+import "./css/Pagination.css";
 import CoachDashboard from "./views/CoachDashboard";
 import WorkoutPlan from "./views/WorkoutPlan";
 import SelectWorkoutPlan from "./views/SelectWorkoutPlan";
