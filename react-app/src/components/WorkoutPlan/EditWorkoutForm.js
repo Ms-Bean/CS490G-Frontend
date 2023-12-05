@@ -63,7 +63,7 @@ function EditWorkoutForm({workoutPlanName, workoutPlanId}) {
 
         }
          function getData(){
-            const fetchedData = fetch(url)
+            const fetchedData = fetch(url, {credentials:"include",})
             .then(res => {
                 res.json()
             .then(data => {pullData(data)})
