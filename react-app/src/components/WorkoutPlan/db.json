@@ -3,7 +3,7 @@
     {
       "workout_plan_exercise_id": "1",
       "workout_plan_id": "10",
-      "exercise_id": "100",
+      "exercise_id": "10",
       "weekday": "Monday",
       "time": "10:00",
       "reps_per_set": "5",
@@ -13,7 +13,7 @@
     {
       "workout_plan_exercise_id": "2",
       "workout_plan_id": "10",
-      "exercise_id": "200",
+      "exercise_id": "20",
       "weekday": "Monday",
       "time": "11:00",
       "reps_per_set": "10",
@@ -23,7 +23,7 @@
     {
       "workout_plan_exercise_id": "3",
       "workout_plan_id": "10",
-      "exercise_id": "300",
+      "exercise_id": "30",
       "weekday": "Monday",
       "time": "12:00",
       "reps_per_set": "5",

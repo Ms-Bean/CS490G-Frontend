@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, ButtonGroup, Table } from 'react-bootstrap';
 
-function EditWorkoutForm(workoutPlanName, workoutPlanId) {
+function EditWorkoutForm({workoutPlanName, workoutPlanId}) {
+
     const [data, setData] = useState([]);
     const [planName, setPlanName] = useState(workoutPlanName)
     const [count, setCount] = useState(-1)
 
-    const [exerciseId, setExerciseId] = useState('Plank') //hard coded Plank for now, will be first exercise from bank in DB
+    const [exerciseId, setExerciseId] = useState()
+    const [exerciseArray, setExerciseArray] = useState([])
     const [sets, setSets] = useState('')
     const [reps, setReps] = useState('')
     const [weight, setWeight] = useState('')
@@ -16,7 +18,9 @@ function EditWorkoutForm(workoutPlanName, workoutPlanId) {
 
     const [addID, setAddID] = useState(0) //used to update table with latest data after inserting
     const [editID, setEditID] = useState(0)
-    const [deleteID, setDeleteID] = useState()
+    const [deleteID, setDeleteID] = useState(0)
+    const [updateID, setUpdateID] = useState(0)
+    const [fetchID, setFetchID] = useState(0)
 
     //update variables
     const[uexerciseId, usetExerciseId] = useState('')
@@ -29,8 +33,7 @@ function EditWorkoutForm(workoutPlanName, workoutPlanId) {
     const[showForm, setShowForm] = useState(false)
     const[showAddButton, setShowAddButton] = useState(true)
 
-    const url = 'http://localhost:3600/workout_exercises';
-
+    const url = `http://localhost:3500/workout_plan/${workoutPlanId}?include_exercises=true`;
         //local storage functions
         const [ex_arr, setex_arr] = useState([]);
         const [add_ex_arr, setadd_ex_arr] = useState([]);
@@ -41,7 +44,7 @@ function EditWorkoutForm(workoutPlanName, workoutPlanId) {
             const newData = [];
             for (let i=0; i < ex_arr.length; i++){
                 //console.log(ex_arr[i])
-                let grab_ex = window.localStorage.getItem(ex_arr[i])
+                let grab_ex = window.sessionStorage.getItem(ex_arr[i])
                 newData.push(JSON.parse(grab_ex))
                 //setData([...oldArray, grab_ex])
             }
@@ -52,9 +55,9 @@ function EditWorkoutForm(workoutPlanName, workoutPlanId) {
             for (let i=0; i<wk_e.length; i++){
                 let new_ex = wk_e[i]
                 let id = new_ex.workout_plan_exercise_id
-                window.localStorage.setItem(id, JSON.stringify(new_ex))
+                window.sessionStorage.setItem(id, JSON.stringify(new_ex))
                 ex_arr[i]=Number(id)
-                //console.log(window.localStorage.getItem(id))
+                //console.log(window.sessionStorage.getItem(id))
             }
             localToData()
 
@@ -80,7 +83,7 @@ function EditWorkoutForm(workoutPlanName, workoutPlanId) {
                 num_sets: sets,
                 weight: weight
             }
-            window.localStorage.setItem(fakeID, JSON.stringify(new_ex))
+            window.sessionStorage.setItem(fakeID, JSON.stringify(new_ex))
             add_ex_arr[add_ex_arr.length]=Number(fakeID)
             ex_arr[ex_arr.length]=Number(fakeID)
             console.log("array", ex_arr)
@@ -88,28 +91,60 @@ function EditWorkoutForm(workoutPlanName, workoutPlanId) {
         }
 
         const delData=(id) =>{
-            window.localStorage.removeItem(id)
+            window.sessionStorage.removeItem(id)
         }
 
     useEffect(()=>{
         getData(url)
-    }, [addID] ) 
+    }, [url] ) 
+
+    useEffect(()=>{
+        window.sessionStorage.setItem("add_exercise_array", JSON.stringify(add_ex_arr))
+        console.log("updating add array")
+    }, [addID, add_ex_arr])
+
+    useEffect(()=>{
+        console.log("updating update array")
+        window.sessionStorage.setItem("update_exercise_array", JSON.stringify(up_ex_arr))
+    }, [updateID, up_ex_arr])
+
+    useEffect(() =>{
+        console.log("updating delete array")
+        window.sessionStorage.setItem("delete_exercise_array", JSON.stringify(del_ex_arr))
+    },[deleteID, del_ex_arr])
+
+    useEffect(()=>{
+        window.sessionStorage.setItem("WorkoutPlanName", planName)
+    }, [planName])
+
+    useEffect(()=>{
+        fetch(`http://localhost:3500/exercises/`)
+        .then((data) => data.json())
+        .then((val) => setExerciseArray(val))
+
+        console.log("exArray", exerciseArray)
+    }, [])
+
+    useEffect(() => { setAddID(1) }, [addID])
+    useEffect(() => { setUpdateID(1) }, [updateID])
+    useEffect(() => { setDeleteID(1) }, [deleteID])
 
 
     const handleSubmit=(event) => {
-        setAddID(1)
+        setAddID('1')
+        console.log("add", addID)
         event.preventDefault();
         addData(ex_arr)
-        setAddID(0)
         handleShowAddButton("true")
         setDefualts()
         console.log("add-array", add_ex_arr)
+        setAddID(0)
         //console.log("data", data)
     }
 
     const handleEdit=(id) => {
         console.log(id)
-        let grab_ex = window.localStorage.getItem(id)
+        let grab_ex = window.sessionStorage.getItem(id)
         let ex = JSON.parse(grab_ex)
         usetExerciseId(ex.exercise_id)
         usetDay(ex.weekday)
@@ -121,6 +156,8 @@ function EditWorkoutForm(workoutPlanName, workoutPlanId) {
     }
 
     const handleUpdate=() => {
+        setUpdateID(1)
+        console.log("upExId", uexerciseId)
         const new_ex = {
             workout_plan_exercise_id: editID,
             workout_plan_id: workoutPlanId,
@@ -134,9 +171,10 @@ function EditWorkoutForm(workoutPlanName, workoutPlanId) {
         if (!add_ex_arr.includes(editID) && !up_ex_arr.includes(editID)){
             up_ex_arr[up_ex_arr.length]=Number(editID)
         }
-        window.localStorage.setItem(editID, JSON.stringify(new_ex))
+        window.sessionStorage.setItem(editID, JSON.stringify(new_ex))
         setEditID(0)
         localToData()
+        setUpdateID(0)
     }
 
     const deleteFromArray=(id, flag) =>{ //search arrays for a specific value, delete value, update array
@@ -144,38 +182,57 @@ function EditWorkoutForm(workoutPlanName, workoutPlanId) {
         if (flag === "add_ex"){
             temp_arr = add_ex_arr
             const index = temp_arr.indexOf(id)
-            temp_arr.splice(index, index)
+            temp_arr.splice(index, 1)
             setadd_ex_arr(temp_arr)
         }
         else if (flag === "up_ex"){
             temp_arr = up_ex_arr
             const index = temp_arr.indexOf(id)
-            temp_arr.splice(index, index)
+            temp_arr.splice(index, 1)
             setup_ex_arr(temp_arr)
         }
         else{
         const index = temp_arr.indexOf(id)
-        temp_arr.splice(index, index)
+        console.log("idx", index)
+        temp_arr.splice(index, 1)
         setex_arr(temp_arr)
         }
         console.log("ex_arr", ex_arr)
 
     }
     const handleDelete=(id) =>{
-        setDeleteID(id) //lowkey might not even need this fr
-        console.log("in")
+        setDeleteID(Number(id))
+        console.log("in, delete ID=", id)
+        if (ex_arr.length === 1){ //handle last value in exercise array
+            var temp_clear = ex_arr;
+            temp_clear.pop()
+            setex_arr(temp_clear)
+            if (!add_ex_arr.includes(Number(id))){
+                del_ex_arr[del_ex_arr.length] = Number(id)
+                console.log("Delete Array", del_ex_arr)
+            }
+            if(add_ex_arr.includes(Number(id))){
+                deleteFromArray(Number(id), "add_ex")
+            }
+        }
         if (ex_arr.includes(Number(id)) && !add_ex_arr.includes(Number(id))){ //exercise pulled from the database
             deleteFromArray(Number(id), "")
+            del_ex_arr[del_ex_arr.length] = Number(id)
+            console.log("Delete Array", del_ex_arr)
         }
         else if (add_ex_arr.includes(Number(id))){ //exercise was recently added, did not make it to the database
             deleteFromArray(Number(id), "add_ex")
             deleteFromArray(Number(id), "")
+            setAddID(id)
         }
         if (up_ex_arr.includes(Number(id))){// exercise was recently updated 
             deleteFromArray(Number(id), "up_ex")
+            setUpdateID(id)
+            console.log("Update Array", up_ex_arr)
         }
         localToData()
-        window.localStorage.removeItem(id) //STOP HERE: cannot remove last item from array
+        window.sessionStorage.removeItem(id) //STOP HERE: cannot remove last item from array
+        setDeleteID(0)
     }
 
     
@@ -210,7 +267,16 @@ function EditWorkoutForm(workoutPlanName, workoutPlanId) {
         handleShowAddButton("true")
         setDefualts()
     }
-    
+
+    function exName(id){
+        let idx = Number(id)
+        console.log("exer", exerciseArray)
+        if (exerciseArray.length > 0){
+        let result = exerciseArray.at(idx-1).name
+        return result}
+
+    }
+
   return (
     <div className='container'>
          <label>Workout Plan Name</label><br/><input type="text" value={planName} onChange={e => setPlanName(e.target.value)}/>
@@ -233,12 +299,11 @@ function EditWorkoutForm(workoutPlanName, workoutPlanId) {
                     <tr> 
                         <td></td>
                         <td>
-                            <select name="upexercise" onChange={e => usetExerciseId(e.target.value)}>
-                                <option value={uexerciseId}>{uexerciseId}</option>
-                                <option value="1">Plank</option>
-                                <option value="2">Bench Press</option>
-                                <option value="3">Jogging</option>
-                                <option value="4">Sprinting</option>
+                            <select name="upexercise" onChange={(e)=>usetExerciseId(e.target.value)}>
+                                <option value={uexerciseId} >{exName(Number(uexerciseId))}</option>
+                                {   
+                                    exerciseArray.map((opts,i)=> <option key={i} value={opts.exercise_id}>{opts.name}</option>)
+                                }
                             </select>
                         </td>
                         <td><input type="number" size="5" value={usets} onChange={e => usetSets(e.target.value)}/></td>
@@ -267,7 +332,7 @@ function EditWorkoutForm(workoutPlanName, workoutPlanId) {
                             <Button variant="danger" onClick={() => handleDelete(workout_exercise.workout_plan_exercise_id)}>Delete</Button>
                         </ButtonGroup>
                         </td>
-                        <td>{workout_exercise.exercise_id}</td>
+                        <td>{exName(workout_exercise.exercise_id)}</td>
                         <td>{workout_exercise.num_sets}</td>
                         <td>{workout_exercise.reps_per_set}</td>
                         <td>{workout_exercise.weight}</td>
@@ -281,11 +346,10 @@ function EditWorkoutForm(workoutPlanName, workoutPlanId) {
       <div>
         {showForm && (
       <form onSubmit={handleSubmit}>
-        <select name="exercise" onChange={e => setExerciseId(e.target.value)} required value="1">
-            <option value="1">Plank</option>
-            <option value="2">Bench Press</option>
-            <option value="3">Jogging</option>
-            <option value="4">Sprinting</option>
+        <select name="upexercise" onChange={(e)=>setExerciseId(e.target.value)}>
+            {
+                exerciseArray.map((opts,i)=> <option key={i} value={opts.exercise_id}>{opts.name}</option>)
+            }
         </select>
         <input type="number" size="5" placeholder="Sets" onChange={e => setSets(e.target.value)}/>
         <input type="number" size="5" placeholder="Reps" onChange={e => setReps(e.target.value)}/>
