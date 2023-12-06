@@ -20,15 +20,15 @@ const CoachNavbar = ({ searchParams, handleChange, handleSubmit, handleModalShow
               onChange={handleChange}
               className="me-2"
             />
-            <Button variant="secondary" type="submit">
+            <span className="navbar-text-link align-self-center" variant="secondary" type="submit">
               <FaSearch />
-            </Button>
-            <Button variant="secondary" onClick={handleModalShow} className="ms-2">
-              Filters
-            </Button>
-            <Dropdown variant="secondary" className="ms-2">
-              <Dropdown.Toggle variant="secondary" id="dropdown-basic-button">
-                Sort
+            </span>
+            <span className="navbar-text-link align-self-center" style={{ cursor: "pointer" }} onClick={handleModalShow}>
+              Filter By ▾
+            </span>
+            <Dropdown className="navbar-text-link align-self-center">
+              <Dropdown.Toggle as="span" id="dropdown-basic-button" style={{ cursor: "pointer" }}>
+                Sort By ▾
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item onClick={() => handleSortChange("name")}>Name{getSortDirectionIcon("name")}</Dropdown.Item>

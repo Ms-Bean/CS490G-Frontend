@@ -14,3 +14,14 @@
   border-radius: 10px;
   overflow: hidden;
 }
+
+.navbar-text-link {
+  margin-right: .5rem; 
+  margin-left: .5rem; 
+  cursor: pointer;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  display: inline-block;
+
+}
