@@ -20,7 +20,6 @@ function EditWorkoutForm({workoutPlanName, workoutPlanId}) {
     const [editID, setEditID] = useState(0)
     const [deleteID, setDeleteID] = useState(0)
     const [updateID, setUpdateID] = useState(0)
-    const [fetchID, setFetchID] = useState(0)
 
     //update variables
     const[uexerciseId, usetExerciseId] = useState('')
@@ -66,7 +65,9 @@ function EditWorkoutForm({workoutPlanName, workoutPlanId}) {
             const fetchedData = fetch(url, {credentials:"include",})
             .then(res => {
                 res.json()
-            .then(data => {pullData(data)})
+            .then(data => {console.log("pulled", data.workout_plan.exercises)
+                pullData(data.workout_plan.exercises)
+            })
            }
     )}
 
@@ -146,7 +147,7 @@ function EditWorkoutForm({workoutPlanName, workoutPlanId}) {
         console.log(id)
         let grab_ex = window.sessionStorage.getItem(id)
         let ex = JSON.parse(grab_ex)
-        usetExerciseId(ex.exercise_id)
+        usetExerciseId(getExId(ex))
         usetDay(ex.weekday)
         usetReps(ex.reps_per_set)
         usetTime(ex.time)
@@ -231,7 +232,7 @@ function EditWorkoutForm({workoutPlanName, workoutPlanId}) {
             console.log("Update Array", up_ex_arr)
         }
         localToData()
-        window.sessionStorage.removeItem(id) //STOP HERE: cannot remove last item from array
+        window.sessionStorage.removeItem(id) 
         setDeleteID(0)
     }
 
@@ -277,6 +278,18 @@ function EditWorkoutForm({workoutPlanName, workoutPlanId}) {
 
     }
 
+    function capitalize(txt){
+        return txt.charAt(0).toUpperCase() + txt.slice(1);
+    }
+
+    function getExId(obj){ //handles sub-object "exercise" in workout_plan_exercise objects fetched
+        if (obj.exercise){
+        return obj.exercise.exercise_id;}
+        else{
+            return obj.exercise_id;
+        }
+    }
+
   return (
     <div className='container'>
          <label>Workout Plan Name</label><br/><input type="text" value={planName} onChange={e => setPlanName(e.target.value)}/>
@@ -311,7 +324,7 @@ function EditWorkoutForm({workoutPlanName, workoutPlanId}) {
                         <td><input type="number" size="5" value={uweight} onChange={e => usetWeight(e.target.value)}/></td>
                         <td>
                             <select name="upday" onChange={e => usetDay(e.target.value)}>
-                                <option value={uday}>{uday}</option>
+                                <option value={capitalize(uday)}>{capitalize(uday)}</option>
                                 <option value="Sunday">Sunday</option>
                                 <option value="Monday">Monday</option>
                                 <option value="Tuesday">Tuesday</option>
@@ -332,11 +345,11 @@ function EditWorkoutForm({workoutPlanName, workoutPlanId}) {
                             <Button variant="danger" onClick={() => handleDelete(workout_exercise.workout_plan_exercise_id)}>Delete</Button>
                         </ButtonGroup>
                         </td>
-                        <td>{exName(workout_exercise.exercise_id)}</td>
+                        <td>{exName(getExId(workout_exercise))}</td>
                         <td>{workout_exercise.num_sets}</td>
                         <td>{workout_exercise.reps_per_set}</td>
                         <td>{workout_exercise.weight}</td>
-                        <td>{workout_exercise.weekday}</td>
+                        <td>{capitalize(workout_exercise.weekday)}</td>
                         <td>{workout_exercise.time}</td>
                     </tr>
                 ))
