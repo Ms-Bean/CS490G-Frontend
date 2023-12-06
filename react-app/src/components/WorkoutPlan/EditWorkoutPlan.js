@@ -13,14 +13,13 @@ function EditWorkoutPlan({workoutPlanName, workoutPlanId}) {
   const addToDB = async (exer) => {
     try{
         console.log(exer.name);
-        console.log("in2")
         const data = {
             workout_plan_id : Number(workoutPlanId),
             exercise_id : Number(exer.exercise_id),
             weekday : exer.weekday.toLowerCase(),
             time : exer.time+':00',
-            reps_per_set : Number(exer.reps_per_set),
-            num_sets : Number(exer.num_sets),
+            reps_per_set : ((exer.reps_per_set) ? Number(exer.reps_per_set) : null),
+            num_sets : ((exer.num_sets) ? Number(exer.num_sets) : null),
             weight : ((exer.weight) ? Number(exer.weight) : null)
         }
         console.log("in transit", data);
