@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Navbar, Nav, Form, FormControl, Button, Dropdown, Container } from "react-bootstrap";
+import { Navbar, Nav, Form, FormControl, Dropdown, Container } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 import ExerciseAddModal from "./ExerciseAddModal";
 import ExerciseFilterModal from "./ExerciseFilterModal";
@@ -37,21 +37,26 @@ const ExerciseNavbar = ({ onSearch, onSort, onToggleSortDirection, sortKey, sort
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto" />
           <Form className="d-flex">
+            
             <FormControl type="text" placeholder="Search by name..." name="name" className="me-2" onChange={handleSearchChange} />
-            <Button variant="secondary">
+            <span className="navbar-text-link align-self-center" variant="secondary" type="submit">
               <FaSearch />
-            </Button>
-            <Button variant="secondary" className="ms-2" onClick={handleFilterClick}>
-              Filters
-            </Button>
+            </span>
+            <span className="navbar-text-link align-self-center" style={{ cursor: "pointer" }} onClick={() => setShowFilterModal(true)}>
+              Filter By ▾
+            </span>
             <ExerciseFilterModal show={showFilterModal} onHide={() => setShowFilterModal(false)} onApplyFilter={onFilter} />
-            <Dropdown variant="secondary" className="ms-2" onSelect={handleSortOptionClick}>
-              <Dropdown.Toggle variant="secondary" id="dropdown-basic-button">
-                Sort
+            <Dropdown className="navbar-text-link align-self-center">
+              <Dropdown.Toggle as="span" id="dropdown-basic-button" style={{ cursor: "pointer" }}>
+                Sort By ▾
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item eventKey="name">Name{getSortDirectionSymbol("name")}</Dropdown.Item>
-                <Dropdown.Item eventKey="difficulty">Difficulty{getSortDirectionSymbol("difficulty")}</Dropdown.Item>
+                <Dropdown.Item eventKey="name" onClick={() => handleSortOptionClick("name")}>
+                  Name{getSortDirectionSymbol("name")}
+                </Dropdown.Item>
+                <Dropdown.Item eventKey="difficulty" onClick={() => handleSortOptionClick("difficulty")}>
+                  Difficulty{getSortDirectionSymbol("difficulty")}
+                </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           </Form>
