@@ -83,8 +83,10 @@ const CoachDashboard = () => {
           {
             document.getElementById("scheduled" + i).innerHTML = "";
             document.getElementById("logged" + i).innerHTML = "";
+            
             let scheduled = document.createElement("li");
             let string = "";
+
             string += data.days[i].exercises[j].exercise_name + ": ";
             if(data.days[i].exercises[j].expected_num_sets !== undefined)
             {
@@ -106,7 +108,7 @@ const CoachDashboard = () => {
 
             for(let k = 0; k < data.days[i].exercises[j].logged_sets.length; k++)
             {
-              let set_title = document.createTextNode("Set " + (k + 1));
+              let set_title = document.createTextNode(data.days[i].exercises[j].exercise_name + ", Set " + (k + 1));
               let sublist = document.createElement("li");
               sublist.appendChild(set_title);
               let subul = document.createElement("ul");
