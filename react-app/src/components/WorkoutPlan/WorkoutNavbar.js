@@ -1,10 +1,25 @@
-import React, { useState } from "react";
+import React from "react";
 import { Dropdown } from "react-bootstrap";
 import { FaSearch} from "react-icons/fa";
 import NewWorkoutPlan from "./NewWorkoutPlan";
 
-const WorkoutNavbar = ({handleSortChange, handleUploadSuccessChange}) => {
+const WorkoutNavbar = ({onSort, onSearch, sortKey, onToggleSortDirection, sortDirection, handleUploadSuccessChange}) => {
 
+    const handleSortOptionClick = (key) => {
+        if (sortKey === key) {
+          onToggleSortDirection();
+        } else {
+          onSort(key);
+        }
+    };
+
+    const getSortDirectionSymbol = (key) => {
+        return sortKey === key ? (sortDirection === "ascending" ? " ↑" : " ↓") : "";
+    };
+
+    const handleSearchChange = (e) => {
+        onSearch(e.target.value);
+    }
 
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -18,20 +33,19 @@ const WorkoutNavbar = ({handleSortChange, handleUploadSuccessChange}) => {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <form className="d-flex ms-auto" role="search">
-                        <input className="form-control" type="search" placeholder="Search By Workout" aria-label="Search"/>
+                        <input onChange={handleSearchChange} className="form-control" type="search" placeholder="Search By Workout" aria-label="Search"/>
                         <button className="btn btn-secondary ms-2" type="submit">
                             <FaSearch />
                         </button>
-                        <Dropdown variant="secondary" className="ms-2">
+                        <Dropdown variant="secondary" className="ms-2" onSelect={handleSortOptionClick}>
                             <Dropdown.Toggle variant="secondary" id="dropdown-basic-button">
                                 Sort By
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
-                                <Dropdown.Item onClick={() => handleSortChange("name")}>Name</Dropdown.Item>
-                                <Dropdown.Item onClick={() => handleSortChange("date")}>Date</Dropdown.Item>
+                                <Dropdown.Item eventKey="name">Name{getSortDirectionSymbol("name")}</Dropdown.Item>
                             </Dropdown.Menu>
                         </Dropdown>
-                        <input className="btn btn-secondary mx-2" type="button" value="Filter By"/>
+                        {/* <input className="btn btn-secondary mx-2" type="button" value="Filter By"/> */}
                     </form>
                 </div>
             </div>

@@ -3,16 +3,48 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { FaPlusCircle} from "react-icons/fa";
 import { useAuth } from '../../hooks/useAuth';
+import CreateExercise from '../CreateExercise';
+
+const convertTimeAMPM = (time) => {
+    const t = time.split(":");
+
+    const hours = Number(t[0]);
+    const mins = Number(t[1]);
+    const sec = Number(t[2]);
+
+    // calculate
+    let timeValue;
+
+    if (hours > 0 && hours <= 12) {
+    timeValue= "" + hours;
+    } else if (hours > 12) {
+    timeValue= "" + (hours - 12);
+    } else if (hours == 0) {
+    timeValue= "12";
+    }
+
+    timeValue += (mins < 10) ? ":0" + mins : ":" + mins;  
+    // timeValue += (sec < 10) ? ":0" + sec : ":" + sec; 
+    timeValue += (hours >= 12) ? " P.M." : " A.M."; 
+
+    // show
+    return timeValue;
+}
+
 
 const NewWorkoutPlan = ({handleUploadSuccessChange}) => {
 
     const {user} = useAuth();
     const [show, setShow] = useState(false);
     const [error, setError] = useState("");
+    const [workoutPlanSuccess, setWorkoutPlanSuccess] = useState(false);
+    const [isLoadingWorkoutPlan, setIsLoadingWorkoutPlan] = useState(false);
     //In form just in case we add more values
     const [formData, setFormData] = useState(
         {
-            name : ""
+            name : "",
+            workout_plan_id : null,
+            exercises : []
         }
     )
 
@@ -21,14 +53,13 @@ const NewWorkoutPlan = ({handleUploadSuccessChange}) => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const submitWorkoutPlan = async () => {
+    const createWorkoutPlan = async () => {
         try{
-            console.log(formData.name);
+            setIsLoadingWorkoutPlan(true);
             const data = {
                 name : formData.name,
                 author_id : user.user_id,
             }
-            console.log(data);
             const response = await fetch(`http://localhost:3500/workout_plan/new`, {
                 method: "POST",
                 headers: {
@@ -38,20 +69,46 @@ const NewWorkoutPlan = ({handleUploadSuccessChange}) => {
                 body: JSON.stringify(data),
                 credentials: "include", // Include credentials with the request
             });
-            console.log(response);
             if (!response.ok) {
                 setError("Failed to Create Workout Plan")
                 throw new Error(`Failed to create workout plan. Status: ${response.status}`);
             }
-            setShow(false);
+            console.log(response);
+            const wp = await response.json();
+            // Update only the workout_plan_id in formData
+            setFormData((prevData) => ({
+                ...prevData,
+                workout_plan_id: wp.workout_plan.workout_plan_id,
+            }));
+            console.log(wp);
+            setWorkoutPlanSuccess(true);
             handleUploadSuccessChange();
         } catch(err){
             console.log(err);
+        } finally {
+            setIsLoadingWorkoutPlan(false);
         }
+        
     }
 
-    const handleClose = () => setShow(false);
+    const handleClose = () => {
+        setFormData({
+            name : ""
+        });
+        setError("");
+        setWorkoutPlanSuccess(false);
+        setShow(false);
+    } 
     const handleShow = () => setShow(true);
+
+    const addWorkoutExercise = (newExercise) => {
+        setFormData((prevData) => ({
+            ...prevData,
+            exercises: [...prevData.exercises, newExercise]
+        }));
+
+        console.log(formData);
+    }
 
     return (
         <>
@@ -67,7 +124,14 @@ const NewWorkoutPlan = ({handleUploadSuccessChange}) => {
             centered
             >
             <Modal.Header closeButton>
+                {!workoutPlanSuccess ? 
+                <>
                 <Modal.Title>New Workout Plan</Modal.Title>
+                </>
+                :
+                <>
+                <Modal.Title>{formData.name}</Modal.Title>
+                </>}
             </Modal.Header>
             <Modal.Body>
                 {error ? 
@@ -78,18 +142,40 @@ const NewWorkoutPlan = ({handleUploadSuccessChange}) => {
                 <>
                 </>
                 }
-                <form>
-                    <div className="mb-3">
-                        <label htmlFor="name" className="form-label ms-1">Name</label>
-                        <input onChange={handleInputChange} type="text" className="form-control" id="name" name="name" aria-describedby="name" placeholder='Name for Workout'/>
-                    </div>
-                </form>
+                {!workoutPlanSuccess ? 
+                <>
+                    <form>
+                        <div className="mb-3">
+                            <label htmlFor="name" className="form-label ms-1">Name</label>
+                            <input onChange={handleInputChange} type="text" className="form-control" id="name" name="name" aria-describedby="name" placeholder='Name for Workout'/>
+                        </div>
+                    </form>
+                </>
+                :
+                <>
+                    <ul className="list-group">
+                        {formData.exercises.map((e, index) => (
+                            <li key={index} className="list-group-item border-0 border-bottom d-flex">
+                            <div className='me-auto'>
+                                {e.exercise_name}
+                            </div>
+                            <div>
+                                {convertTimeAMPM(e.time)} {e.weekday.charAt(0).toUpperCase() + e.weekday.slice(1)} {`${e.reps_per_set}x${e.num_sets}`} {`${e.weight}lbs`}
+                            </div>
+                        </li>
+                        ))}
+                    </ul>
+                    <CreateExercise workout_plan_id={formData.workout_plan_id} addWorkoutExercise={addWorkoutExercise}/>
+                </>}
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={submitWorkoutPlan} className='w-100' variant="dark">Save</Button>
+                {!workoutPlanSuccess ? 
+                    <Button onClick={createWorkoutPlan} className='w-100' variant="dark">Save</Button>
+                :
+                    <></>
+                }
             </Modal.Footer>
             </Modal>
-
         </>
     );
 }
