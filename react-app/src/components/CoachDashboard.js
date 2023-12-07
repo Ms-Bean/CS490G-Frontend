@@ -29,7 +29,7 @@ const CoachDashboard = () => {
                 workoutPlan.appendChild(workoutPlanButton);
 
                 dashboardButton.innerHTML = "Analyitics";
-                dashboardButton.setAttribute("onclick", "window.location='http://localhost:3000/dashboard?user_id=" + data[i].client_id.toString() + "'");
+                dashboardButton.setAttribute("onclick", "window.location='http://localhost:3000/dashboard?client_id=" + data[i].client_id.toString() + "'");
 
                 newTr.appendChild(newTh);
                 newTr.appendChild(userName);
