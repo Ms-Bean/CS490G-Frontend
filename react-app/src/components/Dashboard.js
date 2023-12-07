@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import {CategoryScale} from 'chart.js'; 
+import { Container } from "react-bootstrap";
 import Chart from 'chart.js/auto';
 import {useParams} from "react-router-dom";
 
@@ -130,168 +131,165 @@ const CoachDashboard = () => {
   }, []);
 
     return (
-      <div id="wrapper">
-      <h1>This week's history</h1>
-      <br></br>
-      <div class="row"> 
-                <div class="card"> 
-                    <div class="card-body" id="day0">
-                      <h3 id="day0weekday"></h3>
-                      <div class="row"> 
-                        <div class="col-lg-6 mb-4"> 
-                          <div class="card">
-                            Scheduled exercises
-                            <ul id="scheduled0"></ul>
-                          </div>
-                        </div>
-                        <div class="col-lg-6 mb-4"> 
-                          <div class="card">
-                            Logged exercises
-                            <ul id="logged0"></ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div> 
-                </div> 
-                <div class="card"> 
-  
-                    <div class="card-body" id="day1"> 
-                      <h3 id="day1weekday"></h3> 
-                      <div class="row"> 
-                        <div class="col-lg-6 mb-4"> 
-                          <div class="card">
-                            Scheduled exercises
-                            <ul id="scheduled1"></ul>
-                          </div>
-                        </div>
-                        <div class="col-lg-6 mb-4"> 
-                          <div class="card">
-                            Logged exercises
-                            <ul id="logged1"></ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div> 
-                </div> 
-            </div> 
-                <div class="card"> 
-  
-                    <div class="card-body" id="day2"> 
-                      <h3 id="day2weekday"></h3> 
-                      <div class="row"> 
-                        <div class="col-lg-6 mb-4"> 
-                          <div class="card">
-                            Scheduled exercises
-                            <ul id="scheduled2"></ul>
-                          </div>
-                        </div>
-                        <div class="col-lg-6 mb-4"> 
-                          <div class="card">
-                            Logged exercises
-                            <ul id="logged2"></ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div> 
-            </div> 
-                <div class="card"> 
-  
-                    <div class="card-body" id="day3"> 
-                      <h3 id="day3weekday"></h3> 
-                      <div class="row"> 
-                        <div class="col-lg-6 mb-4"> 
-                          <div class="card">
-                            Scheduled exercises
-                            <ul id="scheduled3"></ul>
-                          </div>
-                        </div>
-                        <div class="col-lg-6 mb-4"> 
-                          <div class="card">
-                            Logged exercises
-                            <ul id="logged3"></ul>
-                          </div>
-                        </div>
-                      </div>
-            </div> 
-                <div class="card"> 
-                    <div class="card-body" id="day4"> 
-                      <h3 id="day4weekday"></h3> 
-                      <div class="row"> 
-                        <div class="col-lg-6 mb-4"> 
-                          <div class="card">
-                            Scheduled exercises
-                            <ul id="scheduled4"></ul>
-                          </div>
-                        </div>
-                        <div class="col-lg-6 mb-4"> 
-                          <div class="card">
-                            Logged exercises
-                            <ul id="logged4"></ul>
-                          </div>
-                        </div>
-                      </div>
-                </div> 
-            </div> 
-        </div> 
-        <br></br>
-        <h1>Statistics</h1>
-        <br></br>
-        <div className="chart-container">
-        <Line
-          data={{
-          labels: chart_data.x,
-          datasets: [
-            {
-                label: "Calories burned",
-                data: chart_data.calories_burned_y,
-                fill: false,
-                borderWidth:4,
-                backgroundColor: "green",
-                borderColor:'green'
-              },
-              {
-                  label: "Calories consumed",
-                  data: chart_data.calories_consumed_y,
-                  fill: false,
-                  borderWidth:4,
-                  backgroundColor: "red",
-                  borderColor:'red'
-                },
-            ],
-          }}
-        />
-        <Line
-          data={{
-          labels: chart_data.x,
-          datasets: [
-            {
-                label: "Water Intake (Liters)",
-                data: chart_data.water_intake_y,
-                fill: false,
-                borderWidth:4,
-                backgroundColor: "blue",
-                borderColor:'blue'
-              }
-            ],
-          }}
-        />
-        <Line
-          data={{
-          labels: chart_data.x,
-          datasets: [
-            {
-                label: "Weight",
-                data: chart_data.weight_y,
-                fill: false,
-                borderWidth:4,
-                backgroundColor: "purple",
-                borderColor:'purple'
-              }
-            ],
-          }}
-        />
+      <Container>
+        <div id="wrapper" className="mt-3">
+          <h1>This week's history</h1>
+          <br></br>
+            <div class="card">
+              <div class="card-body" id="day0">
+                <h3 id="day0weekday"></h3>
+                <div class="row">
+                  <div class="col-lg-6 mb-4">
+                    <div class="card">
+                      Scheduled exercises
+                      <ul id="scheduled0"></ul>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 mb-4">
+                    <div class="card">
+                      Logged exercises
+                      <ul id="logged0"></ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-body" id="day1">
+                <h3 id="day1weekday"></h3>
+                <div class="row">
+                  <div class="col-lg-6 mb-4">
+                    <div class="card">
+                      Scheduled exercises
+                      <ul id="scheduled1"></ul>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 mb-4">
+                    <div class="card">
+                      Logged exercises
+                      <ul id="logged1"></ul>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body" id="day2">
+              <h3 id="day2weekday"></h3>
+              <div class="row">
+                <div class="col-lg-6 mb-4">
+                  <div class="card">
+                    Scheduled exercises
+                    <ul id="scheduled2"></ul>
+                  </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                  <div class="card">
+                    Logged exercises
+                    <ul id="logged2"></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body" id="day3">
+              <h3 id="day3weekday"></h3>
+              <div class="row">
+                <div class="col-lg-6 mb-4">
+                  <div class="card">
+                    Scheduled exercises
+                    <ul id="scheduled3"></ul>
+                  </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                  <div class="card">
+                    Logged exercises
+                    <ul id="logged3"></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </div>
+            <div class="card">
+              <div class="card-body" id="day4">
+                <h3 id="day4weekday"></h3>
+                <div class="row">
+                  <div class="col-lg-6 mb-4">
+                    <div class="card">
+                      Scheduled exercises
+                      <ul id="scheduled4"></ul>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 mb-4">
+                    <div class="card">
+                      Logged exercises
+                      <ul id="logged4"></ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+          <br></br>
+          <h1>Statistics</h1>
+          <br></br>
+          <div className="chart-container">
+            <Line
+              data={{
+                labels: chart_data.x,
+                datasets: [
+                  {
+                    label: "Calories burned",
+                    data: chart_data.calories_burned_y,
+                    fill: false,
+                    borderWidth: 4,
+                    backgroundColor: "green",
+                    borderColor: "green",
+                  },
+                  {
+                    label: "Calories consumed",
+                    data: chart_data.calories_consumed_y,
+                    fill: false,
+                    borderWidth: 4,
+                    backgroundColor: "red",
+                    borderColor: "red",
+                  },
+                ],
+              }}
+            />
+            <Line
+              data={{
+                labels: chart_data.x,
+                datasets: [
+                  {
+                    label: "Water Intake (Liters)",
+                    data: chart_data.water_intake_y,
+                    fill: false,
+                    borderWidth: 4,
+                    backgroundColor: "blue",
+                    borderColor: "blue",
+                  },
+                ],
+              }}
+            />
+            <Line
+              data={{
+                labels: chart_data.x,
+                datasets: [
+                  {
+                    label: "Weight",
+                    data: chart_data.weight_y,
+                    fill: false,
+                    borderWidth: 4,
+                    backgroundColor: "purple",
+                    borderColor: "purple",
+                  },
+                ],
+              }}
+            />
+          </div>
         </div>
-      </div>
+      </Container>
     );
 };
 
