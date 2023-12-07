@@ -6,7 +6,7 @@ const Footer = () => {
     <>
       <div className="text-dark mt-3 py-5" style={{ backgroundColor: "#ccd1d4" }}>
         <Container>
-          <Row>
+          <Row className="justify-content-center">
             <Col sm={6} md={6} lg={2} mb={5}>
               <div className="footer-title">
                 <h6>Who We Are</h6>
@@ -21,7 +21,7 @@ const Footer = () => {
                 </a>
                 <br />
                 <a href="/" className="text-muted">
-                  <small>Work With Us</small>
+                  <small>Careers</small>
                 </a>
                 <br />
                 <a href="/" className="text-muted">
@@ -44,7 +44,7 @@ const Footer = () => {
               </div>
             </Col>
 
-            <Col sm={6} md={6} lg={3} mb={5}>
+            <Col sm={6} md={6} lg={2} mb={5}>
               <div className="footer-title">
                 <h6>Contact Us</h6>
               </div>
@@ -57,6 +57,28 @@ const Footer = () => {
                 <br />
                 <small>Email : cs490group4@njit.edu</small>
                 <br />
+              </div>
+            </Col>
+            <Col sm={6} md={6} lg={2} mb={5}>
+              <div className="footer-title">
+                <h6>Social Media</h6>
+              </div>
+              <div className="footer-content text-muted">
+                <a href="/" className="text-muted">
+                  <small>Instagram</small>
+                </a>
+                <br />
+                <a href="/" className="text-muted">
+                  <small>X</small>
+                </a>
+                <br />
+                <a href="/" className="text-muted">
+                  <small>Facebook</small>
+                </a>
+                <br />
+                <a href="/" className="text-muted">
+                  <small>TikTok</small>
+                </a>
               </div>
             </Col>
           </Row>
