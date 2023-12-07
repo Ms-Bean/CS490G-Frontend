@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Button, ButtonGroup, Table } from 'react-bootstrap';
 
 function EditWorkoutForm({workoutPlanName, workoutPlanId}) {
@@ -62,10 +61,10 @@ function EditWorkoutForm({workoutPlanName, workoutPlanId}) {
 
         }
          function getData(){
-            const fetchedData = fetch(url, {credentials:"include",})
+            fetch(url, {credentials:"include",})
             .then(res => {
                 res.json()
-            .then(data => {console.log("pulled", data.workout_plan.exercises)
+            .then(data => {//console.log("pulled", data.workout_plan.exercises)
                 pullData(data.workout_plan.exercises)
             })
            }
@@ -89,10 +88,6 @@ function EditWorkoutForm({workoutPlanName, workoutPlanId}) {
             ex_arr[ex_arr.length]=Number(fakeID)
             console.log("array", ex_arr)
             localToData() 
-        }
-
-        const delData=(id) =>{
-            window.sessionStorage.removeItem(id)
         }
 
     useEffect(()=>{
@@ -232,7 +227,6 @@ function EditWorkoutForm({workoutPlanName, workoutPlanId}) {
             console.log("Update Array", up_ex_arr)
         }
         localToData()
-        window.sessionStorage.removeItem(id) 
         setDeleteID(0)
     }
 
@@ -271,7 +265,7 @@ function EditWorkoutForm({workoutPlanName, workoutPlanId}) {
 
     function exName(id){
         let idx = Number(id)
-        console.log("exer", exerciseArray)
+        //console.log("exer", exerciseArray)
         if (exerciseArray.length > 0){
         let result = exerciseArray.at(idx-1).name
         return result}
@@ -359,7 +353,7 @@ function EditWorkoutForm({workoutPlanName, workoutPlanId}) {
       <div>
         {showForm && (
       <form onSubmit={handleSubmit}>
-        <select name="upexercise" onChange={(e)=>setExerciseId(e.target.value)}>
+        <select name="upexercise" onChange={(e)=>setExerciseId(e.target.value)} required>
             {
                 exerciseArray.map((opts,i)=> <option key={i} value={opts.exercise_id}>{opts.name}</option>)
             }
@@ -376,7 +370,7 @@ function EditWorkoutForm({workoutPlanName, workoutPlanId}) {
             <option value="Friday">Friday</option>
             <option value="Saturday">Saturday</option>
         </select>
-        <label>&nbsp;Time:&nbsp;</label><input type="time" size="7" placeholder="Time" onChange={e => setTime(e.target.value)}/>
+        <label>&nbsp;Time:&nbsp;</label><input type="time" size="7" placeholder="Time" onChange={e => setTime(e.target.value)} required/>
         <ButtonGroup>
             <Button variant="success" type="submit">Add</Button>
             <Button variant="secondary" onClick={handleCancel}>Cancel</Button>
