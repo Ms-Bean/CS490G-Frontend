@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useContext } from "react";
-import ReactPaginate from 'react-paginate';
-import { Container, Alert, Row } from "react-bootstrap";
+import ReactPaginate from "react-paginate";
+import { Container, Alert, Row, Col, Button } from "react-bootstrap";
 import ExerciseCard from "../components/Exercises/ExerciseCard";
 import ExerciseNavbar from "../components/Exercises/ExerciseNavbar";
 import ExerciseModal from "../components/Exercises/ExerciseModal";
@@ -56,12 +56,10 @@ const ExerciseManagement = () => {
     }
 
     if (filters.goals && filters.goals.length > 0) {
-      // console.log("Current filters.goals:", filters.goals); // Debugging log
       filtered = filtered.filter((exercise) => {
-        // console.log("Checking exercise:", exercise.exercise_id, exercise.goal_name,); // Debugging log
+        setCurrentPage(0);
         return filters.goals.includes(exercise.goal_name);
       });
-      // console.log("Filtered exercises:", filtered); // Debugging log
     }
 
     if (filters.equipmentItems && filters.equipmentItems.length > 0) {
@@ -77,10 +75,12 @@ const ExerciseManagement = () => {
         let comparison = 0;
         if (valA < valB) comparison = -1;
         if (valA > valB) comparison = 1;
+        setCurrentPage(0);
         return sortDirection === "ascending" ? comparison : comparison * -1;
       });
     }
 
+    setCurrentPage(0);
     return filtered;
   }, [exercises, searchTerm, sortKey, sortDirection, filters]);
 
@@ -102,6 +102,14 @@ const ExerciseManagement = () => {
     setCurrentPage(event.selected);
   };
 
+  const resetFilters = () => {
+    setSearchTerm("");
+    setSortKey("");
+    setSortDirection("ascending");
+    setFilters({});
+    setCurrentPage(0);
+  };
+
   return (
     <div>
       <ExerciseNavbar
@@ -121,7 +129,14 @@ const ExerciseManagement = () => {
       <Container className="mt-4">
         <Row>
           {!isLoading && paginatedExercises.length === 0 ? (
-            <Alert variant="info">No exercises found matching the specified criteria.</Alert>
+            <>
+              <Alert variant="info">No exercises found matching the specified criteria.</Alert>
+              <Col className="d-flex justify-content-center">
+                <Button onClick={resetFilters} className="w-50" variant="secondary">
+                  Reset Filters
+                </Button>
+              </Col>
+            </>
           ) : (
             paginatedExercises.map((exercise) => <ExerciseCard key={exercise.exercise_id} exercise={exercise} isAdmin={isAdmin} />)
           )}
