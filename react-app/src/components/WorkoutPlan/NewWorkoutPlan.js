@@ -49,6 +49,7 @@ const NewWorkoutPlan = ({handleUploadSuccessChange}) => {
     )
 
     const handleInputChange = (e) => {
+        e.preventDefault();
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
@@ -144,12 +145,10 @@ const NewWorkoutPlan = ({handleUploadSuccessChange}) => {
                 }
                 {!workoutPlanSuccess ? 
                 <>
-                    <form>
-                        <div className="mb-3">
-                            <label htmlFor="name" className="form-label ms-1">Name</label>
-                            <input onChange={handleInputChange} type="text" className="form-control" id="name" name="name" aria-describedby="name" placeholder='Name for Workout'/>
-                        </div>
-                    </form>
+                    <div className="mb-3">
+                        <label htmlFor="name" className="form-label ms-1">Name</label>
+                        <input onChange={handleInputChange} type="text" className="form-control" id="name" name="name" aria-describedby="name" placeholder='Name for Workout'/>
+                    </div>
                 </>
                 :
                 <>
