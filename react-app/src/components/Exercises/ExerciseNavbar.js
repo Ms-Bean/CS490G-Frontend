@@ -7,10 +7,6 @@ import ExerciseFilterModal from "./ExerciseFilterModal";
 const ExerciseNavbar = ({ onSearch, onSort, onToggleSortDirection, sortKey, sortDirection, isAdmin, onFilter }) => {
   const [showFilterModal, setShowFilterModal] = useState(false);
 
-  const handleFilterClick = () => {
-    setShowFilterModal(true);
-  };
-
   const handleSearchChange = (e) => {
     onSearch(e.target.value);
   };
