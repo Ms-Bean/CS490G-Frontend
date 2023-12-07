@@ -232,9 +232,18 @@ const MessagePage = () => {
     const clients = messages.filter((user) => user.role === "client");
 
     if (clients.length === 0 && userRole === "coach") {
-      return <p>You don't have any clients</p>;
+      return (
+        <Card className="text-center bg-light">
+          <Card.Body>
+            <Card.Title>
+              <h1>My Clients</h1>
+            </Card.Title>
+            <p>You don't have any clients</p>
+          </Card.Body>
+        </Card>
+      );
     } else if (clients.length === 0 && userRole === "client") {
-      return <p></p>;
+      return ;
     }
 
     return (
@@ -478,7 +487,7 @@ const MessagePage = () => {
                       </Form>
                     </>
                   ) : (
-                    <p>Select a user to view messages.</p>
+                    <p>Select a user to view and send messages.</p>
                   )}
                 </>
               )}
