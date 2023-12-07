@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Spinner, Alert, Row, Pagination } from "react-bootstrap";
-import SearchNavbar from "../components/CoachSearch/SearchNavbar";
+import CoachNavbar from "../components/CoachSearch/CoachNavbar";
 import SearchFiltersModal from "../components/CoachSearch/SearchFiltersModal";
 import CoachCard from "../components/CoachSearch/CoachCard";
 
@@ -21,13 +21,12 @@ const CoachSearch = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [sortOption, setSortOption] = useState({ key: "name", isDescending: false });
 
-  const pageSize = 9;
+  const pageSize = 12;
 
   const handleChange = (e) => {
-    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
     setSearchParams({ ...searchParams, [e.target.name]: value });
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -99,10 +98,10 @@ const CoachSearch = () => {
         min: Number(searchParams.minExperience) || defaultMinExperienceLevel,
         max: Number(searchParams.maxExperience) || defaultMaxExperienceLevel,
       },
-    // Include accepting_new_clients only if it's explicitly checked
-    ...(searchParams.acceptingNewClients && { accepting_new_clients: searchParams.acceptingNewClients }),
+      // Include accepting_new_clients only if it's explicitly checked
+      ...(searchParams.acceptingNewClients && { accepting_new_clients: searchParams.acceptingNewClients }),
     };
-  
+
     return { page_info: pageInfo, filter_options: filterOptions };
   };
 
@@ -169,7 +168,7 @@ const CoachSearch = () => {
 
   return (
     <div>
-      <SearchNavbar
+      <CoachNavbar
         searchParams={searchParams}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
@@ -178,35 +177,33 @@ const CoachSearch = () => {
         getSortDirectionIcon={(key) => (sortOption.key === key ? (sortOption.isDescending ? " ↓" : " ↑") : "")}
       />
 
-      <Container>
-        <SearchFiltersModal
-          show={showModal}
-          handleClose={handleModalClose}
-          searchParams={searchParams}
-          handleChange={handleChange}
-          handleSubmit={handleSubmit}
-        />
+      <SearchFiltersModal
+        show={showModal}
+        handleClose={handleModalClose}
+        searchParams={searchParams}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+      />
 
-        <Container className="mt-4">
-          {isLoading ? (
-            <Spinner animation="border" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </Spinner>
-          ) : error ? (
-            <Alert variant="danger">{error}</Alert>
-          ) : results.length === 0 ? (
-            <Alert variant="info">No coaches found. Try adjusting your search criteria.</Alert>
-          ) : (
-            <Row>
-              {results.map((coach, index) => (
-                <CoachCard key={index} coach={coach} />
-              ))}
-            </Row>
-          )}
-        </Container>
-
-        {totalPages > 1 && renderPagination()}
+      <Container className="mt-4">
+        {isLoading ? (
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        ) : error ? (
+          <Alert variant="danger">{error}</Alert>
+        ) : results.length === 0 ? (
+          <Alert variant="info">No personal trainers found. Try adjusting your search criteria.</Alert>
+        ) : (
+          <Row>
+            {results.map((coach, index) => (
+              <CoachCard key={index} coach={coach} />
+            ))}
+          </Row>
+        )}
       </Container>
+
+      {totalPages > 1 && renderPagination()}
     </div>
   );
 };
