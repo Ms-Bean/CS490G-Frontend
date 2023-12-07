@@ -51,7 +51,6 @@ function WorkoutPlanInfo({workoutPlanName, workoutPlanId}) {
             }
 
             const data = await response.json();
-            console.log(data.workout_plan.exercises);
             setExercises(data.workout_plan.exercises);
         }
         catch(err){
