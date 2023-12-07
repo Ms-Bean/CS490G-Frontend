@@ -52,6 +52,7 @@ const CoachDashboard = () => {
             <th scope="col"></th>
             <th scope="col">User</th>
             <th scope="col">Workout plan</th>
+            <th scope="col">Client's Analytics</th>
             </tr>
         </thead>
         <tbody id="clients_table">
