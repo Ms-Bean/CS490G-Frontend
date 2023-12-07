@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import WorkoutNavbar from "../components/WorkoutPlan/WorkoutNavbar";
 import WorkoutPlanCard from "../components/WorkoutPlan/WorkoutCard";
-import ScheduleWorkout from "../components/WorkoutPlan/ScheduleWorkout";
+// import CreateWorkoutPlanForClient from "../components/WorkoutPlan/CreateWorkoutPlanForClient.js";
 import { FaRegClipboard } from "react-icons/fa6";
 import { FaPlusCircle} from "react-icons/fa";
 import { useAuth } from "../hooks/useAuth";
@@ -9,15 +9,38 @@ import { useAuth } from "../hooks/useAuth";
 const WorkoutPlan = () => {
 
     const [workoutPlans, setWorkoutPlans] = useState([]);
+    const [isCoach, setIsCoach] = useState(false);
     const [colCount, setColCount] = useState(4);
     const [rowCount, setRowCount] = useState(0);
     const [uploadSuccess, setUploadSuccess] = useState(false);
-    const [sortByOption, setSortByOption] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [sortKey, setSortKey] = useState("");
+    const [sortDirection, setSortDirection] = useState("ascending");
+    const [isLoading, setIsLoading] = useState(false);
     const {user} = useAuth();
-    let index = 0;
 
     useEffect(() => {
+        const fetchRole = async () => {
+            try {
+                const response = await fetch("http://localhost:3500/get_role", {
+                    method: "GET",
+                    credentials: "include",
+              });
+              if (!response.ok) throw new Error("Failed to fetch role");
+                const data = await response.json();
+                setIsCoach(data.message === "coach");
+            }catch (err) {
+                console.log(err);
+            }
+        };
+
+        fetchRole();
+    }, []);
+
+    //re-renders when a workout plan has been created, edited or deleted
+    useEffect(() => {
         const fetchWorkoutPlans = async () => {
+        setIsLoading(true);
         try{
              const response = await fetch(`http://localhost:3500/workout_plan/author/?author_id=${user.user_id}`, {
                 credentials: "include",
@@ -35,25 +58,45 @@ const WorkoutPlan = () => {
         }
         catch(err){
             console.log(err);
+        }finally {
+            setIsLoading(false);
         }
         }
-
         fetchWorkoutPlans();
+        setUploadSuccess(false);
     }, [uploadSuccess]);
 
-    const createGrid = () => {
-        if(workoutPlans.length > 0){
-            return renderRows();
-        }
-        return [];
+
+    // Filter and sort workout plans
+    const filteredAndSortedWorkoutPlans = useMemo(() => {
+        let filtered = workoutPlans.filter((workoutPlan) => workoutPlan.name.toLowerCase().includes(searchTerm.toLowerCase()));
+
+        if(sortKey){
+            filtered.sort((a, b) => {
+                const modifier = sortDirection === 'ascending' ? 1 : -1;
+                if (a[sortKey] < b[sortKey]) {
+                    return -1 * modifier;
+                } else if (a[sortKey] > b[sortKey]) {
+                    return 1 * modifier;
+                }
+                    return 0;
+            });
     }
 
-    const renderRows = () => {
+        return filtered;
+    }, [searchTerm, sortKey, sortDirection, isLoading]);
+
+    const createGrid = (wps) => {
+        const counter = {count : 0};
+        return renderRows(wps, counter);
+    }
+
+    const renderRows = (wps, counter) => {
         let rows = [];
         for(let row = 0; row < rowCount; row++){
             rows.push(
                 <div key={`row-${row}`} className="row my-3">
-                    {renderCols()}
+                    {renderCols(wps, counter)}
                 </div>
             )
         }
@@ -61,21 +104,25 @@ const WorkoutPlan = () => {
         return rows;
     }
 
-    const renderCols = () => {
+    const renderCols = (wps, counter) => {
         let cols = [];
         for(let col = 0; col < colCount; col++){
-            if(index < workoutPlans.length){
+            if(counter.count < wps.length){
                 cols.push(
-                    <div key={index} className="col-lg-3">
-                        {<WorkoutPlanCard workoutPlanName={workoutPlans[index].name} workoutPlanId={workoutPlans[index].workout_plan_id} />}
+                    <div key={counter.count} className="col-lg-3">
+                        {<WorkoutPlanCard workoutPlanName={wps[counter.count].name} workoutPlanId={wps[counter.count].workout_plan_id} />}
                     </div>
                 )
-                index++;
+                counter.count++;
             }
         }
 
         return cols;
     }
+
+    const toggleSortDirection = () => {
+        setSortDirection((prevDirection) => (prevDirection === "ascending" ? "descending" : "ascending"));
+    };
 
     const handleUploadSuccessChange = () => {
         setUploadSuccess(true);
@@ -83,20 +130,39 @@ const WorkoutPlan = () => {
 
     return (
         <div>
-            <WorkoutNavbar handleUploadSuccessChange={handleUploadSuccessChange}/>
+            <WorkoutNavbar 
+            handleUploadSuccessChange={handleUploadSuccessChange}
+            onSearch={(term) => setSearchTerm(term)}
+            onSort={(key) => setSortKey(key)}
+            sortKey={sortKey}
+            onToggleSortDirection={toggleSortDirection}
+            sortDirection={sortDirection}
+            />
             {workoutPlans.length === 0 ? <div className="container vh-100 d-flex justify-content-center align-items-center">
                 <div className="w-50 d-flex flex-column justify-content-center align-items-center border border-black shadow-lg rounded p-2" >
                     <h2><FaRegClipboard className="mb-1" size={30}/> No Workout Plan available</h2>
-                    <small>Create a Workout Plan by Clicking the <span><FaPlusCircle style={{color : "#6CB4EE"}}/></span> on the Navbar</small>
+                    <small>Create a Workout Plan by Clicking the <span><FaPlusCircle/></span> on the Navbar</small>
                 </div>
             </div> : 
             <>
-                <div className="container mt-3">
-                    {createGrid()}
-                </div>
+                    {!isLoading && filteredAndSortedWorkoutPlans.length === 0 ?
+                    <div className="container vh-100 d-flex justify-content-center align-items-center">
+                        <div className="w-50 d-flex flex-column justify-content-center align-items-center border border-black shadow-lg rounded p-2" >
+                            <h2>No Workout Plan found matching the specified criteria.</h2>
+                        </div>
+                    </div>
+                    :
+                    <div className="container mt-3">
+                    {createGrid(filteredAndSortedWorkoutPlans)}
+                    </div>
+                    }
+                {isCoach ? 
                 <div className="d-flex justify-content-center mt-3">
-                    <ScheduleWorkout/>
+                    {/* <CreateWorkoutPlanForClient/> */}
                 </div>
+                :
+                <>
+                </>}
             </>}
         </div>
     )
