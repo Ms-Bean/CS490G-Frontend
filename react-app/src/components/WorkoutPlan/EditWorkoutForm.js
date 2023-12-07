@@ -309,13 +309,13 @@ function EditWorkoutForm({workoutPlanName, workoutPlanId}) {
                             <select name="upexercise" onChange={(e)=>usetExerciseId(e.target.value)}>
                                 <option value={uexerciseId} >{exName(Number(uexerciseId))}</option>
                                 {   
-                                    exerciseArray.map((opts,i)=> <option key={i} value={opts.exercise_id}>{opts.name}</option>)
+                                    exerciseArray.map((opts,i)=> <option key={opts.exercise_id} value={opts.exercise_id}>{opts.name}</option>)
                                 }
                             </select>
                         </td>
-                        <td><input type="number" size="5" value={usets} onChange={e => usetSets(e.target.value)}/></td>
-                        <td><input type="number" size="5" value={ureps} onChange={e => usetReps(e.target.value)}/></td>
-                        <td><input type="number" size="5" value={uweight} onChange={e => usetWeight(e.target.value)}/></td>
+                        <td><input type="number" size="5" value={(usets === null) ? '' : usets} onChange={e => usetSets(e.target.value)}/></td>
+                        <td><input type="number" size="5" value={(ureps === null) ? '' : ureps} onChange={e => usetReps(e.target.value)}/></td>
+                        <td><input type="number" size="5" value={(uweight === null) ? '' : uweight} onChange={e => usetWeight(e.target.value)}/></td>
                         <td>
                             <select name="upday" onChange={e => usetDay(e.target.value)}>
                                 <option value={capitalize(uday)}>{capitalize(uday)}</option>
@@ -358,10 +358,10 @@ function EditWorkoutForm({workoutPlanName, workoutPlanId}) {
                 exerciseArray.map((opts,i)=> <option key={i} value={opts.exercise_id}>{opts.name}</option>)
             }
         </select>
-        <input type="number" size="5" placeholder="Sets" onChange={e => setSets(e.target.value)}/>
-        <input type="number" size="5" placeholder="Reps" onChange={e => setReps(e.target.value)}/>
-        <input type="text" size="7" placeholder="Weight" onChange={e => setWeight(e.target.value)}/>
-        <label>&nbsp;Day:&nbsp;</label><select name="day" onChange={e => setDay(e.target.value)} required>
+        <input type="number" size="5" placeholder="Sets" value="" onChange={e => setSets(e.target.value)}/>
+        <input type="number" size="5" placeholder="Reps" value="" onChange={e => setReps(e.target.value)}/>
+        <input type="text" size="7" placeholder="Weight" value="" onChange={e => setWeight(e.target.value)}/>
+        <label>&nbsp;Day:&nbsp;</label><select name="day" value="Sunday" onChange={e => setDay(e.target.value)} required>
             <option value="Sunday">Sunday</option>
             <option value="Monday">Monday</option>
             <option value="Tuesday">Tuesday</option>

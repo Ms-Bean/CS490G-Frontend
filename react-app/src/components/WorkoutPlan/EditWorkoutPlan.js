@@ -11,12 +11,27 @@ function EditWorkoutPlan({workoutPlanName, workoutPlanId}) {
   const handleShow = () => setShow(true);
 
   const {user} = useAuth();
+  
+  const resetSession = () =>{
+    const keys = Object.keys(sessionStorage)
+    console.log("keys", keys)
+    keys.forEach((key)=> {
+        if (Number.isInteger(Number(key))){
+            window.sessionStorage.removeItem(key)
+        }
+    })
+    window.sessionStorage.setItem("add_exercise_array", "[]")
+    window.sessionStorage.setItem("update_exercise_array", "[]")
+    window.sessionStorage.setItem("delete_exercise_array", "[]")
+    window.sessionStorage.setItem("WorkoutPlanName", "")
+  }
 
   const addToDB = async (exer) => {
+    console.log("before transit", Number.isInteger(exer.exercise_id))
     try{
         const data = {
             workout_plan_id : Number(workoutPlanId),
-            exercise_id : ((Number.isInteger(exer.exercise_id)) ? Number(exer.exercise_id) : 1),
+            exercise_id : ((isNaN(Number(exer.exercise_id))) ? 1 : Number(exer.exercise_id)),
             weekday : exer.weekday.toLowerCase(),
             time : exer.time+':00',
             reps_per_set : ((exer.reps_per_set) ? Number(exer.reps_per_set) : null),
@@ -43,6 +58,7 @@ function EditWorkoutPlan({workoutPlanName, workoutPlanId}) {
     }
 }
   const updateDB = async (exer) =>{
+    console.log("before transit", Number(exer.exercise_id))
     try{
         const data = {
             workout_plan_exercise_id : Number(exer.workout_plan_exercise_id),
@@ -146,8 +162,9 @@ const handleSave = () =>{
         updaatePlanName(planName)
 
     }
-    handleClose()
-    window.location.reload()
+    handleClose();
+    resetSession();
+    window.location.reload();
 
 }
 
