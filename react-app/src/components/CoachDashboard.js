@@ -17,6 +17,7 @@ const CoachDashboard = () => {
                 const userName = document.createElement("td");
                 const workoutPlan = document.createElement("td");
                 const workoutPlanButton = document.createElement("button");
+                const dashboardButton = document.createElement("button");
 
                 const thContent = document.createTextNode((i+1).toString());
                 const userNameContent = document.createTextNode(data[i].username);
@@ -27,9 +28,13 @@ const CoachDashboard = () => {
                 workoutPlanButton.setAttribute("onclick", "window.location='http://localhost:3000/select_workout_plan?user_id=" + data[i].client_id.toString() + "'");
                 workoutPlan.appendChild(workoutPlanButton);
 
+                dashboardButton.innerHTML = "Analyitics";
+                dashboardButton.setAttribute("onclick", "window.location='http://localhost:3000/dashboard?client_id=" + data[i].client_id.toString() + "'");
+
                 newTr.appendChild(newTh);
                 newTr.appendChild(userName);
                 newTr.appendChild(workoutPlan);
+                newTr.append(dashboardButton);
 
                 /*http://localhost:3000/select_workout_plan?user_id=4
                 <button onclick="window.location='page_name.php';" value="click here" />*/
@@ -47,6 +52,7 @@ const CoachDashboard = () => {
             <th scope="col"></th>
             <th scope="col">User</th>
             <th scope="col">Workout plan</th>
+            <th scope="col">Client's Analytics</th>
             </tr>
         </thead>
         <tbody id="clients_table">
