@@ -1,0 +1,22 @@
+.trainers-section {
+    background-color: #f8f9fa; /* Light gray background */
+    padding: 2rem 0;
+    text-align: center;
+  }
+  
+  .section-title {
+    color: #343a40; /* Dark gray text */
+    margin-bottom: 1.5rem;
+  }
+  
+  .trainers-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: auto;
+  }
+  
+  .trainer-image {
+    margin: 0 20px;
+  }
+  

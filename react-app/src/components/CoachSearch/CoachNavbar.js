@@ -2,11 +2,11 @@ import React from "react";
 import { Navbar, Nav, Form, FormControl, Button, Dropdown, Container } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
 
-const SearchNavbar = ({ searchParams, handleChange, handleSubmit, handleModalShow, handleSortChange, getSortDirectionIcon }) => {
+const CoachNavbar = ({ searchParams, handleChange, handleSubmit, handleModalShow, handleSortChange, getSortDirectionIcon }) => {
   return (
     <Navbar variant="dark" bg="dark" expand="lg" className="secondary-navbar">
       <Container>
-        <Navbar.Brand>Personal Trainer Search</Navbar.Brand>
+        <Navbar.Brand>Personal Trainers</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto" />
@@ -20,15 +20,15 @@ const SearchNavbar = ({ searchParams, handleChange, handleSubmit, handleModalSho
               onChange={handleChange}
               className="me-2"
             />
-            <Button variant="secondary" type="submit">
+            <span className="navbar-text-link align-self-center" variant="secondary" type="submit">
               <FaSearch />
-            </Button>
-            <Button variant="secondary" onClick={handleModalShow} className="ms-2">
-              Filters
-            </Button>
-            <Dropdown variant="secondary" className="ms-2">
-              <Dropdown.Toggle variant="secondary" id="dropdown-basic-button">
-                Sort
+            </span>
+            <span className="navbar-text-link align-self-center" style={{ cursor: "pointer" }} onClick={handleModalShow}>
+              Filter By ▾
+            </span>
+            <Dropdown className="navbar-text-link align-self-center">
+              <Dropdown.Toggle as="span" id="dropdown-basic-button" style={{ cursor: "pointer" }}>
+                Sort By ▾
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 <Dropdown.Item onClick={() => handleSortChange("name")}>Name{getSortDirectionIcon("name")}</Dropdown.Item>
@@ -47,4 +47,4 @@ const SearchNavbar = ({ searchParams, handleChange, handleSubmit, handleModalSho
   );
 };
 
-export default SearchNavbar;
+export default CoachNavbar;

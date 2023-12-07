@@ -55,8 +55,8 @@ const NewWorkoutPlan = ({handleUploadSuccessChange}) => {
 
     return (
         <>
-            <div onClick={handleShow} className="d-inline ms-3" data-bs-toggle="modal" style={{cursor : "pointer"}}>
-                <FaPlusCircle className='mb-1' size={22} style={{color : "#6CB4EE"}}/>
+            <div onClick={handleShow} className="d-inline" data-bs-toggle="modal" style={{ cursor: "pointer" }}>
+                <FaPlusCircle className="align-self-center" size={22} style={{ color: "white" }} />
             </div>
 
             <Modal

@@ -51,7 +51,7 @@ const handleSave = () =>{
 
   return (
     <>
-        <button onClick={handleShow} className="w-50 btn btn-primary rounded-0">
+        <button onClick={handleShow} className="btn btn-primary">
             Edit
         </button>
 
