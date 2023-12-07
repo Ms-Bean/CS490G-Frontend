@@ -141,7 +141,7 @@ const WorkoutPlan = () => {
             {workoutPlans.length === 0 ? <div className="container vh-100 d-flex justify-content-center align-items-center">
                 <div className="w-50 d-flex flex-column justify-content-center align-items-center border border-black shadow-lg rounded p-2" >
                     <h2><FaRegClipboard className="mb-1" size={30}/> No Workout Plan available</h2>
-                    <small>Create a Workout Plan by Clicking the <span><FaPlusCircle style={{color : "#6CB4EE"}}/></span> on the Navbar</small>
+                    <small>Create a Workout Plan by Clicking the <span><FaPlusCircle/></span> on the Navbar</small>
                 </div>
             </div> : 
             <>
