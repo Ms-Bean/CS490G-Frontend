@@ -147,7 +147,7 @@ const handleSave = () =>{
 
     }
     handleClose()
-    //window.location.reload()
+    window.location.reload()
 
 }
 
