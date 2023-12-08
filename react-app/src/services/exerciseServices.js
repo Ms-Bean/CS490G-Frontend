@@ -1,4 +1,5 @@
-const BASE_URL = "http://localhost:3500";
+import { config } from "./../utils/config";
+const BASE_URL = `${config.backendUrl}`;
 
 const fetchFromAPI = async (endpoint) => {
   try {

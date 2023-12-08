@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col, ListGroup } from "react-bootstrap";
+import { config } from "./../utils/config";
 
 const Messages = () => {
   const [formData, setFormData] = useState({
@@ -22,7 +23,7 @@ const Messages = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3500/messages", {
+      const response = await fetch(`${config.backendUrl}/messages`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

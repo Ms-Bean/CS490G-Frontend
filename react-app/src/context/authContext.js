@@ -1,5 +1,6 @@
 import { createContext, useReducer, useEffect, useState } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { config } from "./../utils/config";
 
 export const AuthContext = createContext();
 
@@ -22,11 +23,8 @@ export const AuthContextProvide = ({ children }) => {
 
     const {setItem} = useLocalStorage();
 
-    // Define the backend URL
-    const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3500';
-
     useEffect(() => { // Check if user is logged in
-        fetch(`${backendUrl}/check_session`, {
+        fetch(`${config.backendUrl}/check_session`, {
             credentials: "include",
         })
             .then((res) => res.json())

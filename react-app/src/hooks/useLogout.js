@@ -1,5 +1,6 @@
 import { useAuth } from "./useAuth";
 import { useLocalStorage } from "./useLocalStorage";
+import { config } from "./../utils/config";
 
 export const useLogout = () => {
 
@@ -7,7 +8,7 @@ export const useLogout = () => {
     const {removeItem} = useLocalStorage();
 
     const logout = async () => {
-        const response = await fetch("http://localhost:3500/logout", {
+        const response = await fetch(`${config.backendUrl}/logout`, {
             method: "POST",
             credentials: "include",
         });

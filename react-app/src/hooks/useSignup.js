@@ -1,8 +1,9 @@
 import { useAuth } from "./useAuth";
 import { useLocalStorage } from "./useLocalStorage";
 import { useState } from "react";
+import { config } from "../utils/config";
 
-const url = "http://localhost:3500/";
+const url = `${config.backendUrl}`;
 
 export const useSignup = () => {
   const [isLoading, setIsLoading] = useState(null);

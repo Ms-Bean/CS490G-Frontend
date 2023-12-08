@@ -4,6 +4,7 @@ import {CategoryScale} from 'chart.js';
 import { Container } from "react-bootstrap";
 import Chart from 'chart.js/auto';
 import {useParams} from "react-router-dom";
+import { config } from "./../utils/config";
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
@@ -20,7 +21,7 @@ const CoachDashboard = () => {
   });
 
   useEffect(() => {
-    fetch("http://localhost:3500/get_client_dashboard_info", {
+    fetch(`${config.backendUrl}/get_client_dashboard_info`, {
       credentials: "include",
       headers: {
         client_id: client_id

@@ -6,6 +6,7 @@ import ExerciseNavbar from "../components/Exercises/ExerciseNavbar";
 import ExerciseModal from "../components/Exercises/ExerciseModal";
 import { ExerciseContext } from "../context/exerciseContext";
 import "./../css/ExerciseBank.css";
+import { config } from "./../utils/config";
 
 const ExerciseManagement = () => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -23,7 +24,7 @@ const ExerciseManagement = () => {
     const fetchRole = async () => {
       setIsLoading(true); // Set loading to true when the fetch starts
       try {
-        const response = await fetch("http://localhost:3500/get_role", {
+        const response = await fetch(`${config.backendUrl}/get_role`, {
           method: "GET",
           credentials: "include",
         });

@@ -1,4 +1,5 @@
-const url = "http://localhost:3500/";
+import { config } from "./../utils/config";
+const url = `${config.backendUrl}/`;
 
 
 export const useEditAccount = () => {

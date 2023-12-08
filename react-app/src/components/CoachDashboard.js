@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { config } from "./../utils/config";
 
 const CoachDashboard = () => {
     useEffect(() => {
         //Fetch client profile information
-        fetch("http://localhost:3500/get_coach_dashboard_info", {
+        fetch(`${config.backendUrl}/get_coach_dashboard_info`, {
           credentials: "include",
         })
           .then((res) => res.json())
