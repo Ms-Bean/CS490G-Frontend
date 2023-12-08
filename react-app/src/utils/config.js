@@ -1,5 +1,5 @@
 // Define the backend URL
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3500';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 // Export configuration
 export const config = {
