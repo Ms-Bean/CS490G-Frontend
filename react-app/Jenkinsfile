@@ -19,14 +19,19 @@ pipeline {
 
         stage('Checkout Frontend') {
             steps {
-                git branch: params.FRONTEND_BRANCH, url: 'https://github.com/Ms-Bean/CS490G-Frontend.git'
+                sh 'mkdir -p CS490G-Frontend'
+                dir('CS490G-Frontend') {
+                    git branch: params.FRONTEND_BRANCH, url: 'https://github.com/Ms-Bean/CS490G-Frontend.git'
+                }
             }
         }
 
         stage('Build and Run Frontend') {
             steps {
-                sh 'docker build --build-arg REACT_APP_BACKEND_URL=\$BACKEND_URL -t moxi-frontend .'
-                sh 'docker run -d --name moxi-frontend -p 80:80 moxi-frontend'
+                dir('CS490G-Frontend/react-app') {
+                    sh 'docker build --build-arg REACT_APP_BACKEND_URL=\$BACKEND_URL -t moxi-frontend .'
+                    sh 'docker run -d -p 80:80 moxi-frontend'
+                }
             }
         }
     }
