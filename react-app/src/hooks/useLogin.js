@@ -9,8 +9,6 @@ export const useLogin = () => {
     const {dispatch} = useAuth();
     const {setItem} = useLocalStorage();
 
-    console.log(config.backendUrl);
-
     const login = async (username, password) => {
         try{
             setIsLoading(true);
@@ -26,7 +24,6 @@ export const useLogin = () => {
             const data = await response.json();
 
             if (response.ok) {
-                console.log(data);
                 setItem('user', JSON.stringify({username}));
 
                 dispatch({type: "LOGIN", payload : {username}});
