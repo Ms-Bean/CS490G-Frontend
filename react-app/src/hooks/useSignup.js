@@ -16,7 +16,7 @@ export const useSignup = () => {
       setIsLoading(true);
       setErrorMessage(null);
 
-      const response = await fetch(`${url}insert_user/`, {
+      const response = await fetch(`${url}/insert_user/`, {
         method: "POST",
         headers: {
           // Moved data to body instead of headers
