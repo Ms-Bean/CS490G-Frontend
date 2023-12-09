@@ -110,7 +110,7 @@ const WorkoutPlan = () => {
             if(counter.count < wps.length){
                 cols.push(
                     <div key={counter.count} className="col-lg-3">
-                        {<WorkoutPlanCard workoutPlanName={wps[counter.count].name} workoutPlanId={wps[counter.count].workout_plan_id} />}
+                        {<WorkoutPlanCard workoutPlanName={wps[counter.count].name} workoutPlanId={wps[counter.count].workout_plan_id } handleUploadSuccessChange={handleUploadSuccessChange} />}
                     </div>
                 )
                 counter.count++;

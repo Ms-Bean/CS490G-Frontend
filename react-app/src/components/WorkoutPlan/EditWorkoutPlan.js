@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import TableData from './EditWorkoutForm';
 import { useAuth } from '../../hooks/useAuth';
 
-function EditWorkoutPlan({workoutPlanName, workoutPlanId}) {
+function EditWorkoutPlan({workoutPlanName, workoutPlanId, handleUploadSuccessChange}) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -164,7 +164,7 @@ const handleSave = () =>{
     }
     handleClose();
     resetSession();
-    window.location.reload();
+    handleUploadSuccessChange();
 
 }
 
