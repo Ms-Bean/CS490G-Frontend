@@ -4,8 +4,8 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # Accepting the environment variable at build time
-ARG REACT_APP_BACKEND_URL
-ENV REACT_APP_BACKEND_URL $REACT_APP_BACKEND_URL
+ARG BACKEND_URL
+ENV REACT_APP_BACKEND_URL $BACKEND_URL
 
 RUN npm install
 COPY . ./
