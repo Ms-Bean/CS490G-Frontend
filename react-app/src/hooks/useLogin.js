@@ -9,6 +9,8 @@ export const useLogin = () => {
     const {dispatch} = useAuth();
     const {setItem} = useLocalStorage();
 
+    console.log(config.backendUrl);
+
     const login = async (username, password) => {
         try{
             setIsLoading(true);
