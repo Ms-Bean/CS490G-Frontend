@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { config } from "./../utils/config";
 
 function CreateExercise({addTag, workout_plan_id, addWorkoutExercise}) {
 
@@ -19,7 +20,7 @@ function CreateExercise({addTag, workout_plan_id, addWorkoutExercise}) {
     useEffect(() => {
         const fetchExercises = async () => {
             try {
-                const response = await fetch(`http://localhost:3500/exercises`, {
+                const response = await fetch(`${config.backendUrl}/exercises`, {
                     method: "GET",
                     credentials: "include",
                 });
@@ -80,7 +81,7 @@ function CreateExercise({addTag, workout_plan_id, addWorkoutExercise}) {
                 num_sets : Number(exerciseFormData.num_sets),
                 weight : Number(exerciseFormData.weight)
             }
-            const response = fetch(`http://localhost:3500/workout_plan/${workout_plan_id}/exercise/new`, {
+            const response = fetch(`${config.backendUrl}/workout_plan/${workout_plan_id}/exercise/new`, {
                 method: "POST",
                 headers: {
                 // Moved data to body instead of headers

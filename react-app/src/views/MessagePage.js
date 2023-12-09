@@ -356,7 +356,7 @@ const MessagePage = () => {
   const hasMoreMessagesOnNextPage = async () => {
     try {
       const nextPage = currentPage + 1;
-      const response = await fetch(`http://localhost:3500/messages?user_id=${user.user_id}&other_user_id=${selectedUserId}&page_size=5&page_num=${nextPage}`, {
+      const response = await fetch(`${config.backendUrl}/messages?user_id=${user.user_id}&other_user_id=${selectedUserId}&page_size=5&page_num=${nextPage}`, {
         method: "GET",
         credentials: "include",
       });

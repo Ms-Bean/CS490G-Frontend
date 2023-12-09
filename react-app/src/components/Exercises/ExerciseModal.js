@@ -4,6 +4,7 @@ import { ExerciseContext } from "../../context/exerciseContext";
 import ViewExerciseModal from "./ExerciseViewModal";
 import EditExerciseModal from "./ExerciseEditModal";
 import ConfirmDialog from "./ConfirmDialog.js";
+import { config } from "./../../utils/config";
 
 const ExerciseModal = ({ isAdmin }) => {
   const {
@@ -25,7 +26,7 @@ const ExerciseModal = ({ isAdmin }) => {
 
   const updateExercise = async () => {
     console.log("Updating exercise:", selectedExercise);
-    const response = await fetch(`http://localhost:3500/update_exercise/${selectedExercise.exercise_id}`, {
+    const response = await fetch(`${config.backendUrl}/update_exercise/${selectedExercise.exercise_id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(selectedExercise),
@@ -59,7 +60,7 @@ const ExerciseModal = ({ isAdmin }) => {
   };
 
   const deleteExercise = async (exerciseId) => {
-    const response = await fetch(`http://localhost:3500/delete_exercise/${exerciseId}`, {
+    const response = await fetch(`${config.backendUrl}/delete_exercise/${exerciseId}`, {
       method: "DELETE",
       credentials: "include",
     });
@@ -83,7 +84,7 @@ const ExerciseModal = ({ isAdmin }) => {
 
   const checkExerciseReferences = async (exerciseId) => {
     try {
-      const response = await fetch(`http://localhost:3500/exercise/${exerciseId}/references`, {
+      const response = await fetch(`${config.backendUrl}/exercise/${exerciseId}/references`, {
         method: "GET",
         credentials: "include",
       });

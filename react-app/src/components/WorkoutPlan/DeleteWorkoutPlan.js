@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import { config } from "./../../utils/config";
 
 function DeleteWorkoutPlan({ workoutPlanName, workoutPlanId }) {
     const [show, setShow] = useState(false);
@@ -10,7 +11,7 @@ function DeleteWorkoutPlan({ workoutPlanName, workoutPlanId }) {
 
     const deleteDB = async () =>{
         try{
-            const response = await fetch (`http://localhost:3500/workout_plan/${workoutPlanId}`,{
+            const response = await fetch (`${config.backendUrl}/workout_plan/${workoutPlanId}`,{
                 method: "DELETE", 
                 headers: {
                     "Content-Type": "application/json",

@@ -4,6 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import { FaPlusCircle} from "react-icons/fa";
 import { useAuth } from '../../hooks/useAuth';
 import CreateExercise from '../CreateExercise';
+import { config } from "./../../utils/config";
 
 const convertTimeAMPM = (time) => {
     const t = time.split(":");
@@ -61,7 +62,7 @@ const NewWorkoutPlan = ({handleUploadSuccessChange}) => {
                 name : formData.name,
                 author_id : user.user_id,
             }
-            const response = await fetch(`http://localhost:3500/workout_plan/new`, {
+            const response = await fetch(`${config.backendUrl}/workout_plan/new`, {
                 method: "POST",
                 headers: {
                   // Moved data to body instead of headers

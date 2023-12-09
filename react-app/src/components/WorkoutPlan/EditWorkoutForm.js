@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button, ButtonGroup, Table, Form, Row, Col } from "react-bootstrap";
+import { config } from "./../../utils/config";
 
 function EditWorkoutForm({ workoutPlanName, workoutPlanId }) {
   const [data, setData] = useState([]);
@@ -30,7 +31,7 @@ function EditWorkoutForm({ workoutPlanName, workoutPlanId }) {
   const [showForm, setShowForm] = useState(false);
   const [showAddButton, setShowAddButton] = useState(true);
 
-  const url = `http://localhost:3500/workout_plan/${workoutPlanId}?include_exercises=true`;
+  const url = `${config.backendUrl}/workout_plan/${workoutPlanId}?include_exercises=true`;
   //local storage functions
   const [ex_arr, setex_arr] = useState([]);
   const [add_ex_arr, setadd_ex_arr] = useState([]);
@@ -111,7 +112,7 @@ function EditWorkoutForm({ workoutPlanName, workoutPlanId }) {
   }, [planName]);
 
   useEffect(() => {
-    fetch(`http://localhost:3500/exercises/`)
+    fetch(`${config.backendUrl}/exercises/`)
       .then((data) => data.json())
       .then((val) => setExerciseArray(val));
 

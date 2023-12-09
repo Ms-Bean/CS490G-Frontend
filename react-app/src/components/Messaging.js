@@ -50,7 +50,7 @@ const Messages = () => {
   const fetchMessages = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3500/messages?other_user_id=${formData.recipient_id}&page_size=10&page_num=1`,
+        `${config.backendUrl}/messages?other_user_id=${formData.recipient_id}&page_size=10&page_num=1`,
         {
           method: "GET",
           credentials: "include",

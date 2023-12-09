@@ -26,20 +26,17 @@ const CoachDashboard = () => {
                 newTh.appendChild(thContent);
                 userName.appendChild(userNameContent);
                 workoutPlanButton.innerHTML = data[i].name;
-                workoutPlanButton.setAttribute("onclick", "window.location='http://localhost:3000/select_workout_plan?user_id=" + data[i].client_id.toString() + "'");
+                workoutPlanButton.setAttribute("onclick", `window.location='${config.backendUrl}/select_workout_plan?user_id=${data[i].client_id}'`);
                 workoutPlan.appendChild(workoutPlanButton);
-
-                dashboardButton.innerHTML = "Analyitics";
-                dashboardButton.setAttribute("onclick", "window.location='http://localhost:3000/dashboard?client_id=" + data[i].client_id.toString() + "'");
-
+                
+                dashboardButton.innerHTML = "Analytics";
+                dashboardButton.setAttribute("onclick", `window.location='${config.backendUrl}/dashboard?client_id=${data[i].client_id}'`);
+                
                 newTr.appendChild(newTh);
                 newTr.appendChild(userName);
                 newTr.appendChild(workoutPlan);
                 newTr.append(dashboardButton);
-
-                /*http://localhost:3000/select_workout_plan?user_id=4
-                <button onclick="window.location='page_name.php';" value="click here" />*/
-
+                
                 document.getElementById("clients_table").appendChild(newTr);
             }
           });

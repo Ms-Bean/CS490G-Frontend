@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
+import { config } from "./../../utils/config";
 
 const convertTimeAMPM = (time) => {
     const t = time.split(":");
@@ -42,7 +43,7 @@ function WorkoutPlanInfo({workoutPlanName, workoutPlanId}) {
     useEffect(() => {
         const fetchExercises = async () => {
         try{
-            const response = await fetch(`http://localhost:3500/workout_plan/${workoutPlanId}?include_exercises=true`, {
+            const response = await fetch(`${config.backendUrl}/workout_plan/${workoutPlanId}?include_exercises=true`, {
                 credentials: "include",
             });
             
