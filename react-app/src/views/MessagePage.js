@@ -19,6 +19,14 @@ const MessagePage = () => {
   const [selectedUserName, setSelectedUserName] = useState("");
   const [totalMessagesCount, setTotalMessagesCount] = useState(0);
   const [userRole, setUserRole] = useState(null);
+  const [SelectedPageInfo, setSelectedPageInfo] = useState({
+    page_num: 1,
+    page_size: 5,
+    page_count: 1,
+    has_next: false,
+    has_prev: false
+  });
+  
 
 
 
@@ -352,47 +360,90 @@ const MessagePage = () => {
       );
     });
   };
-
-  const hasMoreMessagesOnNextPage = async () => {
+  const handleNewMessageSubmit = async (e) => {
+    e.preventDefault();
+  
+    const UserId = user.user_id;
+    const recipientId = parseInt(selectedUserId, 10);
+  
+    if (!Number.isInteger(recipientId) || recipientId <= 0 || newMessageContent.trim() === "") {
+      console.error("Invalid recipient id or empty message content");
+      setError("Invalid recipient id or empty message content");
+      return;
+    }
+  
     try {
-      const nextPage = currentPage + 1;
-      const response = await fetch(`${config.backendUrl}/messages?user_id=${user.user_id}&other_user_id=${selectedUserId}&page_size=5&page_num=${nextPage}`, {
-        method: "GET",
+      const extendedFormData = {
+        recipient_id: recipientId,
+        content: newMessageContent.trim(),
+      };
+  
+      const response = await fetch(`${config.backendUrl}/messages/insert`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         credentials: "include",
+        body: JSON.stringify(extendedFormData),
       });
   
       if (response.ok) {
-        const responseData = await response.json();
-        return responseData.messages.length > 0;
+        setNewMessageContent("");
+        setCurrentPage(1); 
+        await fetchUserMessages(UserId, recipientId, 1); 
+        fetchData();
       } else {
-        console.error("Error checking for more messages:", response.statusText);
-        return false;
+        console.error("Error sending message:", response.statusText);
+        setError("Error sending message");
       }
     } catch (error) {
       console.error("Error:", error);
-      return false;
+      setError("Error");
     }
   };
   
-  const handlePaginationClick = async (direction) => {
-    if (direction === 'next') {
-      // Check if there are more messages on the next page
-      const hasMoreMessages = await hasMoreMessagesOnNextPage();
-      if (!hasMoreMessages) {
-        return;
+  const fetchUserMessages = async (userId, otherUserId, page_num) => {
+    try {
+      const response = await fetch(`${config.backendUrl}/messages?user_id=${userId}&other_user_id=${otherUserId}&page_size=5&page_num=${page_num}`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        setSelectedPageInfo({
+          page_num: responseData.page_info.page_num,
+          page_size: responseData.page_info.page_size,
+          page_count: responseData.page_info.page_count,
+          has_next: responseData.page_info.has_next,
+          has_prev: responseData.page_info.has_prev
+        });
+        setSelectedUserMessages(responseData.messages.reverse()); // Reverse the array to show the most recent at the bottom
+      } else {
+        console.error("Error fetching user messages:", response.statusText);
+        setError("Error fetching user messages");
       }
+    } catch (error) {
+      console.error("Error:", error);
+      setError("Error");
     }
+  };
+
   
-    // Increment currentPage before fetching messages
+  const handlePaginationClick = async (direction) => {
+    
     const newPage = direction === 'next' ? currentPage + 1 : currentPage - 1;
-  
-    // Logic for handling pagination, e.g., updating currentPage
-    if (direction === 'next') {
+
+    // Logic for handling pagination
+    if (direction === 'next' && SelectedPageInfo.has_next) {
       setCurrentPage((prevPage) => prevPage + 1);
-    } else if (direction === 'prev' && currentPage > 1) {
-      setCurrentPage((prevPage) => prevPage - 1);
     }
-  
+    else if (direction === 'prev' && SelectedPageInfo.has_prev) {
+      setCurrentPage((prevPage) => prevPage - 1);
+    }    
+    else{
+      return;
+    }
     // Fetch messages with the new page
     if (selectedUserId) {
       const UserId = user.user_id;
@@ -402,42 +453,54 @@ const MessagePage = () => {
   
 
   const renderPagination = () => {
-    const hasNextPage = selectedUserMessages.length === 5; // Adjust this based on your actual page size
+    const hasNextPage = selectedUserMessages.length === 5; // Adjustable page size
   
-    return (
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          <Button
-            variant="outline-secondary"
-            size="sm"
-            onClick={() => handlePaginationClick('prev')}
-            disabled={currentPage === 1}
-          >
-            Previous Page
-          </Button>
-          <span style={{ margin: '0 5px' }}>{currentPage}</span>
-          {hasNextPage && (
-            <Button
-              variant="outline-secondary"
-              size="sm"
-              onClick={() => handlePaginationClick('next')}
-            >
-              Next Page
-            </Button>
-          )}
+    if (!(SelectedPageInfo.has_prev || SelectedPageInfo.has_next)) {
+      return null; // Return null instead of an empty function call
+    } else {
+      return (
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            {SelectedPageInfo.has_prev && (
+              <Button
+                variant="outline-secondary"
+                size="sm"
+                onClick={() => handlePaginationClick('prev')}
+                disabled={currentPage === 1}
+              >
+                Previous Page
+              </Button>
+            )}
+            {/* Display current page and total pages */}
+            <span style={{ margin: '0 5px' }}>
+              {SelectedPageInfo.page_num} / {SelectedPageInfo.page_count}
+            </span>
+            {SelectedPageInfo.has_next && (
+              <Button
+                variant="outline-secondary"
+                size="sm"
+                onClick={() => handlePaginationClick('next')}
+              >
+                Next Page
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   };
+  
 
-  return (//{SelectedUserRole} can be used to specify who they are talking to but coach to coach messages need fixing
+  return (
     <Container className="mt-5">
       <Row>
         <Col md={3}>
-          {renderCoachList()}
-          {renderClientList()}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {renderCoachList()}
+            {renderClientList()}
+          </div>
         </Col>
-  
+
         <Col md={6}>
           <Card className="text-center bg-light">
             <Card.Body>
@@ -448,11 +511,11 @@ const MessagePage = () => {
                       <Image className="thumbnail-image" roundedCircle src={SelectedUserPicture} alt="Profile Picture" />
                       <div style={{ marginLeft: '10px' }}>{selectedUserName}</div>
                     </div>
-                    <hr style={{ margin: '10px 0' }} /> {/* Horizontal line below the title */}
+                    <hr style={{ margin: '10px 0' }} />
                   </>
                 )}
               </Card.Title>
-  
+
               {loading && <Spinner animation="border" />}
               {error && <Alert variant="danger">{error}</Alert>}
               {!loading && !error && (
@@ -464,15 +527,13 @@ const MessagePage = () => {
                           {renderMessages()}
                         </ul>
                       </div>
-  
+
                       <div className="pagination">
                         {renderPagination()}
                       </div>
-  
-                      {/* Horizontal line between messaging box and client/coach boxes */}
+
                       <hr style={{ margin: '20px 0' }} />
-  
-                      {/* Messaging Box */}
+
                       <Form className="mt-3" onSubmit={handleNewMessageSubmit}>
                         <Form.Group controlId="newMessageContent">
                           <Form.Control
@@ -498,6 +559,6 @@ const MessagePage = () => {
       </Row>
     </Container>
   );
-  
 };
+
 export default MessagePage;

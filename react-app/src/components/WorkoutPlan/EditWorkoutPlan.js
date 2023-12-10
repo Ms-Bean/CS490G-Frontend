@@ -5,7 +5,7 @@ import TableData from './EditWorkoutForm';
 import { useAuth } from '../../hooks/useAuth';
 import { config } from "./../../utils/config";
 
-function EditWorkoutPlan({workoutPlanName, workoutPlanId}) {
+function EditWorkoutPlan({workoutPlanName, workoutPlanId, handleUploadSuccessChange}) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -165,7 +165,7 @@ const handleSave = () =>{
     }
     handleClose();
     resetSession();
-    window.location.reload();
+    handleUploadSuccessChange();
 
 }
 
