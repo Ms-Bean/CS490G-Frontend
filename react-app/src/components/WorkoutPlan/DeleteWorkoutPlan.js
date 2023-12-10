@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 
-function DeleteWorkoutPlan({ workoutPlanName, workoutPlanId }) {
+function DeleteWorkoutPlan({ workoutPlanName, workoutPlanId, handleUploadSuccessChange }) {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -29,7 +29,7 @@ function DeleteWorkoutPlan({ workoutPlanName, workoutPlanId }) {
     const handleDelete =() =>{
         deleteDB();
         handleClose();
-        window.location.reload();
+        handleUploadSuccessChange(true);
     }
 
     return (
