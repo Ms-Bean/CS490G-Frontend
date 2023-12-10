@@ -78,47 +78,6 @@ const MessagePage = () => {
     }
   };
 
-  const handleNewMessageSubmit = async (e) => {
-    e.preventDefault();
-
-    const UserId = user.user_id;
-    const recipientId = parseInt(selectedUserId, 10);
-
-    if (!Number.isInteger(recipientId) || recipientId <= 0 || newMessageContent.trim() === "") {
-      console.error("Invalid recipient id or empty message content");
-      setError("Invalid recipient id or empty message content");
-      return;
-    }
-
-    try {
-      const extendedFormData = {
-        recipient_id: recipientId,
-        content: newMessageContent.trim(),
-      };
-
-      const response = await fetch(`${config.backendUrl}/messages/insert`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(extendedFormData),
-      });
-
-      if (response.ok) {
-        await fetchUserMessages(UserId, recipientId, currentPage);
-        setNewMessageContent("");
-      } else {
-        console.error("Error sending message:", response.statusText);
-        setError("Error sending message");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setError("Error");
-    }
-  };
-
-
   const fetchUserRole = async () => {
     try {
       const response = await fetch(`${config.backendUrl}/get_role`, {
@@ -151,28 +110,6 @@ const MessagePage = () => {
     console.log("Selected User ID:", selectedUserId);
     await fetchUserMessages(UserId, selectedUserId, currentPage);
   };
-
-  const fetchUserMessages = async (userId, otherUserId, page_num) => {
-    try {
-      const response = await fetch(`${config.backendUrl}/messages?user_id=${userId}&other_user_id=${otherUserId}&page_size=5&page_num=${page_num}`, {
-        method: "GET",
-        credentials: "include",
-      });
-
-      if (response.ok) {
-        const responseData = await response.json();
-        setSelectedUserMessages(responseData.messages.reverse()); // Reverse the array to show the most recent at the bottom
-      } else {
-        console.error("Error fetching user messages:", response.statusText);
-        setError("Error fetching user messages");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setError("Error");
-    }
-  };
-
-
 
   const renderUserList = (role) => {
     const users = messages.filter((user) => user.role === role);
