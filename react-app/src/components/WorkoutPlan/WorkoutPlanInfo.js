@@ -35,14 +35,12 @@ const tempGoals = [
     'Improve Posture',
 ];
 
-function WorkoutPlanInfo({workoutPlanName, workoutPlanId}) {
-
+function WorkoutPlanInfo({ workoutPlanName, workoutPlanId }) {
     const [exercises, setExercises] = useState([]);
     const [show, setShow] = useState(false);
 
-    useEffect(() => {
-        const fetchExercises = async () => {
-        try{
+    const fetchExercises = async () => {
+        try {
             const response = await fetch(`${config.backendUrl}/workout_plan/${workoutPlanId}?include_exercises=true`, {
                 credentials: "include",
             });
@@ -53,17 +51,20 @@ function WorkoutPlanInfo({workoutPlanName, workoutPlanId}) {
 
             const data = await response.json();
             setExercises(data.workout_plan.exercises);
-        }
-        catch(err){
+        } catch (err) {
             console.log(err);
         }
-        }
+    };
 
+    useEffect(() => {
         fetchExercises();
-    }, []);
+    }, [workoutPlanId]); // Adding workoutPlanId as a dependency to refetch if the ID changes
 
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleShow = () => {
+        setShow(true);
+        fetchExercises(); // Fetch exercises every time the info button is clicked
+    };
 
     return (
         <>
