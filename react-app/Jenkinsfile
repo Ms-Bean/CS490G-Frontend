@@ -30,7 +30,7 @@ pipeline {
             steps {
                 dir('CS490G-Frontend/react-app') {
                     sh 'docker build --build-arg REACT_APP_BACKEND_URL=\$BACKEND_URL -t moxi-frontend .'
-                    sh 'docker run -d -p 80:80 moxi-frontend'
+                    sh 'docker run -d -p 80:80 --name moxi-frontend-container moxi-frontend'
                 }
             }
         }
