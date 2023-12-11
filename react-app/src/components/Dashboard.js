@@ -1,8 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Line } from "react-chartjs-2";
-import {CategoryScale} from 'chart.js'; 
-import { Container } from "react-bootstrap";
-import Chart from 'chart.js/auto';
 import {useParams} from "react-router-dom";
 import { config } from "./../utils/config";
 import { Card, Row, Col, Container, Alert, Tab, Tabs } from "react-bootstrap";
@@ -11,7 +7,6 @@ import { Line, Bar, Pie } from "react-chartjs-2";
 import "./../css/Dashboard.css";
 import { CategoryScale } from "chart.js";
 import Chart from "chart.js/auto";
-import { useParams } from "react-router-dom";
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
