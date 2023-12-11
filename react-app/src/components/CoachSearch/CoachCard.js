@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, Col, Button, ButtonGroup } from "react-bootstrap";
 
 const CoachCard = ({ coach }) => {
   const navigate = useNavigate();
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleInfoClick = () => {
     navigate(`/coach_id=${coach.coach_id}`); // Navigate to coach's user page
@@ -11,7 +12,13 @@ const CoachCard = ({ coach }) => {
 
   return (
     <Col md={3} className="mb-4">
-      <Card className="bg-light" style={{ height: "20em" }}>
+      <Card
+        className="bg-light"
+        style={{ height: "15em" }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {" "}
         <Card.Body>
           <Card.Title>
             {coach.personal_info.first_name} {coach.personal_info.last_name}
@@ -29,11 +36,13 @@ const CoachCard = ({ coach }) => {
             <strong>Coaching History:</strong> {truncateText(coach.professional_info.coaching_history || "Not provided", 50)}
           </p> */}
         </Card.Body>
-        <ButtonGroup className="w-100 p-2">
-          <Button variant="secondary" onClick={handleInfoClick}>
-            Info
-          </Button>
-        </ButtonGroup>
+        {isHovered && (
+          <ButtonGroup className="w-100 p-2">
+            <Button variant="secondary" onClick={handleInfoClick}>
+              Info
+            </Button>
+          </ButtonGroup>
+        )}
       </Card>
     </Col>
   );
