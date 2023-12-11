@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import CoachDashboard from "../components/CoachDashboard";
+import CoachClientDashboard from "../components/CoachClientDashboard";
 import { config } from "./../utils/config";
 
 const ProfilePage = () => {
@@ -41,7 +41,7 @@ const ProfilePage = () => {
   if(type === "coach")
   {
     return (
-      <CoachDashboard />
+      <CoachClientDashboard />
     );
   }
   else

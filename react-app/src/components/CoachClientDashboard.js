@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { config } from "./../utils/config";
+import { config } from "../utils/config";
 
-const CoachDashboard = () => {
+const CoachClientDashboard = () => {
     useEffect(() => {
         //Fetch client profile information
         fetch(`${config.backendUrl}/get_coach_dashboard_info`, {
@@ -60,4 +60,4 @@ const CoachDashboard = () => {
   );
 };
 
-export default CoachDashboard;
+export default CoachClientDashboard;

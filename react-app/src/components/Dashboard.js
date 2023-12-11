@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { config } from "./../utils/config";
 import { Card, Row, Col, Container, Alert, Tab, Tabs } from "react-bootstrap";
 import DashboardNavbar from "./Dashboard/DashboardNavbar";
@@ -7,12 +7,15 @@ import { Line, Bar, Pie } from "react-chartjs-2";
 import "./../css/Dashboard.css";
 import { CategoryScale } from "chart.js";
 import Chart from "chart.js/auto";
+import DailySurveyForm from "./../views/DailySurvey";
+import CoachClientDashboard from "./CoachClientDashboard";
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 let client_id = urlParams.get("client_id");
 
 const CoachDashboard = () => {
+  const [userRole, setUserRole] = useState('');
   const [currentTab, setCurrentTab] = useState("weeklyView");
   const [showPermissionAlert, setShowPermissionAlert] = useState(false);
   const [moodData, setMoodData] = useState({
@@ -26,10 +29,6 @@ const CoachDashboard = () => {
     ],
   });
 
-  const handleTabSelect = (tabKey) => {
-    setCurrentTab(tabKey);
-  };
-
   console.log(client_id);
 
   const [exerciseData, setExerciseData] = useState([]);
@@ -40,6 +39,23 @@ const CoachDashboard = () => {
     water_intake_y: [],
     weight_y: [],
   });
+
+  useEffect(() => {
+    const fetchUserRole = async () => {
+      try {
+        const response = await fetch(`${config.backendUrl}/get_role`, {
+          method: "GET",
+          credentials: "include",
+        });
+        if (!response.ok) throw new Error("Failed to fetch user role");
+        const data = await response.json();
+        setUserRole(data.message);
+      } catch (error) {
+        console.error('Error fetching user role:', error);
+      }
+    };
+    fetchUserRole();
+  }, []);
 
   useEffect(() => {
     fetch(`${config.backendUrl}/get_client_dashboard_info`, {
@@ -97,7 +113,7 @@ const CoachDashboard = () => {
           acc[survey.mood] = (acc[survey.mood] || 0) + 1;
           return acc;
         }, {});
-    
+
         setMoodData({
           labels: Object.keys(moodCounts),
           datasets: [
@@ -108,11 +124,9 @@ const CoachDashboard = () => {
             },
           ],
         });
-    
 
         setExerciseData(data.days);
       });
-
   }, [client_id]);
 
   const formatDateLabels = (dateString) => {
@@ -283,9 +297,61 @@ const CoachDashboard = () => {
 
   const renderMoodPieChart = () => <Pie data={moodData} />;
 
+  const renderTabContent = () => {
+    switch (currentTab) {
+      case "weeklyView":
+        return (
+          <>
+            <p>
+              <h2>This Week</h2>
+            </p>
+            <Row>
+              {[...Array(5)].map((_, i) => (
+                <Col md={4} className="mb-4 d-flex" key={i}>
+                  {renderExerciseCard(i)}
+                </Col>
+              ))}
+            </Row>
+          </>
+        );
+      case "statisticsView":
+        return (
+          <>
+            <p>
+              <h2>Statistics</h2>
+            </p>
+            <Tabs defaultActiveKey="calories" id="chart-tabs" className="mb-3" justify>
+              <Tab eventKey="calories" title="Calories">
+                {renderCombinedCaloriesChart(chart_data.calories_burned_y, chart_data.calories_consumed_y, "Calories Burned vs Consumed")}
+              </Tab>
+              <Tab eventKey="netCalories" title="Net Calories">
+                {renderNetCaloriesChart(chart_data.calories_burned_y, chart_data.calories_consumed_y)}
+              </Tab>
+              <Tab eventKey="waterIntake" title="Water Intake">
+                {renderLineChart("Water Intake (Liters)", chart_data.water_intake_y, "blue", "Daily Water Intake", "Liters")}
+              </Tab>
+              <Tab eventKey="weight" title="Weight">
+                {renderLineChart("Weight", chart_data.weight_y, "purple", "Weight", "Pounds")}
+              </Tab>
+              <Tab eventKey="moodPieChart" title="Mood Pie Chart">
+                {renderMoodPieChart()}
+              </Tab>
+            </Tabs>
+          </>
+        );
+      case "dailySurvey":
+        return <DailySurveyForm />;
+        case "coachClientDashboard":
+          return <CoachClientDashboard />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <>
-      <DashboardNavbar onTabSelect={handleTabSelect} isDisabled={showPermissionAlert} />
+      <DashboardNavbar onTabSelect={setCurrentTab} isDisabled={showPermissionAlert} currentTab={currentTab}
+        userRole={userRole}  />
       <Container className="my-3">
         {showPermissionAlert && (
           <Alert variant="danger" onClose={() => setShowPermissionAlert(false)} dismissible>
@@ -294,41 +360,7 @@ const CoachDashboard = () => {
           </Alert>
         )}
         <div id="wrapper" className="mt-3 mb-5">
-          {currentTab === "weeklyView" && (
-            <>
-              <p><h2>This Week</h2></p>
-              <Row>
-                {[...Array(5)].map((_, i) => (
-                  <Col md={4} className="mb-4 d-flex" key={i}>
-                    {renderExerciseCard(i)}
-                  </Col>
-                ))}
-              </Row>
-            </>
-          )}
-
-          {currentTab === "statisticsView" && (
-            <>
-              <p><h2>Statistics</h2></p>
-              <Tabs defaultActiveKey="calories" id="chart-tabs" className="mb-3" justify>
-                <Tab eventKey="calories" title="Calories">
-                  {renderCombinedCaloriesChart(chart_data.calories_burned_y, chart_data.calories_consumed_y, "Calories Burned vs Consumed")}
-                </Tab>
-                <Tab eventKey="netCalories" title="Net Calories">
-                  {renderNetCaloriesChart(chart_data.calories_burned_y, chart_data.calories_consumed_y)}
-                </Tab>
-                <Tab eventKey="waterIntake" title="Water Intake">
-                  {renderLineChart("Water Intake (Liters)", chart_data.water_intake_y, "blue", "Daily Water Intake", "Liters")}
-                </Tab>
-                <Tab eventKey="weight" title="Weight">
-                  {renderLineChart("Weight", chart_data.weight_y, "purple", "Weight", "Pounds")}
-                </Tab>
-                <Tab eventKey="moodPieChart" title="Mood Pie Chart">
-                  {renderMoodPieChart()}
-                </Tab>
-              </Tabs>
-            </>
-          )}
+          {renderTabContent()}
         </div>
       </Container>
     </>
