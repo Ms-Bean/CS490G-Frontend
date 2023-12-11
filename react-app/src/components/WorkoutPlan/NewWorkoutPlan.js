@@ -95,7 +95,9 @@ const NewWorkoutPlan = ({handleUploadSuccessChange}) => {
 
     const handleClose = () => {
         setFormData({
-            name : ""
+            name : "",
+            workout_plan_id : null,
+            exercises : []
         });
         setError("");
         setWorkoutPlanSuccess(false);

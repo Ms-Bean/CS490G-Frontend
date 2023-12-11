@@ -303,9 +303,12 @@ const MessagePage = () => {
     const UserId = user.user_id;
     const recipientId = parseInt(selectedUserId, 10);
   
-    if (!Number.isInteger(recipientId) || recipientId <= 0 || newMessageContent.trim() === "") {
+    if (!Number.isInteger(recipientId) || recipientId <= 0  ) {
       console.error("Invalid recipient id or empty message content");
       setError("Invalid recipient id or empty message content");
+      return;
+    }
+    if(newMessageContent.trim() === ""){
       return;
     }
   
