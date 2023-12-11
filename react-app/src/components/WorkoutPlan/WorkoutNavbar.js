@@ -47,7 +47,7 @@ const WorkoutNavbar = ({onSort, onSearch, sortKey, onToggleSortDirection, sortDi
                         {/* <button className="btn btn-secondary ms-2" type="submit">
                             <FaSearch />
                         </button> */}
-                        <span className="navbar-text-link align-self-center" style={{ cursor: "pointer" }}>
+                        {/* <span className="navbar-text-link align-self-center" style={{ cursor: "pointer" }}>
                           Filter By ▾
                         </span>
                         <Dropdown className=" navbar-text-link align-self-center ms-2" onSelect={handleSortOptionClick}>
@@ -57,8 +57,7 @@ const WorkoutNavbar = ({onSort, onSearch, sortKey, onToggleSortDirection, sortDi
                             <Dropdown.Menu>
                                 <Dropdown.Item eventKey="name">Name{getSortDirectionSymbol("name")}</Dropdown.Item>
                             </Dropdown.Menu>
-                        </Dropdown>
-                        {/* <input className="btn btn-secondary mx-2" type="button" value="Filter By"/> */}
+                        </Dropdown> */}
                     </form>
                 </div>
             </div>
