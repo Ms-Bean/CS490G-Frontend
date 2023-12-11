@@ -51,7 +51,7 @@ function DeleteWorkoutPlan({ workoutPlanName, workoutPlanId, handleUploadSuccess
                 <Modal.Title>Delete Workout Plan</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                Delete "{workoutPlanName}"? <br/>This action cannot be undone.
+                <center>Are you sure you want to delete workout plan "{workoutPlanName}"? <p/><b>This action cannot be undone.</b></center>
             </Modal.Body>
             <Modal.Footer>
                 <Button className='w-100' onClick={handleDelete} variant="danger">Delete</Button>

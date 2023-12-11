@@ -6,6 +6,7 @@ function EditWorkoutForm({ workoutPlanName, workoutPlanId, setIsEditing}) {
   const [data, setData] = useState([]);
   const [planName, setPlanName] = useState(workoutPlanName);
   const [count, setCount] = useState(-1);
+  const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
   const [exerciseId, setExerciseId] = useState();
   const [exerciseArray, setExerciseArray] = useState([]);
@@ -360,16 +361,12 @@ function EditWorkoutForm({ workoutPlanName, workoutPlanId, setIsEditing}) {
                 </td>
                 <td>
                   <Form.Group>
-                    <Form.Select name="upday" onChange={(e) => usetDay(e.target.value)}>
-                      <option value={capitalize(uday)}>{capitalize(uday)}</option>
-                      <option value="Sunday">Sunday</option>
-                      <option value="Monday">Monday</option>
-                      <option value="Tuesday">Tuesday</option>
-                      <option value="Wednesday">Wednesday</option>
-                      <option value="Thursday">Thursday</option>
-                      <option value="Friday">Friday</option>
-                      <option value="Saturday">Saturday</option>
-                    </Form.Select>
+                <Form.Select name="upday" onChange={(e) => usetDay(e.target.value)}>
+                {weekDays.map((day, index) => (
+                    <option key={index} value={day} selected={day === capitalize(uday)}>
+                      {day}
+                    </option>
+                  ))}                    </Form.Select>
                   </Form.Group>
                 </td>
                 <td>

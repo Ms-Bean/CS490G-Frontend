@@ -180,7 +180,6 @@ const handleSave = () =>{
         show={show}
         onHide={handleClose}
         backdrop="static"
-        keyboard={false}
         centered
         >
         <Modal.Header closeButton>
