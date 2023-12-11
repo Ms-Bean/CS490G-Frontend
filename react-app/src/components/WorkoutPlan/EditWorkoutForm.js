@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button, ButtonGroup, Table, Form, Row, Col } from "react-bootstrap";
 import { config } from "./../../utils/config";
 
-function EditWorkoutForm({ workoutPlanName, workoutPlanId }) {
+function EditWorkoutForm({ workoutPlanName, workoutPlanId, setIsEditing}) {
   const [data, setData] = useState([]);
   const [planName, setPlanName] = useState(workoutPlanName);
   const [count, setCount] = useState(-1);
@@ -142,6 +142,7 @@ function EditWorkoutForm({ workoutPlanName, workoutPlanId }) {
   };
 
   const handleEdit = (id) => {
+    setIsEditing(true);
     console.log(id);
     let grab_ex = window.sessionStorage.getItem(id);
     let ex = JSON.parse(grab_ex);
@@ -155,6 +156,7 @@ function EditWorkoutForm({ workoutPlanName, workoutPlanId }) {
   };
 
   const handleUpdate = () => {
+    setIsEditing(false);
     setUpdateID(1);
     console.log("upExId", uexerciseId);
     const new_ex = {
@@ -235,16 +237,20 @@ function EditWorkoutForm({ workoutPlanName, workoutPlanId }) {
   };
 
   const handleShowForm = (event) => {
+    
     console.log("showForm =", event);
     if (event === "false") {
       setShowForm(false);
+      setIsEditing(false);
     } else {
       setShowForm(true);
+      setIsEditing(true);
       handleShowAddButton("false");
     }
   };
 
   const handleShowAddButton = (event) => {
+    setIsEditing(true);
     console.log("showAddButton =", event);
     if (event === "false") {
       setShowAddButton(false);
@@ -264,6 +270,7 @@ function EditWorkoutForm({ workoutPlanName, workoutPlanId }) {
   };
 
   const handleCancel = () => {
+    setIsEditing(false);
     handleShowAddButton("true");
     setDefualts();
   };

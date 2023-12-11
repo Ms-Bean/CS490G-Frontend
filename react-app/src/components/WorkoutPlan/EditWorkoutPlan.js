@@ -7,7 +7,7 @@ import { config } from "./../../utils/config";
 
 function EditWorkoutPlan({workoutPlanName, workoutPlanId, handleUploadSuccessChange}) {
   const [show, setShow] = useState(false);
-
+  const [isEditing, setIsEditing] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
@@ -187,10 +187,12 @@ const handleSave = () =>{
             <Modal.Title>Edit Workout Plan</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <TableData workoutPlanName={workoutPlanName} workoutPlanId={workoutPlanId}/>
+            <TableData workoutPlanName={workoutPlanName} workoutPlanId={workoutPlanId} setIsEditing={setIsEditing}
+/>
         </Modal.Body>
         <Modal.Footer>
-            <Button className='w-100' onClick={handleSave} variant="dark">Save Changes</Button>
+            <Button className='w-100' onClick={handleSave} variant="dark" disabled={isEditing}
+>Save Changes</Button>
         </Modal.Footer>
         </Modal>
     </>
