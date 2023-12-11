@@ -10,15 +10,15 @@ const WorkoutPlanCard = ({ workoutPlanName, workoutPlanId, handleUploadSuccessCh
       <div className="card-body">
         <h5 className="card-title">{workoutPlanName}</h5>
       </div>
-      <ButtonGroup className="w-100 p-2">
+      <ButtonGroup className="w-100 px-2">
         <WorkoutPlanInfo workoutPlanName={workoutPlanName} workoutPlanId={workoutPlanId} />
+      </ButtonGroup>
+      <ButtonGroup className="w-100 px-2 pb-2">
         <EditWorkoutPlan
           workoutPlanName={workoutPlanName}
           workoutPlanId={workoutPlanId}
           handleUploadSuccessChange={handleUploadSuccessChange}
         />
-      </ButtonGroup>
-      <ButtonGroup className="w-100 p-2">
         <DeleteWorkoutPlan
           workoutPlanName={workoutPlanName}
           workoutPlanId={workoutPlanId}

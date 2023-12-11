@@ -35,7 +35,7 @@ function DeleteWorkoutPlan({ workoutPlanName, workoutPlanId, handleUploadSuccess
 
     return (
         <>
-            <button onClick={handleShow} className="btn btn-danger">
+            <button onClick={handleShow} className="btn btn-danger w-50 rounded-top-0">
                 Delete
             </button>
     

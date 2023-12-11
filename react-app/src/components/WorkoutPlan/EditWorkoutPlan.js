@@ -171,7 +171,7 @@ const handleSave = () =>{
 
   return (
     <>
-        <button onClick={handleShow} className="btn btn-primary">
+        <button onClick={handleShow} className="btn btn-primary w-50 rounded-top-0">
             Edit
         </button>
 

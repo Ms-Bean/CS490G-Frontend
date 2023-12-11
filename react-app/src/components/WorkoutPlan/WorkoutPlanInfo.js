@@ -68,7 +68,7 @@ function WorkoutPlanInfo({ workoutPlanName, workoutPlanId }) {
 
     return (
         <>
-            <button onClick={handleShow} className="btn btn-secondary">
+            <button onClick={handleShow} className="btn btn-secondary rounded-bottom-0">
                 Info
             </button>
 
