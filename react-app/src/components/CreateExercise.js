@@ -23,7 +23,7 @@ function CreateExercise({addTag, workout_plan_id, addWorkoutExercise}) {
                     method: "GET",
                     credentials: "include",
                 });
-                if (!response.ok) throw new Error("Failed to fetch user's clients");
+                if (!response.ok) throw new Error("Failed to fetch the Exercise Bank");
                 const data = await response.json();
                 setExerciseBank(data);
                 console.log(data);

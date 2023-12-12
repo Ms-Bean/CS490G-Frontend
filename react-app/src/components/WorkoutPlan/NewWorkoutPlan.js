@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { FaPlusCircle} from "react-icons/fa";
-import { useAuth } from '../../hooks/useAuth';
 import CreateExercise from '../CreateExercise';
 
 const convertTimeAMPM = (time) => {
@@ -32,9 +30,9 @@ const convertTimeAMPM = (time) => {
 }
 
 
-const NewWorkoutPlan = ({handleUploadSuccessChange}) => {
+const NewWorkoutPlan = ({handleUploadSuccessChange, user_id, button}) => {
 
-    const {user} = useAuth();
+    // const {user} = useAuth();
     const [show, setShow] = useState(false);
     const [error, setError] = useState("");
     const [workoutPlanSuccess, setWorkoutPlanSuccess] = useState(false);
@@ -59,7 +57,7 @@ const NewWorkoutPlan = ({handleUploadSuccessChange}) => {
             setIsLoadingWorkoutPlan(true);
             const data = {
                 name : formData.name,
-                author_id : user.user_id,
+                author_id : Number(user_id),
             }
             const response = await fetch(`http://localhost:3500/workout_plan/new`, {
                 method: "POST",
@@ -116,7 +114,7 @@ const NewWorkoutPlan = ({handleUploadSuccessChange}) => {
     return (
         <>
             <div onClick={handleShow} className="d-inline" data-bs-toggle="modal" style={{ cursor: "pointer" }}>
-                <FaPlusCircle className="align-self-center" size={22} style={{ color: "white" }} />
+                {button}
             </div>
 
             <Modal

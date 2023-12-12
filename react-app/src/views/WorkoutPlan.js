@@ -137,6 +137,7 @@ const WorkoutPlan = () => {
             sortKey={sortKey}
             onToggleSortDirection={toggleSortDirection}
             sortDirection={sortDirection}
+            user_id ={user.user_id}
             />
             {workoutPlans.length === 0 ? <div className="container vh-100 d-flex justify-content-center align-items-center">
                 <div className="w-50 d-flex flex-column justify-content-center align-items-center border border-black shadow-lg rounded p-2" >
