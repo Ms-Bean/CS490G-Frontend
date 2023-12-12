@@ -1,56 +1,52 @@
-import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import CreateExercise from '../CreateExercise';
+import { useState } from "react";
+import { Button, Modal, Table } from "react-bootstrap";
+import CreateExercise from "../CreateExercise";
+import { config } from "./../../utils/config";
 
 const convertTimeAMPM = (time) => {
-    const t = time.split(":");
+  const t = time.split(":");
 
-    const hours = Number(t[0]);
-    const mins = Number(t[1]);
-    const sec = Number(t[2]);
+  const hours = Number(t[0]);
+  const mins = Number(t[1]);
+  const sec = Number(t[2]);
 
-    // calculate
-    let timeValue;
+  // calculate
+  let timeValue;
 
-    if (hours > 0 && hours <= 12) {
-    timeValue= "" + hours;
-    } else if (hours > 12) {
-    timeValue= "" + (hours - 12);
-    } else if (hours == 0) {
-    timeValue= "12";
-    }
+  if (hours > 0 && hours <= 12) {
+    timeValue = "" + hours;
+  } else if (hours > 12) {
+    timeValue = "" + (hours - 12);
+  } else if (hours == 0) {
+    timeValue = "12";
+  }
 
-    timeValue += (mins < 10) ? ":0" + mins : ":" + mins;  
-    // timeValue += (sec < 10) ? ":0" + sec : ":" + sec; 
-    timeValue += (hours >= 12) ? " P.M." : " A.M."; 
+  timeValue += mins < 10 ? ":0" + mins : ":" + mins;
+  // timeValue += (sec < 10) ? ":0" + sec : ":" + sec;
+  timeValue += hours >= 12 ? " P.M." : " A.M.";
 
-    // show
-    return timeValue;
-}
+  // show
+  return timeValue;
+};
 
+const NewWorkoutPlan = ({ handleUploadSuccessChange , user_id, button}) => {
+  // const { user } = useAuth();
+  const [show, setShow] = useState(false);
+  const [error, setError] = useState("");
+  const [workoutPlanSuccess, setWorkoutPlanSuccess] = useState(false);
+  const [isLoadingWorkoutPlan, setIsLoadingWorkoutPlan] = useState(false);
+  // In form just in case we add more values
+  const [formData, setFormData] = useState({
+    name: "",
+    workout_plan_id: null,
+    exercises: [],
+  });
 
-const NewWorkoutPlan = ({handleUploadSuccessChange, user_id, button}) => {
-
-    // const {user} = useAuth();
-    const [show, setShow] = useState(false);
-    const [error, setError] = useState("");
-    const [workoutPlanSuccess, setWorkoutPlanSuccess] = useState(false);
-    const [isLoadingWorkoutPlan, setIsLoadingWorkoutPlan] = useState(false);
-    //In form just in case we add more values
-    const [formData, setFormData] = useState(
-        {
-            name : "",
-            workout_plan_id : null,
-            exercises : []
-        }
-    )
-
-    const handleInputChange = (e) => {
-        e.preventDefault();
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
+  const handleInputChange = (e) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
     const createWorkoutPlan = async () => {
         try{
@@ -59,7 +55,7 @@ const NewWorkoutPlan = ({handleUploadSuccessChange, user_id, button}) => {
                 name : formData.name,
                 author_id : Number(user_id),
             }
-            const response = await fetch(`http://localhost:3500/workout_plan/new`, {
+            const response = await fetch(`${config.backendUrl}/workout_plan/new`, {
                 method: "POST",
                 headers: {
                   // Moved data to body instead of headers
@@ -90,26 +86,26 @@ const NewWorkoutPlan = ({handleUploadSuccessChange, user_id, button}) => {
         
     }
 
-    const handleClose = () => {
-        setFormData({
-            name : "",
-            workout_plan_id : null,
-            exercises : []
-        });
-        setError("");
-        setWorkoutPlanSuccess(false);
-        setShow(false);
-    } 
-    const handleShow = () => setShow(true);
+  const handleClose = () => {
+    setFormData({
+      name: "",
+      workout_plan_id: null,
+      exercises: [],
+    });
+    setError();
+    setWorkoutPlanSuccess(false);
+    setShow(false);
+  };
+  const handleShow = () => setShow(true);
 
-    const addWorkoutExercise = (newExercise) => {
-        setFormData((prevData) => ({
-            ...prevData,
-            exercises: [...prevData.exercises, newExercise]
-        }));
+  const addWorkoutExercise = (newExercise) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      exercises: [...prevData.exercises, newExercise],
+    }));
 
-        console.log(formData);
-    }
+    console.log(formData);
+  };
 
     return (
         <>
@@ -117,66 +113,92 @@ const NewWorkoutPlan = ({handleUploadSuccessChange, user_id, button}) => {
                 {button}
             </div>
 
-            <Modal
-            show={show}
-            onHide={handleClose}
-            backdrop="static"
-            keyboard={false}
-            centered
-            >
-            <Modal.Header closeButton>
-                {!workoutPlanSuccess ? 
+      <Modal size="md" show={show} onHide={handleClose} backdrop="static" keyboard={false} centered>
+        <Modal.Header closeButton>
+          {!workoutPlanSuccess ? (
+            <>
+              <Modal.Title>New Workout Plan</Modal.Title>
+            </>
+          ) : (
+            <>
+              <Modal.Title>Workout Plan Exercises</Modal.Title>
+            </>
+          )}
+        </Modal.Header>
+        <Modal.Body className="pb-0">
+          {error ? (
+            <div className="alert alert-danger" role="alert">
+              {error}
+            </div>
+          ) : (
+            <></>
+          )}
+          {!workoutPlanSuccess ? (
+            <>
+              <div className="mb-3">
+                <label htmlFor="name" className="form-label ms-1">
+                  Name
+                </label>
+                <input
+                  onChange={handleInputChange}
+                  type="text"
+                  className="form-control"
+                  id="name"
+                  name="name"
+                  aria-describedby="name"
+                  placeholder="Workout plan name"
+                />
+              </div>
+            </>
+          ) : (
+            <Table responsive hover>
+              {formData.exercises.length > 0 ? (
                 <>
-                <Modal.Title>New Workout Plan</Modal.Title>
+                  <thead>
+                    <tr>
+                      <th>Exercise</th>
+                      <th>Sets</th>
+                      <th>Reps</th>
+                      <th>Weight</th>
+                      <th>Weekday</th>
+                      <th>Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {formData.exercises.map((e, index) => (
+                      <tr key={index}>
+                        <td>{e.exercise_name || ""}</td>
+                        <td>{e.num_sets || ""}</td>
+                        <td>{e.reps_per_set || ""}</td>
+                        <td>{e.weight ? `${e.weight} lbs` : ""}</td>
+                        <td>{e.weekday ? e.weekday.charAt(0).toUpperCase() + e.weekday.slice(1) : ""}</td>
+                        <td>{e.time ? convertTimeAMPM(e.time) : ""}</td>
+                      </tr>
+                    ))}
+                  </tbody>
                 </>
-                :
-                <>
-                <Modal.Title>{formData.name}</Modal.Title>
-                </>}
-            </Modal.Header>
-            <Modal.Body>
-                {error ? 
-                <div className="alert alert-danger" role="alert">
-                    {error}
-                </div>
-                :
-                <>
-                </>
-                }
-                {!workoutPlanSuccess ? 
-                <>
-                    <div className="mb-3">
-                        <label htmlFor="name" className="form-label ms-1">Name</label>
-                        <input onChange={handleInputChange} type="text" className="form-control" id="name" name="name" aria-describedby="name" placeholder='Name for Workout'/>
-                    </div>
-                </>
-                :
-                <>
-                    <ul className="list-group">
-                        {formData.exercises.map((e, index) => (
-                            <li key={index} className="list-group-item border-0 border-bottom d-flex">
-                            <div className='me-auto'>
-                                {e.exercise_name}
-                            </div>
-                            <div>
-                                {convertTimeAMPM(e.time)} {e.weekday.charAt(0).toUpperCase() + e.weekday.slice(1)} {`${e.reps_per_set}x${e.num_sets}`} {`${e.weight}lbs`}
-                            </div>
-                        </li>
-                        ))}
-                    </ul>
-                    <CreateExercise workout_plan_id={formData.workout_plan_id} addWorkoutExercise={addWorkoutExercise}/>
-                </>}
-            </Modal.Body>
-            <Modal.Footer>
-                {!workoutPlanSuccess ? 
-                    <Button onClick={createWorkoutPlan} className='w-100' variant="dark">Save</Button>
-                :
-                    <></>
-                }
-            </Modal.Footer>
-            </Modal>
-        </>
-    );
-}
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center">
+                    Click below to add an exercise to this workout plan
+                  </td>
+                </tr>
+              )}
+            </Table>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          {!workoutPlanSuccess ? (
+            <Button onClick={createWorkoutPlan} className="w-100" variant="dark">
+              Save
+            </Button>
+          ) : (
+            <CreateExercise workout_plan_id={formData.workout_plan_id} addWorkoutExercise={addWorkoutExercise} />
+          )}
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+};
 
 export default NewWorkoutPlan;

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Col, Row, Container } from "react-bootstrap";
-const url = "http://localhost:3500/";
+import { config } from "./../utils/config";
+
+const url = `${config.backendUrl}`;
 
 const ClientOnboarding = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +26,7 @@ const ClientOnboarding = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${url}onboarding/client/`, {
+      const response = await fetch(`${url}/onboarding/client/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

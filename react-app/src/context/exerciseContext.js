@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { fetchGoals, fetchMuscleGroups, fetchEquipmentItems } from "./../services/exerciseServices.js";
+import { config } from "./../utils/config";
 
 export const ExerciseContext = createContext();
 
@@ -29,7 +30,7 @@ export const ExerciseProvider = ({ children }) => {
   // Function to fetch exercises - can be called to refresh data
   const fetchExercises = async () => {
     try {
-      const response = await fetch("http://localhost:3500/exercises", {
+      const response = await fetch(`${config.backendUrl}/exercises`, {
         method: "GET",
         credentials: "include",
       });
@@ -44,7 +45,7 @@ export const ExerciseProvider = ({ children }) => {
 
   const fetchExerciseDetails = async (exercise) => {
     try {
-      const response = await fetch(`http://localhost:3500/exercise/${exercise.exercise_id}`, {
+      const response = await fetch(`${config.backendUrl}/exercise/${exercise.exercise_id}`, {
         method: "GET",
         credentials: "include",
       });

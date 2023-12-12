@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { Container, Row, Col, Form, Button, FormCheck, Dropdown, Spinner, ButtonGroup, ToggleButton } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, FormCheck, Spinner, ButtonGroup, ToggleButton } from "react-bootstrap";
 import { useAuth } from "../hooks/useAuth";
 import { useSignup } from "../hooks/useSignup";
 import { State } from "country-state-city";

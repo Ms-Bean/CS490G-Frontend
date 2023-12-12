@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'FRONTEND_BRANCH', defaultValue: 'docker', description: 'Branch to checkout for Frontend')
+    }
+
+    environment {
+        BACKEND_URL = 'http://moxi.akifbayram.com:3500'
+    }
+
+    stages {
+        stage('Cleanup Frontend Container') {
+            steps {
+                sh 'docker stop moxi-frontend || true'
+                sh 'docker rm moxi-frontend || true'
+            }
+        }
+
+        stage('Checkout Frontend') {
+            steps {
+                sh 'mkdir -p CS490G-Frontend'
+                dir('CS490G-Frontend') {
+                    git branch: params.FRONTEND_BRANCH, url: 'https://github.com/Ms-Bean/CS490G-Frontend.git'
+                }
+            }
+        }
+
+        stage('Build and Run Frontend') {
+            steps {
+                dir('CS490G-Frontend/react-app') {
+                    sh 'docker build --build-arg REACT_APP_BACKEND_URL=\$BACKEND_URL -t moxi-frontend .'
+                    sh 'docker run -d -p 80:80 --name moxi-frontend moxi-frontend'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Frontend Build and Deployment completed successfully.'
+        }
+        failure {
+            echo 'Frontend Build or Deployment failed.'
+        }
+    }
+}

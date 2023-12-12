@@ -3,12 +3,10 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import TableData from './EditWorkoutForm';
 import { useAuth } from '../../hooks/useAuth';
+import { config } from "./../../utils/config";
 
-function EditWorkoutPlan({workoutPlanName, workoutPlanId, handleUploadSuccessChange}) {
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+function EditWorkoutPlan({workoutPlanName, workoutPlanId, handleUploadSuccessChange, show, handleClose}) {
+  const [isEditing, setIsEditing] = useState(false);
 
   const {user} = useAuth();
   
@@ -39,7 +37,7 @@ function EditWorkoutPlan({workoutPlanName, workoutPlanId, handleUploadSuccessCha
             weight : ((exer.weight) ? Number(exer.weight) : null)
         }
         console.log("in transit (add)", data);
-        const response = await fetch(`http://localhost:3500/workout_plan/${workoutPlanId}/exercise/new`, {
+        const response = await fetch(`${config.backendUrl}/workout_plan/${workoutPlanId}/exercise/new`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -71,7 +69,7 @@ function EditWorkoutPlan({workoutPlanName, workoutPlanId, handleUploadSuccessCha
             weight : ((exer.weight) ? Number(exer.weight) : null)
         }
         console.log("in transit (update)", data);
-        const response = await fetch(`http://localhost:3500/workout_plan/${workoutPlanId}/exercise/${exer.workout_plan_exercise_id}`, {
+        const response = await fetch(`${config.backendUrl}/workout_plan/${workoutPlanId}/exercise/${exer.workout_plan_exercise_id}`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
@@ -93,7 +91,7 @@ function EditWorkoutPlan({workoutPlanName, workoutPlanId, handleUploadSuccessCha
   const deleteDB = async (exer) =>{
     try{
         console.log ("del..", exer)
-        const response = await fetch (`http://localhost:3500/workout_plan/${workoutPlanId}/exercise/${exer.workout_plan_exercise_id}`,{
+        const response = await fetch (`${config.backendUrl}/workout_plan/${workoutPlanId}/exercise/${exer.workout_plan_exercise_id}`,{
             method: "DELETE", 
             headers: {
                 "Content-Type": "application/json",
@@ -116,7 +114,7 @@ function EditWorkoutPlan({workoutPlanName, workoutPlanId, handleUploadSuccessCha
             name : name,
             author_id : user.user_id
         }
-        const response = await fetch (`http://localhost:3500/workout_plan/${workoutPlanId}`, {
+        const response = await fetch (`${config.backendUrl}/workout_plan/${workoutPlanId}`, {
             method: "PUT", 
             headers: {
                 "Content-Type" : "application/json"
@@ -170,26 +168,23 @@ const handleSave = () =>{
 
   return (
     <>
-        <button onClick={handleShow} className="btn btn-primary">
-            Edit
-        </button>
-
         <Modal
         size="xl"
         show={show}
         onHide={handleClose}
         backdrop="static"
-        keyboard={false}
         centered
         >
         <Modal.Header closeButton>
             <Modal.Title>Edit Workout Plan</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <TableData workoutPlanName={workoutPlanName} workoutPlanId={workoutPlanId}/>
+            <TableData workoutPlanName={workoutPlanName} workoutPlanId={workoutPlanId} setIsEditing={setIsEditing}
+/>
         </Modal.Body>
         <Modal.Footer>
-            <Button className='w-100' onClick={handleSave} variant="dark">Save Changes</Button>
+            <Button className='w-100' onClick={handleSave} variant="dark" disabled={isEditing}
+>Save Changes</Button>
         </Modal.Footer>
         </Modal>
     </>

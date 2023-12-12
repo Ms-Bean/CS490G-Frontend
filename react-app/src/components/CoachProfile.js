@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import profile_pic from "./static_images/default-avatar-profile-icon-of-social-media-user-vector.jpg";
+import { config } from "./../utils/config";
 
 const ClientProfile = () => {
   const [editing, setEditing] = useState(false);
@@ -13,7 +14,7 @@ const ClientProfile = () => {
 
   useEffect(() => {
     //Fetch client profile information
-    fetch("http://localhost:3500/get_user_profile", {
+    fetch(`${config.backendUrl}/get_user_profile`, {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -56,7 +57,7 @@ const ClientProfile = () => {
     try {
       console.log("Edit Account");
       console.log(formData.state);
-      const response = await fetch("http://localhost:3500/set_user_profile", {
+      const response = await fetch(`${config.backendUrl}/set_user_profile`, {
         method: "POST",
         headers: {
           // Moved data to body instead of headers
@@ -103,7 +104,7 @@ const ClientProfile = () => {
   return (
     <div className="container my-2">
       <div className="my-3">
-        <img className="img-thumbnail rounded-circle d-block mx-auto" src={profile_pic} />
+        <img alt="Profile Picture" className="img-thumbnail rounded-circle d-block mx-auto" src={profile_pic} />
         <div className="mt-3 me-3 d-flex justify-content-center">
           <button disabled={editing} onClick={changeProfilePicture} className="ms-3 btn btn-dark">
             Change Profile Picture

@@ -3,6 +3,7 @@ import { Container, Card, Row, Col, Spinner, Alert, Form, Button } from "react-b
 import { useAuth } from "../hooks/useAuth";
 import useInterval from "../hooks/useInterval";
 import { Image } from 'react-bootstrap';
+import { config } from "./../utils/config";
 
 const MessagePage = () => {
   const { user } = useAuth();
@@ -55,7 +56,7 @@ const MessagePage = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:3500/messages/list", {
+      const response = await fetch(`${config.backendUrl}/messages/list`, {
         method: "GET",
         credentials: "include",
       });
@@ -77,11 +78,9 @@ const MessagePage = () => {
     }
   };
 
-
-
   const fetchUserRole = async () => {
     try {
-      const response = await fetch("http://localhost:3500/get_role", {
+      const response = await fetch(`${config.backendUrl}/get_role`, {
         method: "GET",
         credentials: "include",
       });
@@ -111,8 +110,6 @@ const MessagePage = () => {
     console.log("Selected User ID:", selectedUserId);
     await fetchUserMessages(UserId, selectedUserId, currentPage);
   };
-
-
 
   const renderUserList = (role) => {
     const users = messages.filter((user) => user.role === role);
@@ -321,7 +318,7 @@ const MessagePage = () => {
         content: newMessageContent.trim(),
       };
   
-      const response = await fetch("http://localhost:3500/messages/insert", {
+      const response = await fetch(`${config.backendUrl}/messages/insert`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -347,7 +344,7 @@ const MessagePage = () => {
   
   const fetchUserMessages = async (userId, otherUserId, page_num) => {
     try {
-      const response = await fetch(`http://localhost:3500/messages?user_id=${userId}&other_user_id=${otherUserId}&page_size=5&page_num=${page_num}`, {
+      const response = await fetch(`${config.backendUrl}/messages?user_id=${userId}&other_user_id=${otherUserId}&page_size=5&page_num=${page_num}`, {
         method: "GET",
         credentials: "include",
       });

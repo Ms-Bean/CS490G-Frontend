@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { Button, ButtonGroup, Table, Form, Row, Col } from "react-bootstrap";
+import { config } from "./../../utils/config";
 
-function EditWorkoutForm({ workoutPlanName, workoutPlanId }) {
+function EditWorkoutForm({ workoutPlanName, workoutPlanId, setIsEditing }) {
   const [data, setData] = useState([]);
   const [planName, setPlanName] = useState(workoutPlanName);
   const [count, setCount] = useState(-1);
+  const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
   const [exerciseId, setExerciseId] = useState();
   const [exerciseArray, setExerciseArray] = useState([]);
@@ -30,7 +32,7 @@ function EditWorkoutForm({ workoutPlanName, workoutPlanId }) {
   const [showForm, setShowForm] = useState(false);
   const [showAddButton, setShowAddButton] = useState(true);
 
-  const url = `http://localhost:3500/workout_plan/${workoutPlanId}?include_exercises=true`;
+  const url = `${config.backendUrl}/workout_plan/${workoutPlanId}?include_exercises=true`;
   //local storage functions
   const [ex_arr, setex_arr] = useState([]);
   const [add_ex_arr, setadd_ex_arr] = useState([]);
@@ -111,7 +113,7 @@ function EditWorkoutForm({ workoutPlanName, workoutPlanId }) {
   }, [planName]);
 
   useEffect(() => {
-    fetch(`http://localhost:3500/exercises/`)
+    fetch(`${config.backendUrl}/exercises/`)
       .then((data) => data.json())
       .then((val) => setExerciseArray(val));
 
@@ -141,6 +143,7 @@ function EditWorkoutForm({ workoutPlanName, workoutPlanId }) {
   };
 
   const handleEdit = (id) => {
+    setIsEditing(true);
     console.log(id);
     let grab_ex = window.sessionStorage.getItem(id);
     let ex = JSON.parse(grab_ex);
@@ -154,6 +157,7 @@ function EditWorkoutForm({ workoutPlanName, workoutPlanId }) {
   };
 
   const handleUpdate = () => {
+    setIsEditing(false);
     setUpdateID(1);
     console.log("upExId", uexerciseId);
     const new_ex = {
@@ -237,13 +241,16 @@ function EditWorkoutForm({ workoutPlanName, workoutPlanId }) {
     console.log("showForm =", event);
     if (event === "false") {
       setShowForm(false);
+      setIsEditing(false);
     } else {
       setShowForm(true);
+      setIsEditing(true);
       handleShowAddButton("false");
     }
   };
 
   const handleShowAddButton = (event) => {
+    setIsEditing(true);
     console.log("showAddButton =", event);
     if (event === "false") {
       setShowAddButton(false);
@@ -263,6 +270,7 @@ function EditWorkoutForm({ workoutPlanName, workoutPlanId }) {
   };
 
   const handleCancel = () => {
+    setIsEditing(false);
     handleShowAddButton("true");
     setDefualts();
   };
@@ -353,14 +361,11 @@ function EditWorkoutForm({ workoutPlanName, workoutPlanId }) {
                 <td>
                   <Form.Group>
                     <Form.Select name="upday" onChange={(e) => usetDay(e.target.value)}>
-                      <option value={capitalize(uday)}>{capitalize(uday)}</option>
-                      <option value="Sunday">Sunday</option>
-                      <option value="Monday">Monday</option>
-                      <option value="Tuesday">Tuesday</option>
-                      <option value="Wednesday">Wednesday</option>
-                      <option value="Thursday">Thursday</option>
-                      <option value="Friday">Friday</option>
-                      <option value="Saturday">Saturday</option>
+                      {weekDays.map((day, index) => (
+                        <option key={index} value={day} selected={day === capitalize(uday)}>
+                          {day}
+                        </option>
+                      ))}
                     </Form.Select>
                   </Form.Group>
                 </td>
@@ -462,10 +467,9 @@ function EditWorkoutForm({ workoutPlanName, workoutPlanId }) {
       </div>
       {showAddButton && (
         <div className="d-grid gap-2">
-          {" "}
           <Button variant="outline-dark" size="lg" id="add" value="true" onClick={(e) => handleShowForm(e.target.value)}>
             +
-          </Button>{" "}
+          </Button>
         </div>
       )}
     </div>

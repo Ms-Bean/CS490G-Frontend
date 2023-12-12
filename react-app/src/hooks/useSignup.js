@@ -1,8 +1,9 @@
 import { useAuth } from "./useAuth";
 import { useLocalStorage } from "./useLocalStorage";
 import { useState } from "react";
+import { config } from "../utils/config";
 
-const url = "http://localhost:3500/";
+const url = `${config.backendUrl}`;
 
 export const useSignup = () => {
   const [isLoading, setIsLoading] = useState(null);
@@ -15,7 +16,7 @@ export const useSignup = () => {
       setIsLoading(true);
       setErrorMessage(null);
 
-      const response = await fetch(`${url}insert_user/`, {
+      const response = await fetch(`${url}/insert_user/`, {
         method: "POST",
         headers: {
           // Moved data to body instead of headers

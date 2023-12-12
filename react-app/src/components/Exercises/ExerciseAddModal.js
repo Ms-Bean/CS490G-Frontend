@@ -5,6 +5,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { FaPlusCircle } from "react-icons/fa";
 import { fetchGoals, fetchMuscleGroups, fetchEquipmentItems } from "./../../services/exerciseServices.js";
 import { ExerciseContext } from "../../context/exerciseContext.js";
+import { config } from "./../../utils/config";
 
 const ExerciseAddModal = () => {
   const { user } = useAuth();
@@ -61,7 +62,7 @@ const ExerciseAddModal = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:3500/add_exercise", {
+      const response = await fetch(`${config.backendUrl}/add_exercise`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newExerciseData),
