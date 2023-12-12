@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button, ButtonGroup, Table, Form, Row, Col } from "react-bootstrap";
 import { config } from "./../../utils/config";
 
-function EditWorkoutForm({ workoutPlanName, workoutPlanId, setIsEditing}) {
+function EditWorkoutForm({ workoutPlanName, workoutPlanId, setIsEditing }) {
   const [data, setData] = useState([]);
   const [planName, setPlanName] = useState(workoutPlanName);
   const [count, setCount] = useState(-1);
@@ -238,7 +238,6 @@ function EditWorkoutForm({ workoutPlanName, workoutPlanId, setIsEditing}) {
   };
 
   const handleShowForm = (event) => {
-    
     console.log("showForm =", event);
     if (event === "false") {
       setShowForm(false);
@@ -361,12 +360,13 @@ function EditWorkoutForm({ workoutPlanName, workoutPlanId, setIsEditing}) {
                 </td>
                 <td>
                   <Form.Group>
-                <Form.Select name="upday" onChange={(e) => usetDay(e.target.value)}>
-                {weekDays.map((day, index) => (
-                    <option key={index} value={day} selected={day === capitalize(uday)}>
-                      {day}
-                    </option>
-                  ))}                    </Form.Select>
+                    <Form.Select name="upday" onChange={(e) => usetDay(e.target.value)}>
+                      {weekDays.map((day, index) => (
+                        <option key={index} value={day} selected={day === capitalize(uday)}>
+                          {day}
+                        </option>
+                      ))}
+                    </Form.Select>
                   </Form.Group>
                 </td>
                 <td>
@@ -456,7 +456,7 @@ function EditWorkoutForm({ workoutPlanName, workoutPlanId, setIsEditing}) {
                   </td>
                   <td>
                     <Form.Group>
-                      <Form.Control type="time" onChange={(e) => setTime(e.target.value)} required />
+                      <Form.Control type="time" onChange={(e) => setTime(e.target.value)} defaultValue={'12:00:00'} required />
                     </Form.Group>
                   </td>
                 </tr>
@@ -467,10 +467,9 @@ function EditWorkoutForm({ workoutPlanName, workoutPlanId, setIsEditing}) {
       </div>
       {showAddButton && (
         <div className="d-grid gap-2">
-          {" "}
           <Button variant="outline-dark" size="lg" id="add" value="true" onClick={(e) => handleShowForm(e.target.value)}>
             +
-          </Button>{" "}
+          </Button>
         </div>
       )}
     </div>

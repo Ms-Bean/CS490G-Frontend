@@ -50,7 +50,7 @@ const LoginForm = () => {
           </p>
         </Form.Group>
         <div className="d-grid">
-          <Button size="lg" className="bg-dark" type="submit">
+          <Button size="lg" variant="primary" type="submit">
             Sign In
           </Button>
         </div>
