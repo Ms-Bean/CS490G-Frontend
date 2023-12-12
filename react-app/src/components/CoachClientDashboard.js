@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import NewWorkoutPlan from "./WorkoutPlan/NewWorkoutPlan";
+import { config } from "./../utils/config";
 
-const CoachDashboard = () => {
+const CoachClientDashboard = () => {
 
   const [clients, setClients] = useState([]);
   const [uploadSuccess, setUploadSuccess] = useState(false);
@@ -11,7 +12,7 @@ const CoachDashboard = () => {
     const fetch_coach_dashboard_info = async () => {
       try{
         setIsLoading(true);
-        const response = await fetch(`http://localhost:3500/get_coach_dashboard_info`, {
+        const response = await fetch(`${config.backendUrl}/get_coach_dashboard_info`, {
             credentials: "include",
         });
         

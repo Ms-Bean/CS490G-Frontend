@@ -19,54 +19,13 @@ function CreateExercise({ addTag, workout_plan_id, addWorkoutExercise }) {
   useEffect(() => {
     const fetchExercises = async () => {
       try {
-        const response = await fetch(`${config.backendUrl}/exercises`, {
+        const response = await fetch(`http://localhost:3500/exercises`, {
           method: "GET",
           credentials: "include",
         });
         if (!response.ok) throw new Error("Failed to fetch the Exercise Bank");
         const data = await response.json();
         setExerciseBank(data);
-        // console.log(data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchExercises();
-  }, []);
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setExerciseFormData({ ...exerciseFormData, [name]: value });
-
-        console.log(exerciseFormData);
-    };
-
-    const handleSelectChange = (event) => {
-        const {name, value} = event.target;
-        if(name === "time"){
-            console.log("time here ")
-        }
-        console.log("name " ,name, "value ", value)
-        const selectedOption = event.target.value;
-        setExerciseFormData({ ...exerciseFormData, [name]: selectedOption });
-
-        console.log(exerciseFormData)
-    };
-
-    const handleExerciseClose = () => {
-        setExerciseFormData({
-            workout_plan_id : workout_plan_id,
-            exercise_id : "",
-            weekday : "",
-            time : "",
-            reps_per_set : "",
-            num_sets : "",
-            weight : ""
-        });
-        if (!response.ok) throw new Error("Failed to fetch user's clients");
-        const data = await response.json();
-        setExerciseBank(data);
-        // console.log(data);
       } catch (err) {
         console.log(err);
       }
@@ -77,8 +36,6 @@ function CreateExercise({ addTag, workout_plan_id, addWorkoutExercise }) {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setExerciseFormData({ ...exerciseFormData, [name]: value });
-
-    // console.log(exerciseFormData);
   };
 
   const handleSelectChange = (event) => {
@@ -93,17 +50,30 @@ function CreateExercise({ addTag, workout_plan_id, addWorkoutExercise }) {
     console.log(exerciseFormData);
   };
 
+
   const handleExerciseClose = () => {
     setExerciseFormData({
       workout_plan_id: workout_plan_id,
+      exercise_id: "",
+      weekday: "",
+      time: "",
+      reps_per_set: "",
+      num_sets: "",
+      weight: "",
     });
     setShowExercise(false);
   };
+
   const handleExerciseShow = () => setShowExercise(true);
 
   const handleAddExercise = async () => {
     try {
       const ex = exerciseBank.find((e) => e.exercise_id === Number(exerciseFormData.exercise_id));
+      if (!ex) {
+        setError("Exercise not found in the bank.");
+        return;
+      }
+
       const data = {
         workout_plan_id: exerciseFormData.workout_plan_id,
         exercise_name: ex.name,
@@ -114,6 +84,7 @@ function CreateExercise({ addTag, workout_plan_id, addWorkoutExercise }) {
         num_sets: Number(exerciseFormData.num_sets),
         weight: Number(exerciseFormData.weight),
       };
+
       const response = await fetch(`${config.backendUrl}/workout_plan/${workout_plan_id}/exercise/new`, {
         method: "POST",
         headers: {
@@ -126,7 +97,7 @@ function CreateExercise({ addTag, workout_plan_id, addWorkoutExercise }) {
       if (!response.ok) {
         const errorData = await response.json();
         setError(errorData.message || "Failed to add exercise. Please try again.");
-        return; // Prevent further execution if there's an error
+        return;
       }
 
       addWorkoutExercise({
@@ -139,6 +110,7 @@ function CreateExercise({ addTag, workout_plan_id, addWorkoutExercise }) {
         num_sets: Number(exerciseFormData.num_sets),
         weight: Number(exerciseFormData.weight),
       });
+      
       setExerciseFormData({
         workout_plan_id: workout_plan_id,
       });
@@ -148,16 +120,6 @@ function CreateExercise({ addTag, workout_plan_id, addWorkoutExercise }) {
       setError("An error occurred while adding the exercise.");
       console.log(err);
     }
-    // addTag(ex.name, {
-    //     workout_plan_id : exerciseFormData.workout_plan_id,
-    //     exercise_name : ex.name,
-    //     exercise_id : Number(exerciseFormData.exercise_id),
-    //     weekday : exerciseFormData.weekday,
-    //     time : exerciseFormData.time + ":00",
-    //     reps_per_set : Number(exerciseFormData.reps_per_set),
-    //     num_sets : Number(exerciseFormData.num_sets),
-    //     weight : Number(exerciseFormData.weight)
-    // });
   };
 
   return (

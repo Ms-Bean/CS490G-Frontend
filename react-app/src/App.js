@@ -13,7 +13,6 @@ import Dashboard from "./views/Dashboard";
 import ProfilePage from "./views/ProfilePage";
 import MessagePage from "./views/MessagePage";
 import CoachSearch from "./views/CoachSearch";
-import DailySurvey from "./views/DailySurvey";
 import ExerciseManagement from "./views/ExerciseManagement";
 import CoachDashboard from "./views/CoachDashboard";
 import WorkoutPlan from "./views/WorkoutPlan";
@@ -54,7 +53,6 @@ const App = () => {
                 <Route path="/coach_dashboard" element={<CoachDashboard />} />
                 <Route path="/select_workout_plan" element={<SelectWorkoutPlan />} />
                 <Route path="workout_plan" element={<WorkoutPlan />} />
-                <Route path="/daily_survey" element={<DailySurvey />} />
               </Route>
               <Route path="/onboard" element={<Onboarding />} />
               <Route path="/registration" element={<RegisterPage />} />
