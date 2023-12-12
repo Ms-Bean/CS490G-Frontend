@@ -27,7 +27,7 @@ function CreateExercise({addTag, workout_plan_id, addWorkoutExercise}) {
                 if (!response.ok) throw new Error("Failed to fetch user's clients");
                 const data = await response.json();
                 setExerciseBank(data);
-                console.log(data);
+                // console.log(data);
             }catch (err) {
                 console.log(err);
             }
@@ -39,7 +39,7 @@ function CreateExercise({addTag, workout_plan_id, addWorkoutExercise}) {
         const { name, value } = e.target;
         setExerciseFormData({ ...exerciseFormData, [name]: value });
 
-        console.log(exerciseFormData);
+        // console.log(exerciseFormData);
     };
 
     const handleSelectChange = (event) => {
@@ -122,8 +122,8 @@ function CreateExercise({addTag, workout_plan_id, addWorkoutExercise}) {
 
     return (
         <>
-            <button type='button' onClick={handleExerciseShow} className="w-25 my-2 btn btn-secondary rounded-0">
-                Add
+            <button type='button' onClick={handleExerciseShow} className="w-100 bg-dark text-light my-2 btn">
+                Add Exercise
             </button>
 
             <Modal
@@ -134,7 +134,7 @@ function CreateExercise({addTag, workout_plan_id, addWorkoutExercise}) {
             centered
             >
             <Modal.Header closeButton>
-                <Modal.Title>Create Exercise</Modal.Title>
+                <Modal.Title>Schedule an Exercise</Modal.Title>
             </Modal.Header>
             <Modal.Body>
             <form>

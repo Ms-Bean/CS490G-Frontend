@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Modal from "react-bootstrap/Modal";
+import { Table, Modal } from "react-bootstrap";
 import { config } from "./../../utils/config";
 
 const convertTimeAMPM = (time) => {
@@ -65,7 +65,7 @@ function WorkoutPlanInfo({ workoutPlanName, workoutPlanId, show, handleClose }) 
     <>
       <Modal show={show} onHide={handleClose} centered size={"lg"}>
         <Modal.Header className="text-center" closeButton>
-          <Modal.Title className="w-100">Workout Plan {workoutPlanName}</Modal.Title>
+          <Modal.Title className="w-100">{workoutPlanName}</Modal.Title>
         </Modal.Header>
         <Modal.Body className="pb-0">
           <div className="mx-auto">
@@ -85,7 +85,7 @@ function WorkoutPlanInfo({ workoutPlanName, workoutPlanId, show, handleClose }) 
             </div>
           ) : (
             <div className="mt-3">
-              <table className="table">
+              <Table responsive hover>
                 <thead>
                   <tr>
                     <th>Exercise Name</th>
@@ -106,10 +106,15 @@ function WorkoutPlanInfo({ workoutPlanName, workoutPlanId, show, handleClose }) 
                     </tr>
                   ))}
                 </tbody>
-              </table>
+              </Table>
             </div>
           )}
         </Modal.Body>
+        <Modal.Footer>
+          <button className="btn btn-secondary w-100" onClick={handleClose}>
+            Close
+          </button>
+        </Modal.Footer>
       </Modal>
     </>
   );
