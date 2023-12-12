@@ -5,11 +5,8 @@ import TableData from './EditWorkoutForm';
 import { useAuth } from '../../hooks/useAuth';
 import { config } from "./../../utils/config";
 
-function EditWorkoutPlan({workoutPlanName, workoutPlanId, handleUploadSuccessChange}) {
-  const [show, setShow] = useState(false);
+function EditWorkoutPlan({workoutPlanName, workoutPlanId, handleUploadSuccessChange, show, handleClose}) {
   const [isEditing, setIsEditing] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
 
   const {user} = useAuth();
   
@@ -171,10 +168,6 @@ const handleSave = () =>{
 
   return (
     <>
-        <button onClick={handleShow} className="btn btn-primary w-50 rounded-top-0">
-            Edit
-        </button>
-
         <Modal
         size="xl"
         show={show}

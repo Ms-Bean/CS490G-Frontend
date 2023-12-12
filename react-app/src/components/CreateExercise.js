@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import { config } from "./../utils/config";
 
 function CreateExercise({addTag, workout_plan_id, addWorkoutExercise}) {
@@ -10,7 +11,7 @@ function CreateExercise({addTag, workout_plan_id, addWorkoutExercise}) {
         workout_plan_id : workout_plan_id,
         exercise_id : "",
         weekday : "",
-        time: '12:00:00', // Set default time here
+        time : "12:00",
         reps_per_set : "",
         num_sets : "",
         weight : ""
@@ -56,12 +57,7 @@ function CreateExercise({addTag, workout_plan_id, addWorkoutExercise}) {
     const handleExerciseClose = () => {
         setExerciseFormData({
             workout_plan_id : workout_plan_id,
-            exercise_id : "",
-            weekday : "",
-            time : "",
-            reps_per_set : "",
-            num_sets : "",
-            weight : ""
+            time : "12:00",
         });
         setShowExercise(false);
     }
@@ -105,12 +101,7 @@ function CreateExercise({addTag, workout_plan_id, addWorkoutExercise}) {
             })
             setExerciseFormData({
                 workout_plan_id : workout_plan_id,
-                exercise_id : "",
-                weekday : "",
-                time : "",
-                reps_per_set : "",
-                num_sets : "",
-                weight : ""
+                time : "12:00",
             });
             setShowExercise(false);
 
@@ -131,9 +122,9 @@ function CreateExercise({addTag, workout_plan_id, addWorkoutExercise}) {
 
     return (
         <>
-            <Button onClick={handleExerciseShow} className="bg-dark w-100 my-2 btn">
-                Add Exercise to Workout Plan
-            </Button>
+            <button type='button' onClick={handleExerciseShow} className="w-25 my-2 btn btn-secondary rounded-0">
+                Add
+            </button>
 
             <Modal
             show={showExercise}
@@ -171,7 +162,7 @@ function CreateExercise({addTag, workout_plan_id, addWorkoutExercise}) {
                 </div>
                 <div className='mb-3'>
                     <label htmlFor='time' className='form-label'>Time</label>
-                    <input type='time' name="time" className='form-control' value={exerciseFormData.time} defaultValue='12:00:00' onChange={handleInputChange} />
+                    <input type='time' name="time" className='form-control' value={exerciseFormData.time} onChange={handleInputChange}/>
                 </div>
                 <div className='mb-3'>
                     <label htmlFor='reps_per_set' className='form-label'>Reps Per Set</label>

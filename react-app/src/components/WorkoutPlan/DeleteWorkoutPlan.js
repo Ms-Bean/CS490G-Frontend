@@ -3,11 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { config } from "./../../utils/config";
 
-function DeleteWorkoutPlan({ workoutPlanName, workoutPlanId, handleUploadSuccessChange }) {
-    const [show, setShow] = useState(false);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+function DeleteWorkoutPlan({ workoutPlanName, workoutPlanId, handleUploadSuccessChange, show, handleClose}) {
 
     const deleteDB = async () =>{
         try{
@@ -35,16 +31,10 @@ function DeleteWorkoutPlan({ workoutPlanName, workoutPlanId, handleUploadSuccess
 
     return (
         <>
-            <button onClick={handleShow} className="btn btn-danger w-50 rounded-top-0">
-                Delete
-            </button>
-    
             <Modal
             size="sm"
             show={show}
             onHide={handleClose}
-            backdrop="static"
-            keyboard={false}
             centered
             >
             <Modal.Header closeButton>

@@ -456,7 +456,7 @@ function EditWorkoutForm({ workoutPlanName, workoutPlanId, setIsEditing }) {
                   </td>
                   <td>
                     <Form.Group>
-                      <Form.Control type="time" onChange={(e) => setTime(e.target.value)} defaultValue={'12:00:00'} required />
+                      <Form.Control type="time" onChange={(e) => setTime(e.target.value)} required />
                     </Form.Group>
                   </td>
                 </tr>

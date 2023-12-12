@@ -30,10 +30,9 @@ const convertTimeAMPM = (time) => {
 
 const tempGoals = ["Build Muscle", "Improve Endurance", , "Reduce Body Fat Percentage", "Improve Posture"];
 
-function WorkoutPlanInfo({ workoutPlanName, workoutPlanId }) {
+function WorkoutPlanInfo({ workoutPlanName, workoutPlanId, show, handleClose }) {
   const weekdayOrder = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
   const [exercises, setExercises] = useState([]);
-  const [show, setShow] = useState(false);
 
   const fetchExercises = async () => {
     try {
@@ -53,14 +52,10 @@ function WorkoutPlanInfo({ workoutPlanName, workoutPlanId }) {
   };
 
   useEffect(() => {
-    fetchExercises();
-  }, [workoutPlanId]); // Adding workoutPlanId as a dependency to refetch if the ID changes
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => {
-    setShow(true);
-    fetchExercises(); // Fetch exercises every time the info button is clicked
-  };
+    if (show) {
+      fetchExercises();
+    }
+  }, [show, workoutPlanId]);
 
   exercises.sort((a, b) => {
     return weekdayOrder.indexOf(a.weekday) - weekdayOrder.indexOf(b.weekday);
@@ -68,13 +63,9 @@ function WorkoutPlanInfo({ workoutPlanName, workoutPlanId }) {
 
   return (
     <>
-      <button onClick={handleShow} className="btn btn-secondary rounded-bottom-0">
-        Info
-      </button>
-
       <Modal show={show} onHide={handleClose} centered size={"lg"}>
         <Modal.Header className="text-center" closeButton>
-          <Modal.Title className="w-100">{workoutPlanName}</Modal.Title>
+          <Modal.Title className="w-100">Workout Plan {workoutPlanName}</Modal.Title>
         </Modal.Header>
         <Modal.Body className="pb-0">
           <div className="mx-auto">
