@@ -23,6 +23,46 @@ function CreateExercise({ addTag, workout_plan_id, addWorkoutExercise }) {
           method: "GET",
           credentials: "include",
         });
+        if (!response.ok) throw new Error("Failed to fetch the Exercise Bank");
+        const data = await response.json();
+        setExerciseBank(data);
+        // console.log(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchExercises();
+  }, []);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setExerciseFormData({ ...exerciseFormData, [name]: value });
+
+        console.log(exerciseFormData);
+    };
+
+    const handleSelectChange = (event) => {
+        const {name, value} = event.target;
+        if(name === "time"){
+            console.log("time here ")
+        }
+        console.log("name " ,name, "value ", value)
+        const selectedOption = event.target.value;
+        setExerciseFormData({ ...exerciseFormData, [name]: selectedOption });
+
+        console.log(exerciseFormData)
+    };
+
+    const handleExerciseClose = () => {
+        setExerciseFormData({
+            workout_plan_id : workout_plan_id,
+            exercise_id : "",
+            weekday : "",
+            time : "",
+            reps_per_set : "",
+            num_sets : "",
+            weight : ""
+        });
         if (!response.ok) throw new Error("Failed to fetch user's clients");
         const data = await response.json();
         setExerciseBank(data);

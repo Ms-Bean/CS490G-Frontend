@@ -31,8 +31,8 @@ const convertTimeAMPM = (time) => {
   return timeValue;
 };
 
-const NewWorkoutPlan = ({ handleUploadSuccessChange }) => {
-  const { user } = useAuth();
+const NewWorkoutPlan = ({ handleUploadSuccessChange , user_id, button}) => {
+  // const { user } = useAuth();
   const [show, setShow] = useState(false);
   const [error, setError] = useState("");
   const [workoutPlanSuccess, setWorkoutPlanSuccess] = useState(false);
@@ -50,43 +50,43 @@ const NewWorkoutPlan = ({ handleUploadSuccessChange }) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const createWorkoutPlan = async () => {
-    try {
-      setIsLoadingWorkoutPlan(true);
-      const data = {
-        name: formData.name,
-        author_id: user.user_id,
-      };
-      const response = await fetch(`${config.backendUrl}/workout_plan/new`, {
-        method: "POST",
-        headers: {
-          // Moved data to body instead of headers
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-        credentials: "include", // Include credentials with the request
-      });
-      if (!response.ok) {
-        setError("Failed to Create Workout Plan");
-        throw new Error(`Failed to create workout plan. Status: ${response.status}`);
-      }
-      setError(); // Clear any errors
-      // console.log(response);
-      const wp = await response.json();
-      // Update only the workout_plan_id in formData
-      setFormData((prevData) => ({
-        ...prevData,
-        workout_plan_id: wp.workout_plan.workout_plan_id,
-      }));
-      // console.log(wp);
-      setWorkoutPlanSuccess(true);
-      handleUploadSuccessChange();
-    } catch (err) {
-      // console.log(err);
-    } finally {
-      setIsLoadingWorkoutPlan(false);
+    const createWorkoutPlan = async () => {
+        try{
+            setIsLoadingWorkoutPlan(true);
+            const data = {
+                name : formData.name,
+                author_id : Number(user_id),
+            }
+            const response = await fetch(`http://localhost:3500/workout_plan/new`, {
+                method: "POST",
+                headers: {
+                  // Moved data to body instead of headers
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+                credentials: "include", // Include credentials with the request
+            });
+            if (!response.ok) {
+                setError("Failed to Create Workout Plan")
+                throw new Error(`Failed to create workout plan. Status: ${response.status}`);
+            }
+            console.log(response);
+            const wp = await response.json();
+            // Update only the workout_plan_id in formData
+            setFormData((prevData) => ({
+                ...prevData,
+                workout_plan_id: wp.workout_plan.workout_plan_id,
+            }));
+            console.log(wp);
+            setWorkoutPlanSuccess(true);
+            handleUploadSuccessChange();
+        } catch(err){
+            console.log(err);
+        } finally {
+            setIsLoadingWorkoutPlan(false);
+        }
+        
     }
-  };
 
   const handleClose = () => {
     setFormData({
@@ -109,11 +109,11 @@ const NewWorkoutPlan = ({ handleUploadSuccessChange }) => {
     console.log(formData);
   };
 
-  return (
-    <>
-      <div onClick={handleShow} className="d-inline" data-bs-toggle="modal" style={{ cursor: "pointer" }}>
-        <FaPlusCircle className="align-self-center" size={22} style={{ color: "white" }} />
-      </div>
+    return (
+        <>
+            <div onClick={handleShow} className="d-inline" data-bs-toggle="modal" style={{ cursor: "pointer" }}>
+                {button}
+            </div>
 
       <Modal size="md" show={show} onHide={handleClose} backdrop="static" keyboard={false} centered>
         <Modal.Header closeButton>

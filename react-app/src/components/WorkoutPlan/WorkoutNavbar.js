@@ -1,9 +1,10 @@
 import React from "react";
 import { Dropdown } from "react-bootstrap";
 import { FaSearch } from "react-icons/fa";
+import { FaPlusCircle} from "react-icons/fa";
 import NewWorkoutPlan from "./NewWorkoutPlan";
 
-const WorkoutNavbar = ({onSort, onSearch, sortKey, onToggleSortDirection, sortDirection, handleUploadSuccessChange}) => {
+const WorkoutNavbar = ({onSort, onSearch, sortKey, onToggleSortDirection, sortDirection, handleUploadSuccessChange, user_id}) => {
 
     const handleSortOptionClick = (key) => {
         if (sortKey === key) {
@@ -27,7 +28,7 @@ const WorkoutNavbar = ({onSort, onSearch, sortKey, onToggleSortDirection, sortDi
                 <div className="navbar-brand">
                     Workout Plan
                 </div>
-                <NewWorkoutPlan handleUploadSuccessChange={handleUploadSuccessChange}/>
+                <NewWorkoutPlan handleUploadSuccessChange={handleUploadSuccessChange} user_id={user_id} button={<FaPlusCircle className="align-self-center" size={22} style={{ color: "white" }} />}/>
                 <button 
                 className="navbar-toggler" 
                 type="button" 
