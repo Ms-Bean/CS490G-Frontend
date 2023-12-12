@@ -38,9 +38,7 @@ const WorkoutPlan = () => {
         fetchRole();
     }, []);
 
-    //re-renders when a workout plan has been created, edited or deleted
-    useEffect(() => {
-        const fetchWorkoutPlans = async () => {
+    const fetchWorkoutPlans = async () => {
         setIsLoading(true);
         try{
              const response = await fetch(`${config.backendUrl}/workout_plan/author/?author_id=${user.user_id}`, {
@@ -63,6 +61,9 @@ const WorkoutPlan = () => {
             setIsLoading(false);
         }
         }
+
+    //re-renders when a workout plan has been created, edited or deleted
+    useEffect(() => {
         fetchWorkoutPlans();
         setUploadSuccess(false);
     }, [uploadSuccess]);
@@ -127,6 +128,7 @@ const WorkoutPlan = () => {
 
     const handleUploadSuccessChange = () => {
         setUploadSuccess(true);
+        fetchWorkoutPlans();
     }
 
     return (
