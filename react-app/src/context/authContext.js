@@ -1,5 +1,6 @@
 import { createContext, useReducer, useEffect, useState } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { config } from "./../utils/config";
 
 export const AuthContext = createContext();
 
@@ -23,7 +24,7 @@ export const AuthContextProvide = ({ children }) => {
     const {setItem} = useLocalStorage();
 
     useEffect(() => { // Check if user is logged in
-        fetch("http://localhost:3500/check_session", {
+        fetch(`${config.backendUrl}/check_session`, {
             credentials: "include",
         })
             .then((res) => res.json())

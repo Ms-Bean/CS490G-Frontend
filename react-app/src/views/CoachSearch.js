@@ -3,6 +3,7 @@ import { Container, Spinner, Alert, Row, Pagination } from "react-bootstrap";
 import CoachNavbar from "../components/CoachSearch/CoachNavbar";
 import SearchFiltersModal from "../components/CoachSearch/SearchFiltersModal";
 import CoachCard from "../components/CoachSearch/CoachCard";
+import { config } from "./../utils/config";
 
 const CoachSearch = () => {
   const [searchParams, setSearchParams] = useState({
@@ -71,7 +72,7 @@ const CoachSearch = () => {
     });
 
     try {
-      const response = await fetch("http://localhost:3500/coaches/search", { method: "POST", headers: headers, body: body });
+      const response = await fetch(`${config.backendUrl}/coaches/search`, { method: "POST", headers: headers, body: body });
       if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
       setResults(data.coaches);

@@ -1,6 +1,7 @@
 import { useAuth } from "./useAuth";
 import { useLocalStorage } from "./useLocalStorage";
 import { useState } from "react";
+import { config } from "./../utils/config";
 
 export const useLogin = () => {
     const [isLoading, setIsLoading] = useState(null);
@@ -13,7 +14,7 @@ export const useLogin = () => {
             setIsLoading(true);
             setErrorMessage(null);
 
-            const response = await fetch("http://localhost:3500/login", {
+            const response = await fetch(`${config.backendUrl}/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({username, password}),
@@ -23,7 +24,6 @@ export const useLogin = () => {
             const data = await response.json();
 
             if (response.ok) {
-                console.log(data);
                 setItem('user', JSON.stringify({username}));
 
                 dispatch({type: "LOGIN", payload : {username}});

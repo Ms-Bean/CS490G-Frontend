@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import CoachDashboard from "../components/CoachDashboard";
 import CoachRequest from '../components/Admin/CoachRequest'
+import CoachClientDashboard from "../components/CoachClientDashboard";
+import { config } from "./../utils/config";
 
 const ProfilePage = () => {
   const [type, setType] = useState(null);
@@ -9,7 +11,7 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchUserRole = async () => {
       try {
-        const response = await fetch("http://localhost:3500/get_role", {
+        const response = await fetch(`${config.backendUrl}/get_role`, {
           method: "GET",
           credentials: "include",
         });

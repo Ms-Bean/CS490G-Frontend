@@ -6,6 +6,7 @@ import ExerciseNavbar from "../components/Exercises/ExerciseNavbar";
 import ExerciseModal from "../components/Exercises/ExerciseModal";
 import { ExerciseContext } from "../context/exerciseContext";
 import "./../css/ExerciseBank.css";
+import { config } from "./../utils/config";
 
 const ExerciseManagement = () => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -23,7 +24,7 @@ const ExerciseManagement = () => {
     const fetchRole = async () => {
       setIsLoading(true); // Set loading to true when the fetch starts
       try {
-        const response = await fetch("http://localhost:3500/get_role", {
+        const response = await fetch(`${config.backendUrl}/get_role`, {
           method: "GET",
           credentials: "include",
         });
@@ -70,12 +71,16 @@ const ExerciseManagement = () => {
 
     if (sortKey) {
       filtered.sort((a, b) => {
-        let valA = a[sortKey].toLowerCase();
-        let valB = b[sortKey].toLowerCase();
+        let valA = a[sortKey];
+        let valB = b[sortKey];
+      
+        // Check if values are strings, if not, convert them to strings
+        valA = (typeof valA === 'string') ? valA.toLowerCase() : String(valA).toLowerCase();
+        valB = (typeof valB === 'string') ? valB.toLowerCase() : String(valB).toLowerCase();
+      
         let comparison = 0;
         if (valA < valB) comparison = -1;
         if (valA > valB) comparison = 1;
-        setCurrentPage(0);
         return sortDirection === "ascending" ? comparison : comparison * -1;
       });
     }

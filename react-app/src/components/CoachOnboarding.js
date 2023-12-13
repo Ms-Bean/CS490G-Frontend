@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import { config } from "./../utils/config";
 
-const url = "http://localhost:3500/";
+const url = `${config.backendUrl}`;
 
 const CoachOnboarding = () => {
   const [formData, setFormData] = useState({
@@ -29,7 +30,7 @@ const CoachOnboarding = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${url}onboarding/coach/`, {
+      const response = await fetch(`${url}/onboarding/coach/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

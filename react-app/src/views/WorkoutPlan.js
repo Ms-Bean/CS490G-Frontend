@@ -5,6 +5,7 @@ import WorkoutPlanCard from "../components/WorkoutPlan/WorkoutCard";
 import { FaRegClipboard } from "react-icons/fa6";
 import { FaPlusCircle} from "react-icons/fa";
 import { useAuth } from "../hooks/useAuth";
+import { config } from "./../utils/config";
 
 const WorkoutPlan = () => {
 
@@ -22,7 +23,7 @@ const WorkoutPlan = () => {
     useEffect(() => {
         const fetchRole = async () => {
             try {
-                const response = await fetch("http://localhost:3500/get_role", {
+                const response = await fetch(`${config.backendUrl}/get_role`, {
                     method: "GET",
                     credentials: "include",
               });
@@ -37,12 +38,10 @@ const WorkoutPlan = () => {
         fetchRole();
     }, []);
 
-    //re-renders when a workout plan has been created, edited or deleted
-    useEffect(() => {
-        const fetchWorkoutPlans = async () => {
+    const fetchWorkoutPlans = async () => {
         setIsLoading(true);
         try{
-             const response = await fetch(`http://localhost:3500/workout_plan/author/?author_id=${user.user_id}`, {
+             const response = await fetch(`${config.backendUrl}/workout_plan/author/?author_id=${user.user_id}`, {
                 credentials: "include",
               });
             
@@ -62,6 +61,9 @@ const WorkoutPlan = () => {
             setIsLoading(false);
         }
         }
+
+    //re-renders when a workout plan has been created, edited or deleted
+    useEffect(() => {
         fetchWorkoutPlans();
         setUploadSuccess(false);
     }, [uploadSuccess]);
@@ -126,6 +128,7 @@ const WorkoutPlan = () => {
 
     const handleUploadSuccessChange = () => {
         setUploadSuccess(true);
+        fetchWorkoutPlans();
     }
 
     return (

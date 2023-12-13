@@ -1,4 +1,5 @@
-const url = "http://localhost:3500/";
+import { config } from "./../utils/config";
+const url = `${config.backendUrl}`;
 
 
 export const useEditAccount = () => {
@@ -6,7 +7,7 @@ export const useEditAccount = () => {
     try {
         console.log("Edit Account");
         console.log(formData.state);
-      const response = await fetch(`${url}alter_account_info/`, {
+      const response = await fetch(`${url}/alter_account_info/`, {
         method: "POST",
         headers: {
           // Moved data to body instead of headers

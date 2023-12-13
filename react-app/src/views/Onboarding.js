@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import ClientOnboarding from "../components/ClientOnboarding";
 import CoachOnboarding from "../components/CoachOnboarding";
+import { config } from "./../utils/config";
 
 const fetchUserRole = async () => {
   try {
-    const response = await fetch("http://localhost:3500/get_role", {
+    const response = await fetch(`${config.backendUrl}/get_role`, {
       method: "GET",
       credentials: "include",
     });

@@ -11,7 +11,7 @@ const LoginForm = () => {
   });
   const [alertMessage, setAlertMessage] = useState(null);
   const [alertType, setAlertType] = useState("danger");
-  const {login, errorMessage, isLoading} = useLogin();
+  const {login, errorMessage} = useLogin();
   const {user} = useAuth();
 
   const handleInputChange = (e) => {

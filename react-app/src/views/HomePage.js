@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Card, Button, CardGroup, Row, Col } from "react-bootstrap";
+import { Container, Card, CardGroup } from "react-bootstrap";
 import CarouselComp from "../components/CarouselComp";
 import "../css/HomePage.css";
 

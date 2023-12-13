@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Container, Form, Button, Row, Col, InputGroup, Navbar, Alert } from "react-bootstrap";
 import { useAuth } from "../hooks/useAuth";
 import { FaAppleAlt, FaRunning, FaWeight, FaTint, FaRegSmileBeam } from "react-icons/fa";
+import { config } from "./../utils/config";
 
 const DailySurveyForm = () => {
   const { user } = useAuth();
@@ -69,7 +70,7 @@ const DailySurveyForm = () => {
       };
 
       try {
-        const response = await fetch("http://localhost:3500/daily_survey", {
+        const response = await fetch(`${config.backendUrl}/daily_survey`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",

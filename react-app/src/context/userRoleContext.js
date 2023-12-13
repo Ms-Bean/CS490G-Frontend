@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
+import { config } from "./../utils/config";
 
 export const UserRoleContext = createContext();
 
@@ -8,7 +9,7 @@ export const UserRoleProvider = ({ children }) => {
   useEffect(() => {
     const fetchRole = async () => {
       try {
-        const response = await fetch("http://localhost:3500/get_role", {
+        const response = await fetch(`${config.backendUrl}/get_role`, {
           method: "GET",
           credentials: "include",
         });
