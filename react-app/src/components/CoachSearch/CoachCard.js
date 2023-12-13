@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import React from "react";
 import { Card, Col, Button, ButtonGroup } from "react-bootstrap";
 import ViewCoachProfile from "./ViewCoachProfile";
 
