@@ -1,0 +1,9 @@
+#hug{
+    display:inline;
+        word-wrap: break-word;
+   }
+   
+   br {
+    display: block;
+    margin: 8px 0;
+ }
