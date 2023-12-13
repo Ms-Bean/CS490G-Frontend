@@ -153,7 +153,7 @@ const WorkoutPlan = () => {
                         </div>
                     </div>
                     :
-                    <div className="container mt-3">
+                    <div className="container mt-3" style={{minHeight: "53em"}}>
                     {createGrid(filteredAndSortedWorkoutPlans)}
                     </div>
                     }
