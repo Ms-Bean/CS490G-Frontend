@@ -2,11 +2,8 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'FRONTEND_BRANCH', defaultValue: 'docker', description: 'Branch to checkout for Frontend')
-    }
-
-    environment {
-        BACKEND_URL = 'http://moxi.akifbayram.com:3500'
+        string(name: 'FRONTEND_BRANCH', defaultValue: 'dev', description: 'Branch to checkout for Frontend')
+        string(name: 'BACKEND_URL', defaultValue: 'http://moxi.akifbayram.com:3500', description: 'URL of the Backend Service')
     }
 
     stages {
@@ -29,7 +26,7 @@ pipeline {
         stage('Build and Run Frontend') {
             steps {
                 dir('CS490G-Frontend/react-app') {
-                    sh 'docker build --build-arg REACT_APP_BACKEND_URL=\$BACKEND_URL -t moxi-frontend .'
+                    sh "docker build --build-arg REACT_APP_BACKEND_URL=${params.BACKEND_URL} -t moxi-frontend ."
                     sh 'docker run -d -p 80:80 --name moxi-frontend moxi-frontend'
                 }
             }
