@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import CoachDashboard from "../components/CoachDashboard";
+// import CoachDashboard from "../components/CoachDashboard";
 import CoachRequest from '../components/Admin/CoachRequest'
 import CoachClientDashboard from "../components/CoachClientDashboard";
 import { config } from "./../utils/config";
@@ -58,7 +58,7 @@ const ProfilePage = () => {
         <CoachRequest/>
       : type === "coach" ?
       <div>
-        <CoachDashboard/>
+        <CoachClientDashboard/>
       </div>
       :
       <div className="container vh-100 d-flex justify-content-center align-items-center">
