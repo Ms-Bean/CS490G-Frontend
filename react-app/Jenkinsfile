@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'FRONTEND_BRANCH', defaultValue: 'docker', description: 'Branch to checkout for Frontend')
+        string(name: 'FRONTEND_BRANCH', defaultValue: 'dev', description: 'Branch to checkout for Frontend')
     }
 
     environment {
