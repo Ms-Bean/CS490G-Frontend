@@ -10,15 +10,10 @@ const CoachCard = ({ coach, handleUploadSuccessChange}) => {
       <div className="card-body">
         <h5 className="card-title">{coach.firstName} {coach.lastName}</h5>
       </div>
-      {/* <ButtonGroup className="w-100 p-2">
-        <WorkoutPlanInfo workoutPlanName={workoutPlanName} workoutPlanId={workoutPlanId} />
-        <EditWorkoutPlan workoutPlanName={workoutPlanName} workoutPlanId={workoutPlanId} handleUploadSuccessChange={handleUploadSuccessChange} />
-      </ButtonGroup> */}
-      {/* <ButtonGroup className="w-100 p-2" ><DeleteWorkoutPlan workoutPlanName={workoutPlanName} workoutPlanId={workoutPlanId} handleUploadSuccessChange={handleUploadSuccessChange}/></ButtonGroup> */}
       <CoachInfo coach={coach} />
-      <ButtonGroup className="w-100">
-        <AcceptCoach user_id={coach.userId} handleUploadSuccessChange={handleUploadSuccessChange}/>
-        <RejectCoach user_id={coach.userId} handleUploadSuccessChange={handleUploadSuccessChange}/>
+      <ButtonGroup className="w-100 px-2 pb-2">
+        <AcceptCoach user_id={coach.userId} handleUploadSuccessChange={handleUploadSuccessChange} firstName={coach.firstName}/>
+        <RejectCoach user_id={coach.userId} handleUploadSuccessChange={handleUploadSuccessChange} firstName={coach.firstName}/>
       </ButtonGroup>
     </div>
   );

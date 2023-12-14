@@ -36,7 +36,7 @@ const NavComp = () => {
                 <Nav.Link href="/workout_plan">Workouts</Nav.Link>
                 <Nav.Link href="/exercise_management">Exercises</Nav.Link>
                 <Nav.Link href="/coaches">Trainers</Nav.Link>
-                <Nav.Link href="/messages">Messaging</Nav.Link>
+                <Nav.Link href="/messages">Messages</Nav.Link>
                 <NavDropdown className="align-self-center"
                   title={<Image className="thumbnail-image" roundedCircle  src="/profilepic.jpg" alt="Profile Picture" />}
                   id="basic-nav-dropdown"

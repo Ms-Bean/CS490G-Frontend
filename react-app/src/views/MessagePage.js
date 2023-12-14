@@ -95,6 +95,8 @@ const MessagePage = () => {
     }
   };
 
+
+  
   const handleUserClick = async (selectedUserId) => {
     const UserId = user.user_id;
     setSelectedUserId(selectedUserId);
@@ -125,51 +127,69 @@ const MessagePage = () => {
     };
   
     return users.map((user) => {
-      const profilePicture = user.id.profile_picture || '/profilepic.jpg'; // Set to static picture when profile_picture is null      const messageDate = new Date(user.id.message_created);
+      const profilePicture = user.id.profile_picture || '/profilepic.jpg'; // Set to static picture when profile_picture is null      
       const messageDate = new Date(user.id.message_created);
       const currentDate = new Date();
       const timeDiff = currentDate - messageDate;
   
       let messageDateDisplay;
       if (timeDiff < 24 * 60 * 60 * 1000) {
-        messageDateDisplay = 'Today';
+        messageDateDisplay = ' Less than a day';
       } else if (timeDiff < 7 * 24 * 60 * 60 * 1000) {
         const daysAgo = Math.floor(timeDiff / (24 * 60 * 60 * 1000));
-        messageDateDisplay = `${daysAgo} day${daysAgo !== 1 ? 's' : ''} ago`;
+        messageDateDisplay = ` ${daysAgo} day${daysAgo !== 1 ? 's' : ''} ago`;
       } else if (timeDiff < 30 * 24 * 60 * 60 * 1000) {
         const weeksAgo = Math.floor(timeDiff / (7 * 24 * 60 * 60 * 1000));
-        messageDateDisplay = `${weeksAgo} week${weeksAgo !== 1 ? 's' : ''} ago`;
+        messageDateDisplay = ` ${weeksAgo} week${weeksAgo !== 1 ? 's' : ''} ago`;
       } else if (timeDiff < 365 * 24 * 60 * 60 * 1000) {
         const monthsAgo = Math.floor(timeDiff / (30 * 24 * 60 * 60 * 1000));
-        messageDateDisplay = `${monthsAgo} month${monthsAgo !== 1 ? 's' : ''} ago`;
+        messageDateDisplay = ` ${monthsAgo} month${monthsAgo !== 1 ? 's' : ''} ago`;
       } else {
         const yearsAgo = Math.floor(timeDiff / (365 * 24 * 60 * 60 * 1000));
-        messageDateDisplay = `${yearsAgo} year${yearsAgo !== 1 ? 's' : ''} ago`;
+        messageDateDisplay = ` ${yearsAgo} year${yearsAgo !== 1 ? 's' : ''} ago`;
       }
   
       return (
         <Button
           key={user.id.id}
           onClick={() => handleUserClick(user.id.id)}
-          style={{ background: 'white', margin: '5px', display: 'flex', alignItems: 'center' }}
+          style={{
+            background: 'white',
+            margin: '5px',
+            display: 'flex',
+            alignItems: 'center',
+            width: '400px', 
+            borderRadius: '10px', 
+          }}
         >
-          <div style={{ marginRight: '20px' }}>
+          <div style={{ marginRight: '20px', flex: '0 0 70px' }}>
             <img
               src={profilePicture}
               alt="Profile"
-              style={{ width: '50px', height: '50px', borderRadius: '50%', objectFit: 'cover' }}
+              style={{
+                width: '100%',
+                height: '70px',
+                borderRadius: '50%',
+                objectFit: 'cover',
+              }}
             />
           </div>
-          <div>
+          <div style={{ flex: '1' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <div style={{color: 'black', display: 'flex', alignItems: 'center' }}>{user.id.name}</div>
+              <div style={{ color: 'black', display: 'flex', alignItems: 'center' }}>
+                {user.id.name}
+              </div>
               <div>&#8226;</div>
-              <div style={{color: 'grey', display: 'flex', alignItems: 'center', margin: '3px' }}>•{messageDateDisplay}</div>
+              <div style={{ color: 'grey', display: 'flex', alignItems: 'center', margin: '3px' }}>
+                •{messageDateDisplay}
+              </div>
             </div>
-            <div style={{ color: 'grey', marginLeft: '20px', margin: '3px'  }}>{user.id.message_content}</div>
+            <div style={{ color: 'grey', margin: '3px' }}>
+              {user.id.message_content}
+            </div>
           </div>
         </Button>
-      );
+      );          
     });
   };
   
@@ -434,14 +454,14 @@ const MessagePage = () => {
   return (
     <Container className="mt-5">
       <Row>
-        <Col md={3}>
+        <Col md={5}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {renderCoachList()}
             {renderClientList()}
           </div>
         </Col>
-
-        <Col md={6}>
+  
+        <Col md={7} className="ml-auto"> {/* Use ml-auto to push the column to the right */}
           <Card className="text-center bg-light">
             <Card.Body>
               <Card.Title>
@@ -455,7 +475,7 @@ const MessagePage = () => {
                   </>
                 )}
               </Card.Title>
-
+  
               {loading && <Spinner animation="border" />}
               {error && <Alert variant="danger">{error}</Alert>}
               {!loading && !error && (
@@ -467,13 +487,13 @@ const MessagePage = () => {
                           {renderMessages()}
                         </ul>
                       </div>
-
+  
                       <div className="pagination">
                         {renderPagination()}
                       </div>
-
+  
                       <hr style={{ margin: '20px 0' }} />
-
+  
                       <Form className="mt-3" onSubmit={handleNewMessageSubmit}>
                         <Form.Group controlId="newMessageContent">
                           <Form.Control
@@ -499,6 +519,6 @@ const MessagePage = () => {
       </Row>
     </Container>
   );
-};
+}
 
 export default MessagePage;

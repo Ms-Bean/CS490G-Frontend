@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Modal from 'react-bootstrap/Modal'
 import { config } from '../../utils/config';
 
-function AcceptCoach({user_id, handleUploadSuccessChange}) {
+function AcceptCoach({user_id, handleUploadSuccessChange, firstName}) {
 
     const [show, setShow] = useState(false);
 
@@ -32,7 +32,7 @@ function AcceptCoach({user_id, handleUploadSuccessChange}) {
 
     return (
         <>
-            <button onClick={handleShow} className="btn btn-success m-2">
+            <button onClick={handleShow} className="btn btn-success">
                 Accept
             </button>
 
@@ -45,12 +45,12 @@ function AcceptCoach({user_id, handleUploadSuccessChange}) {
             >
             <Modal.Header className='text-center' closeButton>
                 <Modal.Title className='w-100'>
-                Are you sure you want to accept coach?
+                Accept Coach
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <button onClick={handleAcceptCoach}>Yes</button>
-                <button onClick={handleClose}>Cancel</button>
+                <center>Are you sure you want accept coach "{firstName}"? <p/><b>This action cannot be undone.</b></center>
+                <button className='btn btn-success w-100 mt-2' onClick={handleAcceptCoach}>Accept</button>
             </Modal.Body>
             </Modal>
         </>
