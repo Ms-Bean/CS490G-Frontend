@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import profile_pic from "./static_images/default-avatar-profile-icon-of-social-media-user-vector.jpg";
 import { config } from "./../utils/config";
 
 const ClientProfile = () => {
@@ -36,7 +35,9 @@ const ClientProfile = () => {
           height: data.response.client_profile_info.height,
           experience_level: data.response.client_profile_info.experience_level,
           budget: b,
+          pfp_link: data.response.client_profile_info.pfp_link,
         });
+        console.log(formData);
       });
     setUploadSuccess(false);
   }, [uploadSuccess, editing]);
@@ -64,6 +65,7 @@ const ClientProfile = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          pfp_link: formData.pfp_link,
           about_me: formData.about_me,
           experience_level: formData.experience_level,
           height: formData.height,
@@ -104,11 +106,8 @@ const ClientProfile = () => {
   return (
     <div className="container my-2">
       <div className="my-3">
-        <img className="img-thumbnail rounded-circle d-block mx-auto" src={profile_pic} />
+        <img className="img-thumbnail rounded-circle d-block mx-auto" height="200" width="200" src={formData.pfp_link} />
         <div className="mt-3 me-3 d-flex justify-content-center">
-          <button disabled={editing} onClick={changeProfilePicture} className="ms-3 btn btn-dark">
-            Change Profile Picture
-          </button>
         </div>
       </div>
 
@@ -227,6 +226,19 @@ const ClientProfile = () => {
             <option>$$</option>
             <option>$$$</option>
           </select>
+        </div>
+        <div class="form-group my-3">
+          <label for="weight">PFP link</label>
+          <input
+            className="form-control mt-1"
+            disabled={!editing}
+            type="test"
+            id="pfp_link"
+            name="pfp_link"
+            placeholder="Not Set"
+            onChange={handleInputChange}
+            value={formData.pfp_link}
+          />
         </div>
         <div className="row my-4">
           <div className="col-8">

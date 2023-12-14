@@ -115,38 +115,45 @@ const MessagePage = () => {
 
   const renderUserList = (role) => {
     const users = messages.filter((user) => user.role === role);
-    
+  
     const nameStyle = {
       fontWeight: 'bold',
-      marginRight: '10px'
+      marginRight: '10px',
     };
   
     const timeStyle = {
       color: 'gray',
-      marginLeft: '10px'
+      marginLeft: '10px',
     };
   
     return users.map((user) => {
-      const profilePicture = user.id.profile_picture || '/profilepic.jpg'; // Set to static picture when profile_picture is null      
-      const messageDate = new Date(user.id.message_created);
-      const currentDate = new Date();
-      const timeDiff = currentDate - messageDate;
+      const profilePicture = user.id.profile_picture || '/profilepic.jpg'; // Set to static picture when profile_picture is null
   
       let messageDateDisplay;
-      if (timeDiff < 24 * 60 * 60 * 1000) {
-        messageDateDisplay = ' Less than a day';
-      } else if (timeDiff < 7 * 24 * 60 * 60 * 1000) {
-        const daysAgo = Math.floor(timeDiff / (24 * 60 * 60 * 1000));
-        messageDateDisplay = ` ${daysAgo} day${daysAgo !== 1 ? 's' : ''} ago`;
-      } else if (timeDiff < 30 * 24 * 60 * 60 * 1000) {
-        const weeksAgo = Math.floor(timeDiff / (7 * 24 * 60 * 60 * 1000));
-        messageDateDisplay = ` ${weeksAgo} week${weeksAgo !== 1 ? 's' : ''} ago`;
-      } else if (timeDiff < 365 * 24 * 60 * 60 * 1000) {
-        const monthsAgo = Math.floor(timeDiff / (30 * 24 * 60 * 60 * 1000));
-        messageDateDisplay = ` ${monthsAgo} month${monthsAgo !== 1 ? 's' : ''} ago`;
+  
+      if (user.id.message_created === null) {
+        messageDateDisplay = null;
       } else {
-        const yearsAgo = Math.floor(timeDiff / (365 * 24 * 60 * 60 * 1000));
-        messageDateDisplay = ` ${yearsAgo} year${yearsAgo !== 1 ? 's' : ''} ago`;
+        const messageDate = new Date(user.id.message_created);
+        const currentDate = new Date();
+        const timeDiff = currentDate - messageDate;
+  
+        // Format the time difference based on different time ranges
+        if (timeDiff < 24 * 60 * 60 * 1000) {
+          messageDateDisplay = '  Less than a day';
+        } else if (timeDiff < 7 * 24 * 60 * 60 * 1000) {
+          const daysAgo = Math.floor(timeDiff / (24 * 60 * 60 * 1000));
+          messageDateDisplay = `  ${daysAgo} day${daysAgo !== 1 ? 's' : ''} ago`;
+        } else if (timeDiff < 30 * 24 * 60 * 60 * 1000) {
+          const weeksAgo = Math.floor(timeDiff / (7 * 24 * 60 * 60 * 1000));
+          messageDateDisplay = `  ${weeksAgo} week${weeksAgo !== 1 ? 's' : ''} ago`;
+        } else if (timeDiff < 365 * 24 * 60 * 60 * 1000) {
+          const monthsAgo = Math.floor(timeDiff / (30 * 24 * 60 * 60 * 1000));
+          messageDateDisplay = `  ${monthsAgo} month${monthsAgo !== 1 ? 's' : ''} ago`;
+        } else {
+          const yearsAgo = Math.floor(timeDiff / (365 * 24 * 60 * 60 * 1000));
+          messageDateDisplay = `  ${yearsAgo} year${yearsAgo !== 1 ? 's' : ''} ago`;
+        }
       }
   
       return (
@@ -158,11 +165,22 @@ const MessagePage = () => {
             margin: '5px',
             display: 'flex',
             alignItems: 'center',
-            width: '400px', 
-            borderRadius: '10px', 
+            width: '90%', // Use percentage width for responsiveness
+            borderRadius: '10px',
+            transition: 'background 0.3s', // Add smooth transition to background color change
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.background = '#f0f0f0'; // Change background color on hover
+            e.currentTarget.style.border = '2px solid #3498db'; // Add border on hover
+            e.currentTarget.style.boxShadow = '0 0 5px rgba(0, 0, 0, 0.1)'; // Add box shadow on hover
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.background = 'white'; // Revert to original background color on mouse out
+            e.currentTarget.style.border = 'none'; // Remove border on mouse out
+            e.currentTarget.style.boxShadow = 'none'; // Remove box shadow on mouse out
           }}
         >
-          <div style={{ marginRight: '20px', flex: '0 0 70px' }}>
+          <div style={{ marginRight: '5%', flex: '0 0 20%' }}>
             <img
               src={profilePicture}
               alt="Profile"
@@ -180,18 +198,21 @@ const MessagePage = () => {
                 {user.id.name}
               </div>
               <div>&#8226;</div>
-              <div style={{ color: 'grey', display: 'flex', alignItems: 'center', margin: '3px' }}>
-                •{messageDateDisplay}
-              </div>
+              {messageDateDisplay !== null && (
+                <div
+                  style={{ color: 'grey', display: 'flex', alignItems: 'center', margin: '3px' }}
+                >
+                  •{messageDateDisplay}
+                </div>
+              )}
             </div>
-            <div style={{ color: 'grey', margin: '3px' }}>
-              {user.id.message_content}
-            </div>
+            <div style={{ color: 'grey', margin: '3px' }}>{user.id.message_content}</div>
           </div>
         </Button>
-      );          
+      );    
     });
   };
+  
   
   
   const renderClientList = () => {
@@ -256,10 +277,9 @@ const MessagePage = () => {
 
   const renderMessages = () => {
     let currentDate = null;
-
-
+  
     return selectedUserMessages.map((message, index) => {
-      const isCurrentUser = message.sender_id === user.user_id;
+      const isCurrentUser = message.sender_id === user.user_id; // Check if the sender_id matches the current user's user_id
       const messageDate = new Date(message.created);
       const formattedDate = messageDate.toLocaleDateString(user.timezone, {
         weekday: 'long',
@@ -267,22 +287,19 @@ const MessagePage = () => {
         month: 'long',
         day: 'numeric',
       });
-
-
+  
       let displayDate = null;
-
-
+  
       // Display date for the first message and when the day changes
       if (index === 0 || currentDate !== formattedDate) {
         displayDate = (
-          <div style={{backgroundColor:'beige', textAlign: 'center', margin: '10px' }}>
+          <div style={{ backgroundColor: 'beige', textAlign: 'center', margin: '10px' }}>
             {formattedDate}
           </div>
         );
         currentDate = formattedDate;
       }
-
-
+  
       return (
         <React.Fragment key={message.message_id}>
           {displayDate}
@@ -290,12 +307,12 @@ const MessagePage = () => {
             style={{
               display: 'flex',
               flexDirection: 'row',
-              justifyContent: isCurrentUser ? 'flex-end' : 'flex-start',
+              justifyContent: user.user_id === message.sender_id ? 'flex-end' : 'flex-start',
             }}
           >
             <div
               style={{
-                backgroundColor: isCurrentUser ? 'green' : 'blue',
+                backgroundColor: user.user_id === message.sender_id ? 'green' : 'blue',
                 color: 'white',
                 borderRadius: '10px',
                 padding: '8px',
@@ -317,6 +334,7 @@ const MessagePage = () => {
       );
     });
   };
+  
   const handleNewMessageSubmit = async (e) => {
     e.preventDefault();
   
