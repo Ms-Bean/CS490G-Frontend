@@ -154,10 +154,8 @@ const CoachDashboard = () => {
   }, []);
 
   useEffect(() => {
-    if (client_id) {
-      fetchClientDashboardInfo();
-      fetchTargetWeight();
-    }
+    fetchClientDashboardInfo();
+    fetchTargetWeight();
     const hash = location.hash.replace("#", "");
     if (hash) setCurrentTab(hash);
   }, [client_id, location.hash]);
