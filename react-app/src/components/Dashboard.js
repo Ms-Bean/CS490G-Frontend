@@ -16,7 +16,7 @@ const CoachDashboard = () => {
   const urlParams = new URLSearchParams(location.search);
   const client_id = urlParams.get("client_id");
   const [userRole, setUserRole] = useState("");
-  const [currentTab, setCurrentTab] = useState("weeklyView");
+  const [currentTab, setCurrentTab] = useState("");
   const [showPermissionAlert, setShowPermissionAlert] = useState(false);
   const [targetWeight, setTargetWeight] = useState(null);
   const [moodData, setMoodData] = useState({
@@ -29,8 +29,6 @@ const CoachDashboard = () => {
       },
     ],
   });
-
-  console.log("client_id", client_id);
 
   const [exerciseData, setExerciseData] = useState([]);
   const [chart_data, set_chart_data] = useState({
@@ -52,7 +50,6 @@ const CoachDashboard = () => {
 
       if (!response.ok) throw new Error("Failed to fetch target weight");
       const data = await response.json();
-      console.log("targetweight", data);
       setTargetWeight(data.target_weight);
     } catch (error) {
       console.error("Error fetching target weight:", error);
@@ -148,6 +145,7 @@ const CoachDashboard = () => {
         if (!response.ok) throw new Error("Failed to fetch user role");
         const data = await response.json();
         setUserRole(data.message);
+        setCurrentTab(data.message === "coach" ? "coachClientDashboard" : "weeklyView");
       } catch (error) {
         console.error("Error fetching user role:", error);
       }
@@ -158,7 +156,6 @@ const CoachDashboard = () => {
   useEffect(() => {
     if (client_id) {
       fetchClientDashboardInfo();
-      console.log("fetched client dashboard info");
       fetchTargetWeight();
     }
     const hash = location.hash.replace("#", "");
@@ -419,7 +416,7 @@ const CoachDashboard = () => {
         return (
           <>
             <p>
-              <h2>This Week</h2>
+              <h2>This Week: username</h2>
             </p>
             <Row>
               {[...Array(5)].map((_, i) => (
@@ -434,7 +431,7 @@ const CoachDashboard = () => {
         return (
           <>
             <p>
-              <h2>Statistics</h2>
+              <h2>Statistics: username</h2>
             </p>
             <Tabs defaultActiveKey="calories" id="chart-tabs" className="mb-3" justify>
               <Tab eventKey="calories" title="Calories">
