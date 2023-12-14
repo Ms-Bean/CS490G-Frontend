@@ -4,7 +4,8 @@ import { Card, Col, Button, ButtonGroup } from "react-bootstrap";
 import ViewCoachProfile from "./ViewCoachProfile";
 
 const CoachCard = ({ coach }) => {
-
+  const [isHovered, setIsHovered] = useState(false);
+  
   return (
     <Col md={3} className="mb-4">
       <Card

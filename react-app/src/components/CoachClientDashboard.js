@@ -3,6 +3,7 @@ import { Button, ButtonGroup, Table, Container, Dropdown, Image, DropdownButton,
 import { useNavigate } from "react-router-dom";
 import NewWorkoutPlan from "./WorkoutPlan/NewWorkoutPlan";
 import { config } from "./../utils/config";
+import AcceptDenyClients from "./AcceptDenyClients";
 
 const CoachClientDashboard = () => {
   const navigate = useNavigate();
@@ -114,7 +115,7 @@ const CoachClientDashboard = () => {
         <Modal.Title>Incoming Requests</Modal.Title>
         </Modal.Header>
           <Modal.Body>
-            Client Request Table goes here.
+            <AcceptDenyClients/>
             </Modal.Body>
       </Modal>
       <table className="table responsive">
