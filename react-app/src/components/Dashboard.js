@@ -41,11 +41,13 @@ const CoachDashboard = () => {
 
   const fetchTargetWeight = async () => {
     try {
-      const response = await fetch(`${config.backendUrl}/get_client_target_weight/${client_id}`, {
+      const url = client_id
+        ? `${config.backendUrl}/get_client_target_weight/${client_id}`
+        : `${config.backendUrl}/get_client_target_weight`;
+
+      const response = await fetch(url, {
         credentials: "include",
-        headers: {
-          client_id: client_id,
-        },
+        // headers are no longer necessary as client_id is either in the URL or taken from session
       });
 
       if (!response.ok) throw new Error("Failed to fetch target weight");
@@ -154,10 +156,8 @@ const CoachDashboard = () => {
   }, []);
 
   useEffect(() => {
-    if (client_id) {
-      fetchClientDashboardInfo();
-      fetchTargetWeight();
-    }
+    fetchClientDashboardInfo();
+    fetchTargetWeight();
     const hash = location.hash.replace("#", "");
     if (hash) setCurrentTab(hash);
   }, [client_id, location.hash]);
@@ -416,7 +416,7 @@ const CoachDashboard = () => {
         return (
           <>
             <p>
-              <h2>This Week: username</h2>
+              <strong>This Week: username</strong>
             </p>
             <Row>
               {[...Array(5)].map((_, i) => (
@@ -431,7 +431,7 @@ const CoachDashboard = () => {
         return (
           <>
             <p>
-              <h2>Statistics: username</h2>
+            <strong>Statistics: username</strong>
             </p>
             <Tabs defaultActiveKey="calories" id="chart-tabs" className="mb-3" justify>
               <Tab eventKey="calories" title="Calories">
