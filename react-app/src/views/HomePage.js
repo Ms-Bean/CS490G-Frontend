@@ -47,29 +47,31 @@ const HomePage = () => {
         <div style={{ zIndex: 1 }}>
           <h1>Welcome to Moxi Fitness</h1>
           <p>Transform your life with personalized training and real results.</p>
-          <Button className="bg-light text-dark" href="/registration">
+          <Button variant="light" href="/registration">
             <strong>Join Now</strong>
           </Button>
         </div>
       </div>
 
-      <Container className="my-5">
-        <Row className="align-items-center">
-          <Col lg={6} className="mb-3 mb-lg-0">
-            <img src="/static_images/hp_small.png" alt="Gym Interior" className="w-100 rounded" />
-          </Col>
-          <Col lg={6}>
-            <h2>Advanced Fitness Tracking</h2>
-            <p>
-              Our app provides comprehensive fitness tracking to monitor your progress, set goals, and keep you motivated on your fitness
-              journey.
-            </p>
-          </Col>
-        </Row>
-      </Container>
+      <div className="bg-light py-5">
+        <Container>
+          <Row className="align-items-center">
+            <Col lg={6} className="mb-3 mb-lg-0">
+              <img src="/static_images/hp_small.png" alt="Gym Interior" className="w-100 rounded" />
+            </Col>
+            <Col lg={6}>
+              <h2>Advanced Fitness Tracking</h2>
+              <p>
+                Our app provides comprehensive fitness tracking to monitor your progress, set goals, and keep you motivated on your fitness
+                journey.
+              </p>
+            </Col>
+          </Row>
+        </Container>
+      </div>
 
-      <Container>
-        <Row className="mb-4 pt-3 text-center">
+      <Container className="my-5">
+        <Row className="mb-4 text-center">
           <Col>
             <h2>Meet Our Trainers</h2>
           </Col>

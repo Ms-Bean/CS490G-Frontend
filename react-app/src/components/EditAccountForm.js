@@ -219,7 +219,7 @@ const EditAccountForm = () => {
           </div>
         </div>
       </form>
-      <div className="col-md-7 mt-3 mx-auto d-flex justify-content-center">
+      <div className="col-md-7 mt-3 mb-4 mx-auto d-flex justify-content-center">
         <button disabled={editing} className="btn btn-danger">
           Delete Account
         </button>
