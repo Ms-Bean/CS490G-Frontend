@@ -30,14 +30,14 @@ const AccountPage = () => {
             <div className='container col-md-5 mt-2'>
                 <div className='row'>
                     <div className='col-12'>
-                        {activeTab === 0 && (
-                            <>
+                        {/* {activeTab === 0 && (
+                            <> */}
                                 <h1 className='text-center'>Account Details</h1>
                                 <EditAccountForm />
-                            </>
+                            {/* </>
                         )}
-                        {activeTab === 1 && <h1 className='text-center'>Billing</h1>}
-                        {activeTab === 2 && <h1 className='text-center'>Password</h1>}
+                        {activeTab === 0 && <h1 className='text-center'>Billing</h1>}
+                        {activeTab === 0 && <h1 className='text-center'>Password</h1>} */}
                     </div>
                 </div>
             </div>

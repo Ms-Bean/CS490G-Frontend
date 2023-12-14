@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { config } from "./../utils/config";
 import { Card, Row, Col, Container, Alert, Tab, Tabs } from "react-bootstrap";
@@ -10,14 +11,14 @@ import Chart from "chart.js/auto";
 import DailySurveyForm from "./../views/DailySurvey";
 import CoachClientDashboard from "./CoachClientDashboard";
 
-const queryString = window.location.search;
-const urlParams = new URLSearchParams(queryString);
-let client_id = urlParams.get("client_id");
-
 const CoachDashboard = () => {
-  const [userRole, setUserRole] = useState('');
-  const [currentTab, setCurrentTab] = useState("weeklyView");
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
+  const client_id = urlParams.get("client_id");
+  const [userRole, setUserRole] = useState("");
+  const [currentTab, setCurrentTab] = useState("");
   const [showPermissionAlert, setShowPermissionAlert] = useState(false);
+  const [targetWeight, setTargetWeight] = useState(null);
   const [moodData, setMoodData] = useState({
     labels: [],
     datasets: [
@@ -29,8 +30,6 @@ const CoachDashboard = () => {
     ],
   });
 
-  console.log(client_id);
-
   const [exerciseData, setExerciseData] = useState([]);
   const [chart_data, set_chart_data] = useState({
     x: [],
@@ -39,6 +38,102 @@ const CoachDashboard = () => {
     water_intake_y: [],
     weight_y: [],
   });
+
+  const fetchTargetWeight = async () => {
+    try {
+      const response = await fetch(`${config.backendUrl}/get_client_target_weight/${client_id}`, {
+        credentials: "include",
+        headers: {
+          client_id: client_id,
+        },
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch target weight");
+      const data = await response.json();
+      setTargetWeight(data.target_weight);
+    } catch (error) {
+      console.error("Error fetching target weight:", error);
+    }
+  };
+
+  const fetchClientDashboardInfo = async () => {
+    try {
+      const response = await fetch(`${config.backendUrl}/get_client_dashboard_info`, {
+        credentials: "include",
+        headers: {
+          client_id: client_id,
+        },
+      });
+      if (!response.ok) throw new Error("Failed to fetch client dashboard info");
+      const data = await response.json();
+
+      if (data.message) {
+        setShowPermissionAlert(true); // Show alert if there's an issue with permissions
+        return;
+      }
+
+      // Process and set the data for daily surveys
+      let daily_survey_x = [];
+      let calories_burned_y = [];
+      let calories_consumed_y = [];
+      let water_intake_y = [];
+      let weight_y = [];
+
+      for (let i = 0; i < data.daily_surveys.length; i++) {
+        daily_survey_x.push(data.daily_surveys[i].date.slice(0, 10));
+        calories_burned_y.push(data.daily_surveys[i].calories_burned);
+        water_intake_y.push(data.daily_surveys[i].water_intake);
+        calories_consumed_y.push(data.daily_surveys[i].calories_consumed);
+        weight_y.push(data.daily_surveys[i].weight);
+
+        if (i < data.daily_surveys.length - 1) {
+          let nextdate = new Date(data.daily_surveys[i + 1].date.slice(0, 10) + "T00:00:00");
+          let currdate = new Date(data.daily_surveys[i].date.slice(0, 10) + "T00:00:00");
+          for (
+            currdate.setDate(currdate.getDate() + 1);
+            currdate.getDate() < nextdate.getDate();
+            currdate.setDate(currdate.getDate() + 1)
+          ) {
+            daily_survey_x.push(currdate.toISOString().split("T")[0]);
+            calories_burned_y.push(undefined);
+            calories_consumed_y.push(undefined);
+            water_intake_y.push(undefined);
+            weight_y.push(undefined);
+          }
+        }
+      }
+
+      set_chart_data({
+        x: daily_survey_x,
+        calories_burned_y: calories_burned_y,
+        calories_consumed_y: calories_consumed_y,
+        water_intake_y: water_intake_y,
+        weight_y: weight_y,
+      });
+
+      // Process and set data for mood
+      const moodCounts = data.daily_surveys.reduce((acc, survey) => {
+        acc[survey.mood] = (acc[survey.mood] || 0) + 1;
+        return acc;
+      }, {});
+
+      setMoodData({
+        labels: Object.keys(moodCounts),
+        datasets: [
+          {
+            data: Object.values(moodCounts),
+            backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+            hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+          },
+        ],
+      });
+
+      // Set exercise data
+      setExerciseData(data.days);
+    } catch (error) {
+      console.error("Error fetching client dashboard info:", error);
+    }
+  };
 
   useEffect(() => {
     const fetchUserRole = async () => {
@@ -50,84 +145,22 @@ const CoachDashboard = () => {
         if (!response.ok) throw new Error("Failed to fetch user role");
         const data = await response.json();
         setUserRole(data.message);
+        setCurrentTab(data.message === "coach" ? "coachClientDashboard" : "weeklyView");
       } catch (error) {
-        console.error('Error fetching user role:', error);
+        console.error("Error fetching user role:", error);
       }
     };
     fetchUserRole();
   }, []);
 
   useEffect(() => {
-    fetch(`${config.backendUrl}/get_client_dashboard_info`, {
-      credentials: "include",
-      headers: {
-        client_id: client_id,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.message) {
-          setShowPermissionAlert(true); // Show alert instead of changing innerHTML
-          return;
-        }
-
-        let daily_survey_x = [];
-        let calories_burned_y = [];
-        let calories_consumed_y = [];
-        let water_intake_y = [];
-        let weight_y = [];
-
-        for (let i = 0; i < data.daily_surveys.length; i++) {
-          daily_survey_x.push(data.daily_surveys[i].date.slice(0, 10));
-          calories_burned_y.push(data.daily_surveys[i].calories_burned);
-          water_intake_y.push(data.daily_surveys[i].water_intake);
-          calories_consumed_y.push(data.daily_surveys[i].calories_consumed);
-          weight_y.push(data.daily_surveys[i].weight);
-
-          if (i < data.daily_surveys.length - 1) {
-            let nextdate = new Date(data.daily_surveys[i + 1].date.slice(0, 10) + "T00:00:00");
-            let currdate = new Date(data.daily_surveys[i].date.slice(0, 10) + "T00:00:00");
-            for (
-              currdate.setDate(currdate.getDate() + 1);
-              currdate.getDate() < nextdate.getDate();
-              currdate.setDate(currdate.getDate() + 1)
-            ) {
-              daily_survey_x.push(currdate.toISOString().split("T")[0]);
-              calories_burned_y.push(undefined);
-              calories_consumed_y.push(undefined);
-              water_intake_y.push(undefined);
-              weight_y.push(undefined);
-            }
-          }
-        }
-
-        set_chart_data({
-          x: daily_survey_x,
-          calories_burned_y: calories_burned_y,
-          calories_consumed_y: calories_consumed_y,
-          water_intake_y: water_intake_y,
-          weight_y: weight_y,
-        });
-
-        const moodCounts = data.daily_surveys.reduce((acc, survey) => {
-          acc[survey.mood] = (acc[survey.mood] || 0) + 1;
-          return acc;
-        }, {});
-
-        setMoodData({
-          labels: Object.keys(moodCounts),
-          datasets: [
-            {
-              data: Object.values(moodCounts),
-              backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
-              hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
-            },
-          ],
-        });
-
-        setExerciseData(data.days);
-      });
-  }, [client_id]);
+    if (client_id) {
+      fetchClientDashboardInfo();
+      fetchTargetWeight();
+    }
+    const hash = location.hash.replace("#", "");
+    if (hash) setCurrentTab(hash);
+  }, [client_id, location.hash]);
 
   const formatDateLabels = (dateString) => {
     const date = new Date(dateString);
@@ -179,7 +212,7 @@ const CoachDashboard = () => {
     );
   };
 
-  const renderLineChart = (label, data, color, chartTitle, yAxisTitle) => (
+  const renderLineChart = (label, data, color, chartTitle, yAxisTitle, targetWeight) => (
     <Line
       className="mx-3"
       data={{
@@ -192,6 +225,64 @@ const CoachDashboard = () => {
             borderWidth: 4,
             backgroundColor: color,
             borderColor: color,
+          },
+        ],
+      }}
+      options={{
+        animation: false,
+        plugins: {
+          title: {
+            display: true,
+            text: chartTitle,
+            font: {
+              size: 18,
+            },
+          },
+          legend: {
+            position: "top",
+          },
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: "Date",
+            },
+          },
+          y: {
+            beginAtZero: false,
+            title: {
+              display: true,
+              text: yAxisTitle,
+            },
+          },
+        },
+      }}
+    />
+  );
+
+  const renderWeightChart = (label, data, color, chartTitle, yAxisTitle, targetWeight) => (
+    <Line
+      className="mx-3"
+      data={{
+        labels: chart_data.x.map((date) => formatDateLabels(date)),
+        datasets: [
+          {
+            label,
+            data,
+            fill: false,
+            borderWidth: 4,
+            backgroundColor: color,
+            borderColor: color,
+          },
+          {
+            label: "Target Weight",
+            data: chart_data.x.map(() => targetWeight), // Create an array with the same length as the x-axis, filled with the target weight value
+            fill: false,
+            borderWidth: 2,
+            borderDash: [10, 5],
+            borderColor: "orange",
+            pointRadius: 0,
           },
         ],
       }}
@@ -295,7 +386,29 @@ const CoachDashboard = () => {
     );
   };
 
-  const renderMoodPieChart = () => <Pie data={moodData} />;
+  const renderMoodPieChart = () => (
+    <Container fluid>
+      <Row className="justify-content-md-center">
+        <Col xs={12} md={6} lg={4}>
+          <div style={{ position: "relative", height: "60vh", width: "80vw" }}>
+            <Pie
+              data={moodData}
+              options={{
+                animation: {
+                  duration: 0,
+                },
+                plugins: {
+                  legend: {
+                    position: "right",
+                  },
+                },
+              }}
+            />
+          </div>
+        </Col>
+      </Row>
+    </Container>
+  );
 
   const renderTabContent = () => {
     switch (currentTab) {
@@ -303,7 +416,7 @@ const CoachDashboard = () => {
         return (
           <>
             <p>
-              <h2>This Week</h2>
+              <h2>This Week: username</h2>
             </p>
             <Row>
               {[...Array(5)].map((_, i) => (
@@ -318,7 +431,7 @@ const CoachDashboard = () => {
         return (
           <>
             <p>
-              <h2>Statistics</h2>
+              <h2>Statistics: username</h2>
             </p>
             <Tabs defaultActiveKey="calories" id="chart-tabs" className="mb-3" justify>
               <Tab eventKey="calories" title="Calories">
@@ -331,7 +444,7 @@ const CoachDashboard = () => {
                 {renderLineChart("Water Intake (Liters)", chart_data.water_intake_y, "blue", "Daily Water Intake", "Liters")}
               </Tab>
               <Tab eventKey="weight" title="Weight">
-                {renderLineChart("Weight", chart_data.weight_y, "purple", "Weight", "Pounds")}
+                {renderWeightChart("Weight", chart_data.weight_y, "purple", "Weight", "Pounds", targetWeight)}
               </Tab>
               <Tab eventKey="moodPieChart" title="Mood Pie Chart">
                 {renderMoodPieChart()}
@@ -341,8 +454,8 @@ const CoachDashboard = () => {
         );
       case "dailySurvey":
         return <DailySurveyForm />;
-        case "coachClientDashboard":
-          return <CoachClientDashboard />;
+      case "coachClientDashboard":
+        return <CoachClientDashboard />;
       default:
         return null;
     }
@@ -350,8 +463,7 @@ const CoachDashboard = () => {
 
   return (
     <>
-      <DashboardNavbar onTabSelect={setCurrentTab} isDisabled={showPermissionAlert} currentTab={currentTab}
-        userRole={userRole}  />
+      <DashboardNavbar onTabSelect={setCurrentTab} isDisabled={showPermissionAlert} currentTab={currentTab} userRole={userRole} />
       <Container className="my-3">
         {showPermissionAlert && (
           <Alert variant="danger" onClose={() => setShowPermissionAlert(false)} dismissible>

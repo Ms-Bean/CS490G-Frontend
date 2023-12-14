@@ -91,7 +91,7 @@ function WorkoutPlanInfo({ workoutPlanName, workoutPlanId, show, handleClose }) 
                     <th>Exercise Name</th>
                     <th>Time</th>
                     <th>Day</th>
-                    <th>Reps x Sets</th>
+                    <th>Sets x Reps</th>
                     <th>Weight</th>
                   </tr>
                 </thead>
@@ -101,7 +101,7 @@ function WorkoutPlanInfo({ workoutPlanName, workoutPlanId, show, handleClose }) 
                       <td>{e.exercise.name || ""}</td>
                       <td>{e.time ? convertTimeAMPM(e.time) : ""}</td>
                       <td>{e.weekday ? e.weekday.charAt(0).toUpperCase() + e.weekday.slice(1) : ""}</td>
-                      <td>{e.reps_per_set && e.num_sets ? `${e.reps_per_set}x${e.num_sets}` : ""}</td>
+                      <td>{e.num_sets && e.reps_per_set ? `${e.num_sets}x${e.reps_per_set}` : ""}</td>
                       <td>{e.weight ? `${e.weight} lbs` : ""}</td>
                     </tr>
                   ))}

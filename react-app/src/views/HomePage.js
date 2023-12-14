@@ -1,70 +1,111 @@
 import React from "react";
-import { Container, Card, CardGroup } from "react-bootstrap";
-import CarouselComp from "../components/CarouselComp";
+import { Container, Row, Col, Card, Button, Navbar, Nav } from "react-bootstrap";
 import "../css/HomePage.css";
+import "../css/ExerciseBank.css";
+
+const trainers = [
+  {
+    name: "Jake Opitz",
+    description: "Specialist in strength training and nutrition.",
+    image: "/static_images/trainer_1.png",
+  },
+  {
+    name: "Marc Edwards",
+    description: "Expert in cardio fitness and endurance.",
+    image: "/static_images/trainer_2.png",
+  },
+  {
+    name: "Priya Singh",
+    description: "Holistic fitness coach with a focus on wellness.",
+    image: "/static_images/trainer_3.png",
+  },
+];
 
 const HomePage = () => {
   return (
-    <div>
-      <CarouselComp />
-      <div className="trainers-section">
-        <h2 className="section-title">Work with the Best Trainers</h2>
-        <div className="trainers-container">
-          <img src="hpp1.webp" alt="Trainer 1" className="trainer-image" />
-          <img src="hpp2.webp" alt="Trainer 2" className="trainer-image" />
-          <img src="hpp3.webp" alt="Trainer 3" className="trainer-image" />
-          <img src="hpp4.webp" alt="Trainer 4" className="trainer-image" />
-          <img src="hpp5.webp" alt="Trainer 5" className="trainer-image" />
-          <img src="hpp6.webp" alt="Trainer 6" className="trainer-image" />
+    <>
+      <div
+        className="hero-section position-relative text-white text-center d-flex align-items-center justify-content-center"
+        style={{ height: "60vh" }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            backgroundImage: 'url("/static_images/hp_hero.webp")',
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            zIndex: -1,
+            filter: "brightness(50%)",
+          }}
+        ></div>
+
+        <div style={{ zIndex: 1 }}>
+          <h1>Welcome to Moxi Fitness</h1>
+          <p>Transform your life with personalized training and real results.</p>
+          <Button variant="light" href="/registration">
+            <strong>Join Now</strong>
+          </Button>
         </div>
       </div>
-      <Container>
-        <CardGroup className="py-5">
-          <Card>
-            <Card.Img variant="top" src="/static_images/barbell.jpg" />
-            <Card.Body>
-              <Card.Title>Personal Workout Plans</Card.Title>
-              <Card.Text>
-                Try one of our workout plans designed by professional trainers or create a plan precisely tailored to your needs.
-              </Card.Text>
-            </Card.Body>
-          </Card>
-          <Card>
-            <Card.Img variant="top" src="/static_images/coach_whistle.jpg" />
-            <Card.Body>
-              <Card.Title>Dedicated Coaches</Card.Title>
-              <Card.Text>
-                You don't have to do it alone! The path to your goal isn't necessarily straightforward so allow us to guide you there.{" "}
-                <a href="/registration">Book an appointment today</a> with a coach near you!
-              </Card.Text>
-            </Card.Body>
-          </Card>
-          <Card>
-            <Card.Img variant="top" src="/static_images/linegraph.jpg" />
-            <Card.Body>
-              <Card.Title>Track Progress</Card.Title>
-              <Card.Text>Easily track your progress and reach your milestones right from the in-app dashboard!</Card.Text>
-            </Card.Body>
-          </Card>
-        </CardGroup>
-        <Card>
-          <Card.Body>
-            <Card.Title>Become a Coach!</Card.Title>
-            <Card.Text>
-              Moxi provides trainers with an efficient and sophisticated way to manage appointments, bill clients, and track client progress.
-              <br />
-              <br />
-              <b>The conditioning does not stop with appointments!</b> Moxi allows coaches to assign workout plans to their clients and
-              communicate with them along the way. This builds trust, retention, and better habits while coaches are not physically with
-              their clients. Because of this, trainers saw consistent progress amongst their clientele when they switched to Moxi. <br />
-              <br />
-              Do you have what it takes to be a Moxi trainer? <a href="/registration">Become a coach today!</a>
-            </Card.Text>
-          </Card.Body>
-        </Card>
+
+      <div className="bg-light py-5">
+        <Container>
+          <Row className="align-items-center">
+            <Col lg={6} className="mb-3 mb-lg-0">
+              <img src="/static_images/hp_small.png" alt="Gym Interior" className="w-100 rounded" />
+            </Col>
+            <Col lg={6}>
+              <h2>Advanced Fitness Tracking</h2>
+              <p>
+                Our app provides comprehensive fitness tracking to monitor your progress, set goals, and keep you motivated on your fitness
+                journey.
+              </p>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+
+      <Container className="my-5">
+        <Row className="mb-4 text-center">
+          <Col>
+            <h2>Meet Our Trainers</h2>
+          </Col>
+        </Row>
+        <Row>
+          {trainers.map((trainer, index) => (
+            <Col md={4} key={index}>
+              <Card className="mb-4">
+                <Card.Img variant="top" src={trainer.image} />
+                <Card.Body>
+                  <Card.Title>{trainer.name}</Card.Title>
+                  <Card.Text>{trainer.description}</Card.Text>
+                  <Button variant="outline-secondary" className="w-100">
+                    View Profile
+                  </Button>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
       </Container>
-      <p />
-    </div>
+
+      <div className="bg-secondary py-5">
+        <Container className="text-center text-light">
+          <Row>
+            <Col>
+              <h2>Join Our Community</h2>
+              <p>Sign up for our newsletter to get the latest updates and offers.</p>
+              <Button variant="dark">Subscribe</Button>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+    </>
   );
 };
 
