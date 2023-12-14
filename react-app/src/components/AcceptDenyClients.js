@@ -1,6 +1,5 @@
 import {useState, useEffect} from 'react'
-import { Button, Table, Container, Dropdown, Image, DropdownButton, Row, Col, Modal } from "react-bootstrap";
-import { useAuth } from '../hooks/useAuth';
+import { Button, Table, Modal, Alert } from "react-bootstrap";
 import { config } from "./../utils/config";
 
 
@@ -8,8 +7,8 @@ const AcceptDenyClients = () => {
   const [show, setShow] = useState();
   const [requests, setRequests] = useState([]);
   const [activeClient, setActiveClient] = useState([]);
+  const [showAlert, setShowAlert] = useState(false);
   
-  const {user} = useAuth();
 
   const url =`${config.backendUrl}/requested_clients`
 
@@ -53,6 +52,9 @@ const acceptClient = async (id) =>{
     if (!response.ok) {
       throw new Error(`Failed to accept client. Status: ${response.status}`)
     }
+    else{
+      setShowAlert(true);
+    }
   } catch (err){
     console.log(err);
   }
@@ -65,11 +67,12 @@ const confirmAccept = (request)=>{
 }
 useEffect (()=> {
   getData();
-  //getProfInfo(1006);
+  //getProfInfo();
 },[show])
 
   return (
     <div>
+      <Alert variant="success" show={showAlert}>Hooray! You are now {activeClient.name}'s coach!</Alert>
       <Table responsive hover>
         <thead>
           <tr>
