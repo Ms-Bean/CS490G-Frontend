@@ -264,7 +264,6 @@ const CoachDashboard = () => {
     />
   );
 
-  
   const renderWeightChart = (label, data, color, chartTitle, yAxisTitle, targetWeight) => (
     <Line
       className="mx-3"
@@ -390,7 +389,29 @@ const CoachDashboard = () => {
     );
   };
 
-  const renderMoodPieChart = () => <Pie data={moodData} />;
+  const renderMoodPieChart = () => (
+    <Container fluid>
+      <Row className="justify-content-md-center">
+        <Col xs={12} md={6} lg={4}>
+          <div style={{ position: "relative", height: "60vh", width: "80vw" }}>
+            <Pie
+              data={moodData}
+              options={{
+                animation: {
+                  duration: 0,
+                },
+                plugins: {
+                  legend: {
+                    position: "right",
+                  },
+                },
+              }}
+            />
+          </div>
+        </Col>
+      </Row>
+    </Container>
+  );
 
   const renderTabContent = () => {
     switch (currentTab) {
