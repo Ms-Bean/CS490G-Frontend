@@ -2,31 +2,19 @@ import { useState } from 'react';
 import Modal from 'react-bootstrap/Modal'
 
 
-// const convertTimeAMPM = (time) => {
-//     const t = time.split(":");
-
-//     const hours = Number(t[0]);
-//     const mins = Number(t[1]);
-//     const sec = Number(t[2]);
-
-//     // calculate
-//     let timeValue;
-
-//     if (hours > 0 && hours <= 12) {
-//     timeValue= "" + hours;
-//     } else if (hours > 12) {
-//     timeValue= "" + (hours - 12);
-//     } else if (hours == 0) {
-//     timeValue= "12";
-//     }
-
-//     timeValue += (mins < 10) ? ":0" + mins : ":" + mins;  
-//     // timeValue += (sec < 10) ? ":0" + sec : ":" + sec; 
-//     timeValue += (hours >= 12) ? " P.M." : " A.M."; 
-
-//     // show
-//     return timeValue;
-// }
+const formatDateToYYYYMMDD = (inputDate) => {
+    const date = new Date(inputDate);
+    
+    // Get the year, month, and day
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(date.getDate()).padStart(2, '0');
+  
+    // Format the date as "yyyy-mm-dd"
+    const formattedDate = `${year}-${month}-${day}`;
+  
+    return formattedDate;
+  }
 
 function CoachInfo({coach}) {
 
@@ -54,15 +42,16 @@ function CoachInfo({coach}) {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <ul>
-                    <li>First Name: {coach.firstName}</li>
-                    <li>Last Name: {coach.lastName}</li>
-                    <li>Phone Number : {coach.phoneNumber}</li>
-                    <li>Email : {coach.email}</li>
-                    <li>Experience : {coach.experienceLevel}</li>
-                    <li>Hourly Rate : {coach.hourlyRate}</li>
-                    <li>Coach History : {coach.coachingHistory}</li>
-                    <li>Availability : {coach.availability}</li>
+                <ul className='list-group list-group-flush'>
+                    <li className='list-group-item lead'>First Name: {coach.firstName}</li>
+                    <li className='list-group-item lead'>Last Name: {coach.lastName}</li>
+                    <li className='list-group-item lead'>Phone Number : {coach.phoneNumber}</li>
+                    <li className='list-group-item lead'>Email : {coach.email}</li>
+                    <li className='list-group-item lead'>Experience : {coach.experienceLevel}</li>
+                    <li className='list-group-item lead'>Hourly Rate : {coach.hourlyRate}</li>
+                    <li className='list-group-item lead'>Coach History : {coach.coachingHistory}</li>
+                    <li className='list-group-item lead'>Availability : {coach.availability}</li>
+                    <li className='list-group-item lead'>Coach Request Date : {formatDateToYYYYMMDD(coach.date)}</li>
                 </ul>
             </Modal.Body>
             </Modal>

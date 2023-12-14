@@ -67,7 +67,6 @@ const ProfilePage = () => {
               <small>Sign up to be a coach! By signing up as a coach, individuals gain access to exclusive training resources, networking opportunities, and marketing support, while also enjoying benefits of being a client!</small>
           </div>
       </div>
-      // <h1>You do not have permission to view this page.</h1>
       }
     </div>
   )
