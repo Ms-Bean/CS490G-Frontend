@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Container, Card, Row, Col, Spinner, Alert, Form, Button } from "react-bootstrap";
+import { Container, Card, Row, Col, Spinner, Alert, Form, Button, Navbar } from "react-bootstrap";
 import { useAuth } from "../hooks/useAuth";
 import useInterval from "../hooks/useInterval";
-import { Image } from 'react-bootstrap';
+import { Image } from "react-bootstrap";
 import { config } from "./../utils/config";
 
 const MessagePage = () => {
@@ -17,6 +17,7 @@ const MessagePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [newMessageContent, setNewMessageContent] = useState("");
   const [selectedUserName, setSelectedUserName] = useState("");
+  const [activeUserId, setActiveUserId] = useState(null);
   const [totalMessagesCount, setTotalMessagesCount] = useState(0);
   const [userRole, setUserRole] = useState(null);
   const [SelectedPageInfo, setSelectedPageInfo] = useState({
@@ -24,11 +25,43 @@ const MessagePage = () => {
     page_size: 5,
     page_count: 1,
     has_next: false,
-    has_prev: false
+    has_prev: false,
   });
-  
 
+  const buttonStyle = {
+    background: "white",
+    margin: "5px",
+    display: "flex",
+    alignItems: "center",
+    width: "100%",
+    borderRadius: "10px",
+    border: "1px solid #eaeaea", // subtle border
+    padding: "10px", // consistent spacing
+  };
 
+  const profilePicStyle = {
+    width: "100%",
+    height: "auto",
+    maxWidth: "70px",
+    maxHeight: "70px",
+    borderRadius: "50%",
+    objectFit: "cover",
+    border: "2px solid white", // subtle border around image
+  };
+
+  const messageSectionStyle = {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    height: "100%",
+    position: "relative",
+    paddingBottom: "60px",
+  };
+
+  const messageListStyle = {
+    overflowY: "auto",
+    flexGrow: 1,
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -46,7 +79,7 @@ const MessagePage = () => {
           fetchUserMessages(UserId, selectedUserId, 1);
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error("Error fetching user data:", error);
       }
     };
 
@@ -65,7 +98,6 @@ const MessagePage = () => {
         const responseData = await response.json();
         const user_id_List = responseData.user_id_List;
         setMessages(user_id_List);
-
       } else {
         console.error("Error fetching messages list:", response.statusText);
         setError("Error fetching messages");
@@ -85,21 +117,20 @@ const MessagePage = () => {
         credentials: "include",
       });
       if (!response.ok) {
-        throw new Error('Error: ' + response.statusText);
+        throw new Error("Error: " + response.statusText);
       }
       const data = await response.json();
       return data.message;
     } catch (error) {
-      console.error('Error fetching user role:', error);
+      console.error("Error fetching user role:", error);
       throw error;
     }
   };
 
-
-  
   const handleUserClick = async (selectedUserId) => {
     const UserId = user.user_id;
     setSelectedUserId(selectedUserId);
+    setActiveUserId(selectedUserId);
     const selectedUser = messages.find((user) => user.id.id === selectedUserId);
     setSelectedUserName(selectedUser.id.name);
     setSelectedUserRole(selectedUser.role);
@@ -107,8 +138,8 @@ const MessagePage = () => {
     if (selectedUser.id.profile_picture !== null) {
       setSelectedUserPicture(selectedUser.id.profile_picture);
     } else {
-      setSelectedUserPicture('/profilepic.jpg');
-    }    
+      setSelectedUserPicture("/profilepic.jpg");
+    }
     console.log("Selected User ID:", selectedUserId);
     await fetchUserMessages(UserId, selectedUserId, currentPage);
   };
@@ -117,17 +148,17 @@ const MessagePage = () => {
     const users = messages.filter((user) => user.role === role);
   
     const nameStyle = {
-      fontWeight: 'bold',
-      marginRight: '10px',
+      fontWeight: "bold",
+      marginRight: "10px",
+      color: "black",
     };
   
     const timeStyle = {
-      color: 'gray',
-      marginLeft: '10px',
+      color: "gray",
     };
   
     return users.map((user) => {
-      const profilePicture = user.id.profile_picture || '/profilepic.jpg'; // Set to static picture when profile_picture is null
+      const profilePicture = user.id.profile_picture || '/profilepic.jpg'; // Set to a static picture when profile_picture is null
   
       let messageDateDisplay;
   
@@ -156,92 +187,70 @@ const MessagePage = () => {
         }
       }
   
+      const isSelected = user.id.id === activeUserId;
+      const dynamicButtonStyle = {
+        ...buttonStyle, // your existing styles
+        backgroundColor: isSelected ? "#e9ecef" : "white", // change color if selected
+        border: isSelected ? "1px solid #eaeaea" : "1px solid #eaeaea", // change border if selected
+      };
+  
       return (
         <Button
           key={user.id.id}
           onClick={() => handleUserClick(user.id.id)}
-          style={{
-            background: 'white',
-            margin: '5px',
-            display: 'flex',
-            alignItems: 'center',
-            width: '90%', // Use percentage width for responsiveness
-            borderRadius: '10px',
-            transition: 'background 0.3s', // Add smooth transition to background color change
-          }}
+          className="w-100"
+          style={dynamicButtonStyle}
           onMouseOver={(e) => {
             e.currentTarget.style.background = '#f0f0f0'; // Change background color on hover
             e.currentTarget.style.border = '2px solid #3498db'; // Add border on hover
             e.currentTarget.style.boxShadow = '0 0 5px rgba(0, 0, 0, 0.1)'; // Add box shadow on hover
           }}
           onMouseOut={(e) => {
-            e.currentTarget.style.background = 'white'; // Revert to original background color on mouse out
+            e.currentTarget.style.background = 'white'; // Revert to the original background color on mouse out
             e.currentTarget.style.border = 'none'; // Remove border on mouse out
             e.currentTarget.style.boxShadow = 'none'; // Remove box shadow on mouse out
           }}
         >
-          <div style={{ marginRight: '5%', flex: '0 0 20%' }}>
-            <img
-              src={profilePicture}
-              alt="Profile"
-              style={{
-                width: '100%',
-                height: '70px',
-                borderRadius: '50%',
-                objectFit: 'cover',
-              }}
-            />
+          <div style={{ marginRight: "15px", flex: "0 0 50px" }}>
+            <img src={profilePicture} alt="Profile" style={profilePicStyle} />
           </div>
-          <div style={{ flex: '1' }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <div style={{ color: 'black', display: 'flex', alignItems: 'center' }}>
-                {user.id.name}
-              </div>
-              <div>&#8226;</div>
-              {messageDateDisplay !== null && (
-                <div
-                  style={{ color: 'grey', display: 'flex', alignItems: 'center', margin: '3px' }}
-                >
-                  •{messageDateDisplay}
-                </div>
-              )}
+          <div style={{ flex: "1", display: "flex", flexDirection: "column", justifyContent: "left", textAlign: "left" }}>
+            {/* Align content to the left */}
+            <div style={nameStyle}>{user.id.name}</div>
+            <div style={{ fontSize: "0.8rem", color: "grey" }}>
+              <div>{user.id.message_content}</div>
+              <span style={timeStyle}>{messageDateDisplay}</span>
             </div>
-            <div style={{ color: 'grey', margin: '3px' }}>{user.id.message_content}</div>
           </div>
         </Button>
-      );    
+      );
     });
   };
   
-  
-  
+
   const renderClientList = () => {
     const clients = messages.filter((user) => user.role === "client");
 
     if (clients.length === 0 && userRole === "coach") {
       return (
         <Card className="text-center bg-light">
+          <Card.Header>
+            <strong>My Clients</strong>
+          </Card.Header>
           <Card.Body>
-            <Card.Title>
-              <h1>My Clients</h1>
-            </Card.Title>
-            <p>You don't have any clients</p>
+            <Card.Text>You don't have any clients yet</Card.Text>
           </Card.Body>
         </Card>
       );
     } else if (clients.length === 0 && userRole === "client") {
-      return ;
+      return;
     }
 
     return (
-      <Card className="text-center bg-light">
-        <Card.Body>
-          <Card.Title>
-            <h1>My Clients</h1>
-          </Card.Title>
-          <ul>{renderUserList("client")}</ul>
-        </Card.Body>
-      </Card>
+      <>
+        <strong>Clients</strong>
+        {renderUserList("client")}
+      </>
     );
   };
 
@@ -250,12 +259,12 @@ const MessagePage = () => {
 
     if (coaches.length === 0 && userRole === "client") {
       return (
-        <Card className="text-center bg-light">
+        <Card className="text-center">
           <Card.Body>
             <Card.Title>
-              <h1>Hired Coach</h1>
+              <h1>Hired Trainer</h1>
             </Card.Title>
-            <p>You haven't hired any coaches yet.</p>
+            You haven't hired any trainers yet.
           </Card.Body>
         </Card>
       );
@@ -264,98 +273,90 @@ const MessagePage = () => {
     }
 
     return (
-      <Card className="text-center bg-light">
-        <Card.Body>
-          <Card.Title>
-            <h1>Hired Coach</h1>
-          </Card.Title>
-          <ul>{renderUserList("coach")}</ul>
-        </Card.Body>
-      </Card>
+      <>
+        <strong>Hired Trainer</strong>
+        {renderUserList("coach")}
+      </>
     );
   };
 
   const renderMessages = () => {
     let currentDate = null;
-  
+
     return selectedUserMessages.map((message, index) => {
-      const isCurrentUser = message.sender_id === user.user_id; // Check if the sender_id matches the current user's user_id
+      const isCurrentUser = message.sender_id === user.user_id;
       const messageDate = new Date(message.created);
       const formattedDate = messageDate.toLocaleDateString(user.timezone, {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       });
-  
+
       let displayDate = null;
-  
+
       // Display date for the first message and when the day changes
       if (index === 0 || currentDate !== formattedDate) {
-        displayDate = (
-          <div style={{ backgroundColor: 'beige', textAlign: 'center', margin: '10px' }}>
-            {formattedDate}
-          </div>
-        );
+        displayDate = <div style={{ textAlign: "center", margin: "10px" }}>{formattedDate}</div>;
         currentDate = formattedDate;
       }
-  
+
       return (
         <React.Fragment key={message.message_id}>
           {displayDate}
-          <li
+          <div
             style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: user.user_id === message.sender_id ? 'flex-end' : 'flex-start',
+              display: "flex",
+              flexDirection: "column",
+              alignItems: isCurrentUser ? "flex-end" : "flex-start",
+              margin: "5px",
             }}
           >
             <div
               style={{
-                backgroundColor: user.user_id === message.sender_id ? 'green' : 'blue',
-                color: 'white',
-                borderRadius: '10px',
-                padding: '8px',
-                margin: '5px',
-                maxWidth: '70%',
+                backgroundColor: isCurrentUser ? "#0074d9" : "#d8d8d8",
+                color: isCurrentUser ? "white" : "black",
+                borderRadius: "10px",
+                padding: "8px",
+                margin: "5px",
+                maxWidth: "70%",
               }}
             >
               {message.content}
-              <br />
-              <small>
-                {messageDate.toLocaleTimeString(user.timezone, {
-                  hour: 'numeric',
-                  minute: 'numeric',
-                })}
-              </small>
             </div>
-          </li>
+            <small style={{ marginTop: "2px" }}>
+              {messageDate.toLocaleTimeString(user.timezone, {
+                hour: "numeric",
+                minute: "numeric",
+              })}
+            </small>
+          </div>
         </React.Fragment>
       );
     });
   };
-  
+
   const handleNewMessageSubmit = async (e) => {
     e.preventDefault();
-  
+
     const UserId = user.user_id;
     const recipientId = parseInt(selectedUserId, 10);
-  
-    if (!Number.isInteger(recipientId) || recipientId <= 0  ) {
+
+    if (!Number.isInteger(recipientId) || recipientId <= 0) {
       console.error("Invalid recipient id or empty message content");
       setError("Invalid recipient id or empty message content");
       return;
     }
-    if(newMessageContent.trim() === ""){
+    if (newMessageContent.trim() === "") {
       return;
     }
-  
+
     try {
       const extendedFormData = {
         recipient_id: recipientId,
         content: newMessageContent.trim(),
       };
-  
+
       const response = await fetch(`${config.backendUrl}/messages/insert`, {
         method: "POST",
         headers: {
@@ -364,11 +365,11 @@ const MessagePage = () => {
         credentials: "include",
         body: JSON.stringify(extendedFormData),
       });
-  
+
       if (response.ok) {
         setNewMessageContent("");
-        setCurrentPage(1); 
-        await fetchUserMessages(UserId, recipientId, 1); 
+        setCurrentPage(1);
+        await fetchUserMessages(UserId, recipientId, 1);
         fetchData();
       } else {
         console.error("Error sending message:", response.statusText);
@@ -379,13 +380,16 @@ const MessagePage = () => {
       setError("Error");
     }
   };
-  
+
   const fetchUserMessages = async (userId, otherUserId, page_num) => {
     try {
-      const response = await fetch(`${config.backendUrl}/messages?user_id=${userId}&other_user_id=${otherUserId}&page_size=5&page_num=${page_num}`, {
-        method: "GET",
-        credentials: "include",
-      });
+      const response = await fetch(
+        `${config.backendUrl}/messages?user_id=${userId}&other_user_id=${otherUserId}&page_size=5&page_num=${page_num}`,
+        {
+          method: "GET",
+          credentials: "include",
+        }
+      );
 
       if (response.ok) {
         const responseData = await response.json();
@@ -394,7 +398,7 @@ const MessagePage = () => {
           page_size: responseData.page_info.page_size,
           page_count: responseData.page_info.page_count,
           has_next: responseData.page_info.has_next,
-          has_prev: responseData.page_info.has_prev
+          has_prev: responseData.page_info.has_prev,
         });
         setSelectedUserMessages(responseData.messages.reverse()); // Reverse the array to show the most recent at the bottom
       } else {
@@ -407,19 +411,15 @@ const MessagePage = () => {
     }
   };
 
-  
   const handlePaginationClick = async (direction) => {
-    
-    const newPage = direction === 'next' ? currentPage + 1 : currentPage - 1;
+    const newPage = direction === "next" ? currentPage + 1 : currentPage - 1;
 
     // Logic for handling pagination
-    if (direction === 'next' && SelectedPageInfo.has_next) {
+    if (direction === "next" && SelectedPageInfo.has_next) {
       setCurrentPage((prevPage) => prevPage + 1);
-    }
-    else if (direction === 'prev' && SelectedPageInfo.has_prev) {
+    } else if (direction === "prev" && SelectedPageInfo.has_prev) {
       setCurrentPage((prevPage) => prevPage - 1);
-    }    
-    else{
+    } else {
       return;
     }
     // Fetch messages with the new page
@@ -428,38 +428,28 @@ const MessagePage = () => {
       fetchUserMessages(UserId, selectedUserId, newPage);
     }
   };
-  
 
   const renderPagination = () => {
-    const hasNextPage = selectedUserMessages.length === 5; // Adjustable page size
+    const hasNextPage = SelectedPageInfo.has_next;
   
     if (!(SelectedPageInfo.has_prev || SelectedPageInfo.has_next)) {
       return null; // Return null instead of an empty function call
     } else {
       return (
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", marginTop: "10px" }}>
           <div>
             {SelectedPageInfo.has_prev && (
-              <Button
-                variant="outline-secondary"
-                size="sm"
-                onClick={() => handlePaginationClick('prev')}
-                disabled={currentPage === 1}
-              >
-                Previous Page
+              <Button variant="outline-secondary" size="sm" onClick={() => handlePaginationClick("prev")} disabled={currentPage === 1}>
+                Newer Messages
               </Button>
             )}
             {/* Display current page and total pages */}
-            <span style={{ margin: '0 5px' }}>
+            <span style={{ margin: "0 5px" }}>
               {SelectedPageInfo.page_num} / {SelectedPageInfo.page_count}
             </span>
             {SelectedPageInfo.has_next && (
-              <Button
-                variant="outline-secondary"
-                size="sm"
-                onClick={() => handlePaginationClick('next')}
-              >
-                Next Page
+              <Button variant="outline-secondary" size="sm" onClick={() => handlePaginationClick("next")}>
+                Older Messages
               </Button>
             )}
           </div>
@@ -468,75 +458,70 @@ const MessagePage = () => {
     }
   };
   
+  
+
 
   return (
-    <Container className="mt-5">
-      <Row>
-        <Col md={5}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {renderCoachList()}
-            {renderClientList()}
-          </div>
-        </Col>
+    <>
+      <Navbar variant="dark" bg="dark" expand="lg" className="secondary-navbar">
+        <Container>
+          <Navbar.Brand href="#">Messages</Navbar.Brand>
+        </Container>
+      </Navbar>
+      <Container className="mt-4">
+        <Card className="my-3">
+          <Row>
+            <Col md={4} className="user-list-column" style={{ borderRight: "1px solid #D1D1D6", maxHeight: "80vh", overflowY: "auto" }}>
+              <div style={{ padding: "10px" }}>
+                {renderCoachList()}
+                {renderClientList()}
+              </div>
+            </Col>
   
-        <Col md={7} className="ml-auto"> {/* Use ml-auto to push the column to the right */}
-          <Card className="text-center bg-light">
-            <Card.Body>
-              <Card.Title>
-                {selectedUserId && (
-                  <>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <Image className="thumbnail-image" roundedCircle src={SelectedUserPicture} alt="Profile Picture" />
-                      <div style={{ marginLeft: '10px' }}>{selectedUserName}</div>
-                    </div>
-                    <hr style={{ margin: '10px 0' }} />
-                  </>
-                )}
-              </Card.Title>
-  
-              {loading && <Spinner animation="border" />}
-              {error && <Alert variant="danger">{error}</Alert>}
-              {!loading && !error && (
+            <Col md={8} className="message-section-column px-3 py-3">
+              {selectedUserId && (
                 <>
-                  {selectedUserId ? (
-                    <>
-                      <div>
-                        <ul style={{ listStyle: 'none', padding: 0 }}>
-                          {renderMessages()}
-                        </ul>
-                      </div>
-  
-                      <div className="pagination">
-                        {renderPagination()}
-                      </div>
-  
-                      <hr style={{ margin: '20px 0' }} />
-  
-                      <Form className="mt-3" onSubmit={handleNewMessageSubmit}>
-                        <Form.Group controlId="newMessageContent">
-                          <Form.Control
-                            type="text"
-                            placeholder="Type your message..."
-                            value={newMessageContent}
-                            onChange={(e) => setNewMessageContent(e.target.value)}
-                          />
-                        </Form.Group>
-                        <Button variant="primary" type="submit">
-                          Send Message
-                        </Button>
-                      </Form>
-                    </>
-                  ) : (
-                    <p>Select a user to view and send messages.</p>
-                  )}
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <Image className="thumbnail-image" roundedCircle src={SelectedUserPicture} alt="Profile Picture" />
+                    <div style={{ marginLeft: "10px", fontWeight: "bold", fontSize: "1.2rem" }}>{selectedUserName}</div>
+                  </div>
+                  <hr style={{ margin: "10px 0", border: "1px solid black" }} />
                 </>
               )}
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+              {loading && <Spinner animation="border" />}
+              {error && <Alert variant="danger">{error}</Alert>}
+              {!loading && !error && selectedUserId ? (
+                renderMessages()
+              ) : (
+                <div style={{ textAlign: "center", flexGrow: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <p>Select a user to message.</p>
+                </div>
+              )}
+              {selectedUserId && (
+                <Form onSubmit={handleNewMessageSubmit} className="mt-2">
+                  <Form.Group controlId="newMessageContent" className="d-flex">
+                    <Form.Control
+                      type="text"
+                      placeholder="Message..."
+                      value={newMessageContent}
+                      onChange={(e) => setNewMessageContent(e.target.value)}
+                      style={{ borderRadius: "10px", border: "1px solid #D1D1D6" }}
+                      autoComplete="off"
+                    />
+                    <Button variant="primary" type="submit" className="mx-2" style={{ borderRadius: "10px" }}>
+                      Send
+                    </Button>
+                  </Form.Group>
+                </Form>
+              )}
+              {renderPagination()} {/* Include the pagination rendering here */}
+            </Col>
+          </Row>
+        </Card>
+      </Container>
+    </>
   );
-}
+  
+};
 
 export default MessagePage;
