@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Button, Table, Container, Dropdown, Image, DropdownButton } from "react-bootstrap";
+import { Button, ButtonGroup, Table, Container, Dropdown, Image, DropdownButton, Row, Col, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import NewWorkoutPlan from "./WorkoutPlan/NewWorkoutPlan";
 import { config } from "./../utils/config";
+import AcceptDenyClients from "./AcceptDenyClients";
 
 const CoachClientDashboard = () => {
   const navigate = useNavigate();
   const [clients, setClients] = useState([]);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [show, setShow] = useState();
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const handleAnalyticsClick = (clientId) => {
     navigate(`?client_id=${clientId}#statisticsView`);
@@ -92,6 +97,27 @@ const CoachClientDashboard = () => {
   return (
     <Container>
       <h1 className="mb-4">Your Clients</h1>
+      <Row>
+        <Col xs={10}>
+        </Col>
+        <Col xs={2}>
+        <Button onClick={handleShow}>Incoming Requests</Button>
+        </Col>
+      </Row>
+      <Modal
+        size="lg"
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}
+        centered>
+        <Modal.Header closeButton>
+        <Modal.Title>Incoming Requests</Modal.Title>
+        </Modal.Header>
+          <Modal.Body>
+            <AcceptDenyClients/>
+            </Modal.Body>
+      </Modal>
       <table className="table responsive">
         <thead>
           <tr>
