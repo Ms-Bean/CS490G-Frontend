@@ -20,7 +20,7 @@ const NavComp = () => {
   };
 
   return (
-    <Navbar className="main-navbar py-0" expand="lg">
+    <Navbar className="main-navbar py-0" expand="lg" sticky="top" bg="white">
       <Container>
         <Navbar.Brand href="/" className="d-flex align-items-center">
           <Image src="/logo_moxi.png" alt="Logo" />

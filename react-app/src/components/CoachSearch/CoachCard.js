@@ -10,8 +10,8 @@ const CoachCard = ({ coach }) => {
       <Card
         className="bg-light"
         style={{ height: "15em" }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        // onMouseEnter={() => setIsHovered(true)}
+        // onMouseLeave={() => setIsHovered(false)}
       >
         {" "}
         <Card.Body>

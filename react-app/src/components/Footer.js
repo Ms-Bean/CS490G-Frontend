@@ -4,7 +4,7 @@ import { Container } from "react-bootstrap";
 const Footer = () => {
   return (
     <>
-      <div className="text-dark mt-3 pt-2" style={{ backgroundColor: "#ccd1d4" }}>
+      <div className="text-dark pt-2" style={{ backgroundColor: "#ccd1d4" }}>
         <Container className="text-center d-flex flex-column align-items-center">
           <img src="/logo_moxi.png" alt="logo" style={{ width: "40px", height: "40px" }} className="mb-3 mt-4" />
 
