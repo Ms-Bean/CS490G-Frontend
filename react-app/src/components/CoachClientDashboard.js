@@ -32,7 +32,7 @@ const CoachClientDashboard = () => {
 
         const data = await response.json();
         setClients(data);
-        console.log(data);
+        // console.log(data);
       } catch (err) {
         console.log(err);
       } finally {
