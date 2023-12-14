@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import NewWorkoutPlan from "./WorkoutPlan/NewWorkoutPlan";
 import { config } from "./../utils/config";
 
 const CoachClientDashboard = () => {
-
+  const navigate = useNavigate();
   const [clients, setClients] = useState([]);
   const [uploadSuccess, setUploadSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleAnalyticsClick = (clientId) => {
+    navigate(`?client_id=${clientId}#statisticsView`);
+  };
 
   useEffect(() => {
     const fetch_coach_dashboard_info = async () => {
@@ -99,7 +104,7 @@ const CoachClientDashboard = () => {
             <tr>
               <td>{client.username}</td>
               <td><button>{client.name}</button></td>
-              <td><button>Analyitics</button></td>
+              <td><button onClick={() => handleAnalyticsClick(client.client_id)}>Analytics</button></td>
               <td><NewWorkoutPlan handleUploadSuccessChange={handleUploadSuccessChange} user_id={client.client_id} button={<button>Create Workout Plan</button>}/></td>
             </tr>
           ))}
