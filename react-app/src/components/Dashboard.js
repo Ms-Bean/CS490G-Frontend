@@ -61,8 +61,11 @@ const CoachDashboard = () => {
 
   const fetchClientDashboardInfo = async () => {
     try {
-      const response = await fetch(`${config.backendUrl}/get_client_dashboard_info?client_id=${client_id}`, {
+      const response = await fetch(`${config.backendUrl}/get_client_dashboard_info`, {
         credentials: "include",
+        headers: {
+          client_id: client_id,
+        },
       });
       if (!response.ok) throw new Error("Failed to fetch client dashboard info");
       const data = await response.json();
@@ -155,6 +158,7 @@ const CoachDashboard = () => {
   useEffect(() => {
     if (client_id) {
       fetchClientDashboardInfo();
+      console.log("fetched client dashboard info");
       fetchTargetWeight();
     }
     const hash = location.hash.replace("#", "");
@@ -212,6 +216,56 @@ const CoachDashboard = () => {
   };
 
   const renderLineChart = (label, data, color, chartTitle, yAxisTitle, targetWeight) => (
+    <Line
+      className="mx-3"
+      data={{
+        labels: chart_data.x.map((date) => formatDateLabels(date)),
+        datasets: [
+          {
+            label,
+            data,
+            fill: false,
+            borderWidth: 4,
+            backgroundColor: color,
+            borderColor: color,
+          },
+        ],
+      }}
+      options={{
+        animation: false,
+        plugins: {
+          title: {
+            display: true,
+            text: chartTitle,
+            font: {
+              size: 18,
+            },
+          },
+          legend: {
+            position: "top",
+          },
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: "Date",
+            },
+          },
+          y: {
+            beginAtZero: false,
+            title: {
+              display: true,
+              text: yAxisTitle,
+            },
+          },
+        },
+      }}
+    />
+  );
+
+  
+  const renderWeightChart = (label, data, color, chartTitle, yAxisTitle, targetWeight) => (
     <Line
       className="mx-3"
       data={{
@@ -372,7 +426,7 @@ const CoachDashboard = () => {
                 {renderLineChart("Water Intake (Liters)", chart_data.water_intake_y, "blue", "Daily Water Intake", "Liters")}
               </Tab>
               <Tab eventKey="weight" title="Weight">
-                {renderLineChart("Weight", chart_data.weight_y, "purple", "Weight", "Pounds", targetWeight)}
+                {renderWeightChart("Weight", chart_data.weight_y, "purple", "Weight", "Pounds", targetWeight)}
               </Tab>
               <Tab eventKey="moodPieChart" title="Mood Pie Chart">
                 {renderMoodPieChart()}
