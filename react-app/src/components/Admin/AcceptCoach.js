@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Modal from 'react-bootstrap/Modal'
+import { config } from '../../utils/config';
 
 function AcceptCoach({user_id, handleUploadSuccessChange}) {
 
@@ -10,7 +11,7 @@ function AcceptCoach({user_id, handleUploadSuccessChange}) {
 
     const handleAcceptCoach = () => {
         try{
-            const response = fetch(`http://localhost:3500/get_coach_dashboard_info/coach_request/${user_id}`, {
+            const response = fetch(`${config.backendUrl}/get_coach_dashboard_info/coach_request/${user_id}`, {
                 method: "PUT",
                 headers: {
                 // Moved data to body instead of headers

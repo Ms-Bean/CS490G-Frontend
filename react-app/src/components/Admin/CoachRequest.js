@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useMemo} from "react";
 import CoachRequestNavbar from "./CoachRequestNavbar";
 import CoachCard from "./CoachCard";
+import { config } from "../../utils/config";
 
 const CoachRequest = () => {
     const [coachList, setCoachList] = useState([]);
@@ -17,7 +18,7 @@ const CoachRequest = () => {
         const fetchCoachList = async () => {
         setIsLoading(true);
         try{
-            const response = await fetch(`http://localhost:3500/get_coach_dashboard_info/coach_request`, {
+            const response = await fetch(`${config.backendUrl}/get_coach_dashboard_info/coach_request`, {
             credentials: "include",
             });
         
