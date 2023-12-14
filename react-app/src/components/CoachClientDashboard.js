@@ -135,6 +135,8 @@ const CoachClientDashboard = () => {
                         button={<span>Create Workout Plan</span>}
                       />
                     </Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item variant="danger" onClick={() => navigate(`#`)}>End Training</Dropdown.Item>
                   </DropdownButton>
                 </td>
               </tr>
