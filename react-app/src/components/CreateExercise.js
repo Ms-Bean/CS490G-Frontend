@@ -19,7 +19,7 @@ function CreateExercise({ addTag, workout_plan_id, addWorkoutExercise }) {
   useEffect(() => {
     const fetchExercises = async () => {
       try {
-        const response = await fetch(`http://localhost:3500/exercises`, {
+        const response = await fetch(`${config.backendUrl}/exercises`, {
           method: "GET",
           credentials: "include",
         });

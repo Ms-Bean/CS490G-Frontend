@@ -16,7 +16,7 @@ function ViewCoachProfile({ coach }) {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const url = `http://localhost:3500/request_coach`
+    const url = `${config.backendUrl}/request_coach`
 
     const {user} = useAuth();
 
