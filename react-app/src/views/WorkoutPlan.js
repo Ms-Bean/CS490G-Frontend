@@ -6,9 +6,11 @@ import { FaRegClipboard } from "react-icons/fa6";
 import { FaPlusCircle} from "react-icons/fa";
 import { useAuth } from "../hooks/useAuth";
 import { config } from "./../utils/config";
+import { Button, ButtonGroup, Table, Container, Dropdown, Image, DropdownButton, Row, Col, Modal, Alert } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const WorkoutPlan = () => {
-
+    const navigate = useNavigate();
     const [workoutPlans, setWorkoutPlans] = useState([]);
     const [isCoach, setIsCoach] = useState(false);
     const [colCount, setColCount] = useState(4);
@@ -141,7 +143,9 @@ const WorkoutPlan = () => {
         setUploadSuccess(true);
         fetchWorkoutPlans();
     }
-
+    const handleAssignClick = () =>{
+        navigate("../select_workout_plan?user_id=" + user.user_id);
+    }
     return (
         <div>
             <WorkoutNavbar 
@@ -153,6 +157,7 @@ const WorkoutPlan = () => {
             sortDirection={sortDirection}
             user_id ={user.user_id}
             />
+            <Button onClick={() => handleAssignClick()}>Choose a workout plan for yourself</Button>
             {workoutPlans.length === 0 ? <div className="container vh-100 d-flex justify-content-center align-items-center">
                 <div className="w-50 d-flex flex-column justify-content-center align-items-center border border-black shadow-lg rounded p-2" >
                     <h2><FaRegClipboard className="mb-1" size={30}/> No Workout Plan available</h2>

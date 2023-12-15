@@ -5,11 +5,12 @@ import { Button, ButtonGroup, Table, Container, Dropdown, Image, DropdownButton,
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
+
+
 let client_id = urlParams.get("user_id");
-
-
 const handleAssignClick = (workout_plan_id) => {
   try {
+    let client_id = urlParams.get("user_id");
     fetch(`${config.backendUrl}/assign_workout_plan`, {
       method: "POST",
       credentials: "include",
