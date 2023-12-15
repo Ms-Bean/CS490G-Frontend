@@ -191,13 +191,13 @@ const CoachDashboard = () => {
         <br />
         Reps per Set: {exercise.expected_reps_per_set}
         <br />
-        Expected Weight: {exercise.expected_weight} kg
+        Expected Weight: {exercise.expected_weight} lbs
         {exercise.logged_sets && exercise.logged_sets.length > 0 && (
           <div>
             <h6>Logged Sets:</h6>
             {exercise.logged_sets.map((set, index) => (
               <p key={index}>
-                Set {index + 1}: {set.actual_reps} reps, {set.actual_weight} kg
+                Set {index + 1}: {set.actual_reps} reps, {set.actual_weight} lbs
               </p>
             ))}
           </div>
@@ -460,33 +460,33 @@ const CoachDashboard = () => {
         return (
           <>
             {clientDataAlert}
-            <Tabs defaultActiveKey="calories" id="chart-tabs" className="mb-3" justify>
+            <Tabs defaultActiveKey="calories" id="chart-tabs" className="mb-3" justify >
               <Tab eventKey="calories" title="Calories">
                 {chart_data.calories_burned_y.length > 0 || chart_data.calories_consumed_y.length > 0 ? (
                   renderCombinedCaloriesChart(chart_data.calories_burned_y, chart_data.calories_consumed_y)
                 ) : (
-                  <Alert variant="info">No calorie data available.</Alert>
+                  <Alert variant="secondary">No calorie data available.</Alert>
                 )}
               </Tab>
               <Tab eventKey="netCalories" title="Net Calories">
                 {chart_data.calories_burned_y.length > 0 || chart_data.calories_consumed_y.length > 0 ? (
                   renderNetCaloriesChart(chart_data.calories_burned_y, chart_data.calories_consumed_y)
                 ) : (
-                  <Alert variant="info">No net calorie data available.</Alert>
+                  <Alert variant="secondary">No net calorie data available.</Alert>
                 )}
               </Tab>
               <Tab eventKey="waterIntake" title="Water Intake">
                 {chart_data.water_intake_y.length > 0 ? (
                   renderLineChart("Water Intake (Liters)", chart_data.water_intake_y, "blue", "Daily Water Intake", "Liters")
                 ) : (
-                  <Alert variant="info">No water intake data available.</Alert>
+                  <Alert variant="secondary">No water intake data available.</Alert>
                 )}
               </Tab>
               <Tab eventKey="weight" title="Weight">
                 {chart_data.weight_y.length > 0 ? (
                   renderWeightChart("Weight", chart_data.weight_y, "purple", "Weight", "Pounds", targetWeight)
                 ) : (
-                  <Alert variant="info">No weight data available.</Alert>
+                  <Alert variant="secondary">No weight data available.</Alert>
                 )}
               </Tab>
               <Tab eventKey="moodPieChart" title="Mood Pie Chart">
