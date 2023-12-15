@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { useParams } from "react-router-dom";
 import { config } from "./../utils/config";
-import { Card, Row, Col, Container, Alert, Tab, Tabs } from "react-bootstrap";
+import { Card, Row, Col, Container, Alert, Tab, Tabs, Button } from "react-bootstrap";
 import DashboardNavbar from "./Dashboard/DashboardNavbar";
 import { Line, Bar, Pie } from "react-chartjs-2";
 import "./../css/Dashboard.css";
@@ -10,8 +9,10 @@ import { CategoryScale } from "chart.js";
 import Chart from "chart.js/auto";
 import DailySurveyForm from "./../views/DailySurvey";
 import CoachClientDashboard from "./CoachClientDashboard";
+import { useAuth } from "../hooks/useAuth";
 
 const CoachDashboard = () => {
+  const { user } = useAuth();
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const client_id = urlParams.get("client_id");
@@ -29,6 +30,8 @@ const CoachDashboard = () => {
       },
     ],
   });
+
+  console.log("user", user);
 
   const [exerciseData, setExerciseData] = useState([]);
   const [chart_data, set_chart_data] = useState({
@@ -411,12 +414,31 @@ const CoachDashboard = () => {
   );
 
   const renderTabContent = () => {
+    const isViewingClientData = !!client_id;
+
+    const handleResetDashboard = () => {
+      window.history.pushState({}, document.title, "/dashboard"); // Reset URL (remove client_id)
+      fetchClientDashboardInfo(); // Refetch data for the coach
+      setCurrentTab("coachClientDashboard");
+    };
+
+    const clientDataAlert = isViewingClientData && (
+      <Alert variant="info d-flex flex-column align-items-center">
+        <Alert.Heading>Viewing Client Data</Alert.Heading>
+        <p>You are currently viewing data for a client.</p>
+        <Button variant="secondary" onClick={handleResetDashboard}>
+          View My Dashboard
+        </Button>
+      </Alert>
+    );
+
     switch (currentTab) {
       case "weeklyView":
         return (
           <>
+            {clientDataAlert}
             <p>
-              <strong>This Week: username</strong>
+              <strong>This Week: {user.username}</strong>
             </p>
             <Row>
               {[...Array(5)].map((_, i) => (
@@ -430,8 +452,9 @@ const CoachDashboard = () => {
       case "statisticsView":
         return (
           <>
+            {clientDataAlert}
             <p>
-            <strong>Statistics: username</strong>
+              <strong>Statistics: {user.username}</strong>
             </p>
             <Tabs defaultActiveKey="calories" id="chart-tabs" className="mb-3" justify>
               <Tab eventKey="calories" title="Calories">

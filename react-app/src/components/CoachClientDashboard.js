@@ -47,6 +47,7 @@ const CoachClientDashboard = () => {
 
     fetch_coach_dashboard_info();
   }, []);
+  
   // useEffect(() => {
   //     //Fetch client profile information
   //     fetch("http://localhost:3500/get_coach_dashboard_info", {
@@ -96,14 +97,10 @@ const CoachClientDashboard = () => {
 
   return (
     <Container>
-      <h1 className="mb-4">Your Clients</h1>
-      <Row>
-        <Col xs={10}>
-        </Col>
-        <Col xs={2}>
-        <Button onClick={handleShow}>Incoming Requests</Button>
-        </Col>
-      </Row>
+    <div className="d-flex justify-content-between align-items-center">
+      <h4 className="mb-4">Your Clients</h4>
+      <Button onClick={handleShow}>Incoming Requests</Button>
+    </div>     
       <Modal
         size="lg"
         show={show}
