@@ -51,7 +51,8 @@ const CoachClientDashboard = () => {
     };
 
     fetch_coach_dashboard_info();
-  }, []);
+    setUploadSuccess(false);
+  }, [uploadSuccess]);
 
   // useEffect(() => {
   //     //Fetch client profile information
@@ -117,8 +118,9 @@ const CoachClientDashboard = () => {
           <Modal.Title>Pending Client Requests</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <AcceptDenyClients />
+          <AcceptDenyClients handleUploadSuccessChange={handleUploadSuccessChange}/>
         </Modal.Body>
+        <Modal.Footer><Button className='w-100' onClick={handleClose} variant="dark">Done</Button></Modal.Footer>
       </Modal>
       <table className="table responsive">
         <thead>
