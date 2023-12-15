@@ -30,7 +30,6 @@ const WorkoutPlan = () => {
     const {user} = useAuth();
 
     useEffect(() => {
-        setWorkoutPlanId(25);
         const fetchRole = async () => {
             try {
                 const response = await fetch(`${config.backendUrl}/get_role`, {
@@ -64,18 +63,15 @@ const WorkoutPlan = () => {
                 setRowCount(Math.floor(data.workout_plans.length / colCount) + 1);
              }
              setWorkoutPlans(data.workout_plans);
+
             const assigned_response = await fetch(`${config.backendUrl}/get_client_dashboard_info`, {
                 credentials: "include",
                 headers: {
                 },
             });
-            if (!assigned_response.ok) throw new Error("Failed to fetch client dashboard info");
+            if (!response.ok) throw new Error("Failed to fetch client dashboard info");
             const assigned_data = await assigned_response.json();
-    
-            let workout_plan_id = assigned_data.workout_plan_id;
-            setWorkoutPlanId(workout_plan_id);
-            console.log("Assigned workout plan");
-            console.log(workout_plan_id);
+            setWorkoutPlanId(assigned_data.workout_plan_id);
         }
         catch(err){
             console.log(err);
