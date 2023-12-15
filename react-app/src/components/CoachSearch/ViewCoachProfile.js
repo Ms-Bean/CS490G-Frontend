@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
-import {Modal, Button, Container, Row, Col, Tooltip, OverlayTrigger} from 'react-bootstrap';
+import {Modal, Button, Container, Row, Col, Tooltip, OverlayTrigger, Alert} from 'react-bootstrap';
 import profile_pic from "../static_images/default-avatar-profile-icon-of-social-media-user-vector.jpg";
 import "../../css/ViewCoachProf.css"
 import { useAuth } from '../../hooks/useAuth';
+import { config } from "./../../utils/config";
 
 function ViewCoachProfile({ coach }) {
     const [show, setShow] = useState(false);
     const [requested, setRequested] = useState();
     const [coachData, setCoachData] = useState();
+    const [showAlert, setShowAlert] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -21,23 +23,18 @@ function ViewCoachProfile({ coach }) {
         client_id : user.user_id
     }
     useEffect(() => {
-        //Fetch coach profile information //NOT WORKING YET, need to retrieve by user id
-        fetch("http://localhost:3500/get_user_profile", {
-          credentials: "include",
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log(data);
-            setCoachData({
-              hourly_rate: data.response.coach_profile_info.hourly_rate,
-              availability: data.response.coach_profile_info.availability,
-              experience_level: data.response.coach_profile_info.experience_level,
-              accepting_new_clients: data.response.coach_profile_info.accepting_new_clients,
-              coaching_history: data.response.coach_profile_info.coaching_history,
-              paypal_link: data.response.coach_profile_info.paypal_link
-            });
-          });
+        //getProfInfo(); very broken
       }, []);
+
+      const getProfInfo = async (id) => {
+        fetch(`${config.backendUrl}/get_profile_info?user_id=${id}`, { credentials: "include" }).then((res) => {
+          res.json().then((data) => {
+            console.log(data)
+            if (!res.ok){throw new Error("Network response was not ok");}
+          });
+        });
+      }
+
     const reqCoach = async () => {
         try{
             const response = await fetch(url, {
@@ -52,6 +49,9 @@ function ViewCoachProfile({ coach }) {
     
             if (!response.ok) {
                 throw new Error(`Failed to request coach. Status: ${response.status}`);
+            }
+            else {
+                setShowAlert(true);
             }
     
         } catch(err){
@@ -78,6 +78,7 @@ function ViewCoachProfile({ coach }) {
         </Modal.Header>
         <Modal.Body>
            <Container>
+            <Row><Alert variant="primary" show={showAlert}>Coach request has been sent.</Alert></Row>
             <Row>
                 <Col xs={1}></Col>
                 <Col xs={2} md={4}>
