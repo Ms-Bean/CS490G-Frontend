@@ -10,6 +10,8 @@ function ViewCoachProfile({ coach }) {
     const [requested, setRequested] = useState();
     const [coachData, setCoachData] = useState();
     const [showAlert, setShowAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertVariant, setAlertVariant] = useState('success');
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -35,8 +37,8 @@ function ViewCoachProfile({ coach }) {
         });
       }
 
-    const reqCoach = async () => {
-        try{
+      const reqCoach = async () => {
+        try {
             const response = await fetch(url, {
                 method: "POST",
                 headers: {
@@ -45,19 +47,28 @@ function ViewCoachProfile({ coach }) {
                 body: JSON.stringify(data),
                 credentials: "include", 
             });
-            console.log(response);
     
             if (!response.ok) {
-                throw new Error(`Failed to request coach. Status: ${response.status}`);
-            }
-            else {
+                if (!response.bodyUsed) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Unknown error occurred');
+                } else {
+                    throw new Error('Error response already read');
+                }
+            } else {
+                setAlertMessage("Your trainer request has been sent.");
+                setAlertVariant('success');
                 setShowAlert(true);
             }
     
-        } catch(err){
+        } catch(err) {
             console.log(err);
+            setAlertMessage(err.message);
+            setAlertVariant('danger');
+            setShowAlert(true);
         }
     }
+    
 
     const handleRequest=()=>{
         reqCoach();
@@ -78,7 +89,8 @@ function ViewCoachProfile({ coach }) {
         </Modal.Header>
         <Modal.Body>
            <Container>
-            <Row><Alert variant="primary" show={showAlert}>Coach request has been sent.</Alert></Row>
+           <Row><Alert variant={alertVariant} show={showAlert}>{alertMessage}</Alert></Row>
+
             <Row>
                 <Col xs={1}></Col>
                 <Col xs={2} md={4}>
@@ -89,10 +101,8 @@ function ViewCoachProfile({ coach }) {
                    <h2>{coach.personal_info.first_name} {coach.personal_info.last_name}</h2>
                    <p className="fs-5 fw-lighter"> Personal Trainer  &nbsp;|&nbsp; Advanced</p>
                    
-                   <p className= "lh-1"><b>Specialty:&nbsp;</b>???</p>
                    <p className= "lh-1"><b>Experience:&nbsp;</b>{coach.professional_info.experience_level === 0 ? "Less than a year" : coach.professional_info.experience_level + " years"}</p>
                    <p className= "lh-1"><b>Session Cost:&nbsp;</b>{coach.professional_info.hourly_rate}/hour</p>
-                   <p className= "lh-1"><b>Availability:&nbsp;</b>???</p>
                    <p className= "lh-1"><b>Location:&nbsp;</b>{coach.location.city}, {coach.location.state}</p> 
                    
                 </Col>
