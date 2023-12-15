@@ -16,6 +16,7 @@ const CoachSearch = () => {
   });
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
@@ -109,7 +110,11 @@ const CoachSearch = () => {
   useEffect(() => {
     setCurrentPage(1);
     fetchCoaches(1);
-  }, [sortOption]);
+  }, [sortOption, uploadSuccess]);
+  
+  const handleUploadSuccessChange = () => {
+    setUploadSuccess(true);
+  };
 
   const renderPagination = () => {
     let items = [];
@@ -198,7 +203,7 @@ const CoachSearch = () => {
         ) : (
           <Row>
             {results.map((coach, index) => (
-              <CoachCard key={index} coach={coach} />
+              <CoachCard key={index} coach={coach} handleUploadSuccessChange={handleUploadSuccessChange}/>
             ))}
           </Row>
         )}

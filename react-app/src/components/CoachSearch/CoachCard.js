@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Card, Col, Button, ButtonGroup } from "react-bootstrap";
 import ViewCoachProfile from "./ViewCoachProfile";
 
-const CoachCard = ({ coach }) => {
+const CoachCard = ({ coach, handleUploadSuccessChange }) => {
   const [isHovered, setIsHovered] = useState(false);
   
   return (
@@ -33,7 +33,7 @@ const CoachCard = ({ coach }) => {
           </p> */}
         </Card.Body>
         <ButtonGroup className="w-100 p-2">
-          <ViewCoachProfile coach={coach}/>
+          <ViewCoachProfile coach={coach} handleUploadSuccessChange={handleUploadSuccessChange}/>
         </ButtonGroup>
 
       </Card>
