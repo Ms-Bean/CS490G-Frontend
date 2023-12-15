@@ -23,6 +23,11 @@ const CoachClientDashboard = () => {
     navigate(`?client_id=${clientId}#weeklyView`);
   };
 
+  const handleAssignClick = (clientId) => {
+
+    navigate("../select_workout_plan?user_id=" + clientId);
+  }
+
   useEffect(() => {
     const fetch_coach_dashboard_info = async () => {
       try {
@@ -163,13 +168,7 @@ const CoachClientDashboard = () => {
                     <Dropdown.Item onClick={() => handleLogClick(client.client_id)}>Activity Log</Dropdown.Item>
                     <Dropdown.Item onClick={() => handleAnalyticsClick(client.client_id)}>View Statistics</Dropdown.Item>
                     <Dropdown.Divider />
-                    <Dropdown.Item>
-                      <NewWorkoutPlan
-                        handleUploadSuccessChange={handleUploadSuccessChange}
-                        user_id={client.client_id}
-                        button={<span>Create Workout Plan</span>}
-                      />
-                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleAssignClick(client.client_id)}>Assign Workout Plan</Dropdown.Item>
                     <Dropdown.Divider />
                     <Dropdown.Item variant="danger" onClick={() => navigate(`#`)}>
                       End Training

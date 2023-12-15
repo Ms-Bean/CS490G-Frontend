@@ -32,7 +32,7 @@ const WorkoutPlanCard = ({ workoutPlanName, workoutPlanId, handleUploadSuccessCh
           <div>
             <ButtonGroup className="w-100 px-2 pb-2">
               <Button variant="success" onClick={toggleLogModal} className="w-25">
-                Log
+                Choose This Workout Plan
               </Button>
             </ButtonGroup>
             <ButtonGroup className="w-100 px-2 pb-2">
