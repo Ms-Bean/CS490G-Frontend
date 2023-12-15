@@ -12,11 +12,15 @@ import { useNavigate } from "react-router-dom";
 
 const WorkoutPlan = () => {
     const navigate = useNavigate();
+
+    const [assigned_workout_data, set_assigned_workout_data] = useState({
+        workoutPlanId: "",
+        workoutPlanName: "",
+    });
     const [workoutPlans, setWorkoutPlans] = useState([]);
     const [isCoach, setIsCoach] = useState(false);
     const [colCount, setColCount] = useState(4);
     const [rowCount, setRowCount] = useState(0);
-    let [workoutPlanId, setWorkoutPlanId] = useState([]);
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [sortKey, setSortKey] = useState("");
@@ -71,7 +75,13 @@ const WorkoutPlan = () => {
             });
             if (!response.ok) throw new Error("Failed to fetch client dashboard info");
             const assigned_data = await assigned_response.json();
-            setWorkoutPlanId(assigned_data.workout_plan_id);
+
+            console.log("Assigned workout plan");
+            console.log(assigned_data);
+            set_assigned_workout_data({
+                workoutPlanId: assigned_data.workout_plan_id,
+                workoutPlanName: assigned_data.name
+            })
         }
         catch(err){
             console.log(err);
@@ -196,13 +206,13 @@ const WorkoutPlan = () => {
                 </>}
             </>}
             <div>
-                <WorkoutProgress
-                    workoutPlanName={"TestTest"}
-                    workoutPlanId={workoutPlanId}
+            {assigned_workout_data.workoutPlanId !== "" && <WorkoutProgress
+                    workoutPlanName={assigned_workout_data.workoutPlanName}
+                    workoutPlanId={assigned_workout_data.workoutPlanId}
                     handleUploadSuccessChange={handleUploadSuccessChange}
                     show={showLogModal}
                     handleClose={() => setShowLogModal(false)}
-                />
+                /> }
             </div>
         </div>
     )
