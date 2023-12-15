@@ -206,7 +206,7 @@ const CoachDashboard = () => {
     );
 
     return (
-      <Card className="shadow-sm w-100" style={{ minHeight: "300px" }}>
+      <Card className="w-100" style={{ minHeight: "250px" }}>
         <Card.Header>
           <Card.Title>{capitalizeFirstLetter(dayData.weekday)}</Card.Title>
         </Card.Header>
@@ -426,7 +426,7 @@ const CoachDashboard = () => {
       <Alert variant="info d-flex flex-column align-items-center">
         <Alert.Heading>Viewing Client Data</Alert.Heading>
         <p>You are currently viewing data for a client.</p>
-        <Button variant="secondary" onClick={handleResetDashboard}>
+        <Button variant="dark" onClick={handleResetDashboard}>
           View My Dashboard
         </Button>
       </Alert>
@@ -441,7 +441,7 @@ const CoachDashboard = () => {
               <strong>This Week: {user.username}</strong>
             </p>
             <Row>
-              {[...Array(5)].map((_, i) => (
+              {[...Array(6)].map((_, i) => (
                 <Col md={4} className="mb-4 d-flex" key={i}>
                   {renderExerciseCard(i)}
                 </Col>
