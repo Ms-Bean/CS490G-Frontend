@@ -127,8 +127,8 @@ useEffect (()=> {
         <thead>
           <tr>
             <th>Action</th>
-            <th>User</th>
             <th>Name</th>
+            <th>Username</th>
           </tr>
         </thead>
         <tbody>
@@ -139,8 +139,8 @@ useEffect (()=> {
               <Button variant="danger" onClick={() =>confirmDecline(request)}>Decline</Button>
               </ButtonGroup>
               </td>
-              <td>{request.id}</td>
-              <td>{request.name}</td>
+              <td align="left" style={{ verticalAlign: "middle" }}>{request.name}</td>
+              <td align="left" style={{ verticalAlign: "middle" }}>{request.username}</td>
             </tr>
           ))}
         </tbody>
