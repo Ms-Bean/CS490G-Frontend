@@ -434,37 +434,63 @@ const CoachDashboard = () => {
 
     switch (currentTab) {
       case "weeklyView":
+        const hasData = exerciseData.some((day) => day && day.exercises.length > 0);
+
         return (
           <>
             {clientDataAlert}
-            <Row>
-              {[...Array(6)].map((_, i) => (
-                <Col md={4} className="mb-4 d-flex" key={i}>
-                  {renderExerciseCard(i)}
-                </Col>
-              ))}
-            </Row>
+            {hasData ? (
+              <Row>
+                {[...Array(6)].map((_, i) => (
+                  <Col md={4} className="mb-4 d-flex" key={i}>
+                    {renderExerciseCard(i)}
+                  </Col>
+                ))}
+              </Row>
+            ) : (
+              <Alert variant="secondary">
+                <Alert.Heading>No Data Available</Alert.Heading>
+                <p>There is no exercise data available for the entire week.</p>
+              </Alert>
+            )}
           </>
         );
+
       case "statisticsView":
         return (
           <>
             {clientDataAlert}
             <Tabs defaultActiveKey="calories" id="chart-tabs" className="mb-3" justify>
               <Tab eventKey="calories" title="Calories">
-                {renderCombinedCaloriesChart(chart_data.calories_burned_y, chart_data.calories_consumed_y, "Calories Burned vs Consumed")}
+                {chart_data.calories_burned_y.length > 0 || chart_data.calories_consumed_y.length > 0 ? (
+                  renderCombinedCaloriesChart(chart_data.calories_burned_y, chart_data.calories_consumed_y)
+                ) : (
+                  <Alert variant="info">No calorie data available.</Alert>
+                )}
               </Tab>
               <Tab eventKey="netCalories" title="Net Calories">
-                {renderNetCaloriesChart(chart_data.calories_burned_y, chart_data.calories_consumed_y)}
+                {chart_data.calories_burned_y.length > 0 || chart_data.calories_consumed_y.length > 0 ? (
+                  renderNetCaloriesChart(chart_data.calories_burned_y, chart_data.calories_consumed_y)
+                ) : (
+                  <Alert variant="info">No net calorie data available.</Alert>
+                )}
               </Tab>
               <Tab eventKey="waterIntake" title="Water Intake">
-                {renderLineChart("Water Intake (Liters)", chart_data.water_intake_y, "blue", "Daily Water Intake", "Liters")}
+                {chart_data.water_intake_y.length > 0 ? (
+                  renderLineChart("Water Intake (Liters)", chart_data.water_intake_y, "blue", "Daily Water Intake", "Liters")
+                ) : (
+                  <Alert variant="info">No water intake data available.</Alert>
+                )}
               </Tab>
               <Tab eventKey="weight" title="Weight">
-                {renderWeightChart("Weight", chart_data.weight_y, "purple", "Weight", "Pounds", targetWeight)}
+                {chart_data.weight_y.length > 0 ? (
+                  renderWeightChart("Weight", chart_data.weight_y, "purple", "Weight", "Pounds", targetWeight)
+                ) : (
+                  <Alert variant="info">No weight data available.</Alert>
+                )}
               </Tab>
               <Tab eventKey="moodPieChart" title="Mood Pie Chart">
-                {renderMoodPieChart()}
+                {moodData.datasets[0].data.length > 0 ? renderMoodPieChart() : <Alert variant="secondary">No mood data available.</Alert>}
               </Tab>
             </Tabs>
           </>
