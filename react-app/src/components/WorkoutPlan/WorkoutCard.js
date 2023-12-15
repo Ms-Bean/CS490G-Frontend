@@ -31,11 +31,6 @@ const WorkoutPlanCard = ({ workoutPlanName, workoutPlanId, handleUploadSuccessCh
         {isHovered && (
           <div>
             <ButtonGroup className="w-100 px-2 pb-2">
-              <Button variant="success" onClick={toggleLogModal} className="w-25">
-                Log
-              </Button>
-            </ButtonGroup>
-            <ButtonGroup className="w-100 px-2 pb-2">
               <Button variant="secondary" onClick={toggleInfoModal} className="w-25">
                 Info
               </Button>

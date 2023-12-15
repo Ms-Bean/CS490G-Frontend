@@ -93,7 +93,7 @@ const ClientProfile = () => {
   return (
     <div className="container my-2">
       <div className="my-3">
-        <img height="200" width="200" src={profile_pic}/>
+        <img className="img-thumbnail rounded-circle d-block mx-auto" src={profile_pic} />
         <div className="mt-3 me-3 d-flex justify-content-center">
           <button disabled={editing} onClick={changeProfilePicture} className="ms-3 btn btn-dark">
             Change Profile Picture

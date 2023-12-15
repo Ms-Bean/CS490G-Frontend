@@ -6,9 +6,11 @@ import { FaRegClipboard } from "react-icons/fa6";
 import { FaPlusCircle} from "react-icons/fa";
 import { useAuth } from "../hooks/useAuth";
 import { config } from "./../utils/config";
+import { Button, ButtonGroup, Table, Container, Dropdown, Image, DropdownButton, Row, Col, Modal, Alert } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const WorkoutPlan = () => {
-
+    const navigate = useNavigate();
     const [workoutPlans, setWorkoutPlans] = useState([]);
     const [isCoach, setIsCoach] = useState(false);
     const [colCount, setColCount] = useState(4);
@@ -54,13 +56,24 @@ const WorkoutPlan = () => {
                 setRowCount(Math.floor(data.workout_plans.length / colCount) + 1);
              }
              setWorkoutPlans(data.workout_plans);
+            const assigned_response = await fetch(`${config.backendUrl}/get_client_dashboard_info`, {
+                credentials: "include",
+                headers: {
+                },
+            });
+            if (!response.ok) throw new Error("Failed to fetch client dashboard info");
+            const assigned_data = await response.json();
+    
+            let workout_plan_id = assigned_data.workout_plan_id;
+            console.log("Assigned workout plan");
+            console.log(workout_plan_id);
         }
         catch(err){
             console.log(err);
         }finally {
             setIsLoading(false);
         }
-        }
+    }
 
     //re-renders when a workout plan has been created, edited or deleted
     useEffect(() => {
@@ -130,7 +143,9 @@ const WorkoutPlan = () => {
         setUploadSuccess(true);
         fetchWorkoutPlans();
     }
-
+    const handleAssignClick = () =>{
+        navigate("../select_workout_plan?user_id=" + user.user_id);
+    }
     return (
         <div>
             <WorkoutNavbar 
@@ -142,6 +157,7 @@ const WorkoutPlan = () => {
             sortDirection={sortDirection}
             user_id ={user.user_id}
             />
+            <Button onClick={() => handleAssignClick()}>Choose a workout plan for yourself</Button>
             {workoutPlans.length === 0 ? <div className="container vh-100 d-flex justify-content-center align-items-center">
                 <div className="w-50 d-flex flex-column justify-content-center align-items-center border border-black shadow-lg rounded p-2" >
                     <h2><FaRegClipboard className="mb-1" size={30}/> No Workout Plan available</h2>

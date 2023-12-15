@@ -177,6 +177,7 @@ const CoachDashboard = () => {
 
   const renderExerciseCard = (day) => {
     const dayData = exerciseData[day];
+    console.log(exerciseData);
     if (!dayData) {
       return null;
     }
