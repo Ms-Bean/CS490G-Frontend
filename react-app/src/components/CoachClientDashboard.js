@@ -109,7 +109,7 @@ const CoachClientDashboard = () => {
       </div>
       <Modal size="lg" show={show} onHide={handleClose} backdrop="static" keyboard={false} centered>
         <Modal.Header closeButton>
-          <Modal.Title>Incoming Requests</Modal.Title>
+          <Modal.Title>Pending Client Requests</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <AcceptDenyClients />
@@ -148,13 +148,13 @@ const CoachClientDashboard = () => {
                   {client.first_name} {client.last_name}
                 </td>
                 <td align="left" style={{ verticalAlign: "middle" }}>
-                  {client.weight} lbs
+                {client.weight ? `${client.weight} lbs` : 'Not available'}
                 </td>
                 <td align="left" style={{ verticalAlign: "middle" }}>
-                  {capitalizeFirstLetter(client.mood)}
+                {client.mood ? capitalizeFirstLetter(client.mood) : 'Not available'}
                 </td>
                 <td align="left" style={{ verticalAlign: "middle" }}>
-                  {client.name}
+                {client.name || 'No plan assigned'}
                 </td>
                 <td align="left" style={{ verticalAlign: "middle" }}>
                   <DropdownButton variant="success" id="dropdown-button-basic" title="Actions">
