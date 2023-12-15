@@ -47,7 +47,7 @@ const CoachClientDashboard = () => {
 
     fetch_coach_dashboard_info();
   }, []);
-  
+
   // useEffect(() => {
   //     //Fetch client profile information
   //     fetch("http://localhost:3500/get_coach_dashboard_info", {
@@ -95,31 +95,33 @@ const CoachClientDashboard = () => {
     setUploadSuccess(true);
   };
 
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
   return (
     <Container>
-    <div className="d-flex justify-content-between align-items-center">
-      <h4 className="mb-4">Your Clients</h4>
-      <Button onClick={handleShow}>Incoming Requests</Button>
-    </div>     
-      <Modal
-        size="lg"
-        show={show}
-        onHide={handleClose}
-        backdrop="static"
-        keyboard={false}
-        centered>
+      <div className="d-flex justify-content-between align-items-center">
+        <h4 className="mb-2">Your Clients</h4>
+        <Button className="mb-2" onClick={handleShow}>
+          Pending Clients
+        </Button>
+      </div>
+      <Modal size="lg" show={show} onHide={handleClose} backdrop="static" keyboard={false} centered>
         <Modal.Header closeButton>
-        <Modal.Title>Incoming Requests</Modal.Title>
+          <Modal.Title>Incoming Requests</Modal.Title>
         </Modal.Header>
-          <Modal.Body>
-            <AcceptDenyClients/>
-            </Modal.Body>
+        <Modal.Body>
+          <AcceptDenyClients />
+        </Modal.Body>
       </Modal>
       <table className="table responsive">
         <thead>
           <tr>
             <th scope="col">User</th>
             <th scope="col">Name</th>
+            <th scope="col">Weight</th>
+            <th scope="col">Mood</th>
             <th scope="col">Workout Plan</th>
             <th scope="col">Actions</th>
           </tr>
@@ -138,14 +140,24 @@ const CoachClientDashboard = () => {
           ) : clients.length > 0 ? (
             clients.map((client, index) => (
               <tr key={index}>
-                <td align="left">
+                <td align="left" style={{ verticalAlign: "middle" }}>
                   <Image src="/profilepic.jpg" roundedCircle width="30" height="30" />
                   <span className="ml-2">&nbsp;&nbsp;{client.username}</span>
                 </td>
-                <td>{client.name}</td>
-                <td>{client.name}</td>
-                <td>
-                  <DropdownButton variant="success" id="dropdown-button-basic" title="Actions" size="sm">
+                <td align="left" style={{ verticalAlign: "middle" }}>
+                  {client.first_name} {client.last_name}
+                </td>
+                <td align="left" style={{ verticalAlign: "middle" }}>
+                  {client.weight} lbs
+                </td>
+                <td align="left" style={{ verticalAlign: "middle" }}>
+                  {capitalizeFirstLetter(client.mood)}
+                </td>
+                <td align="left" style={{ verticalAlign: "middle" }}>
+                  {client.name}
+                </td>
+                <td align="left" style={{ verticalAlign: "middle" }}>
+                  <DropdownButton variant="success" id="dropdown-button-basic" title="Actions">
                     <Dropdown.Item onClick={() => navigate(`/messages`)}>Message</Dropdown.Item>
                     <Dropdown.Divider />
                     <Dropdown.Item onClick={() => handleLogClick(client.client_id)}>Activity Log</Dropdown.Item>
@@ -159,7 +171,9 @@ const CoachClientDashboard = () => {
                       />
                     </Dropdown.Item>
                     <Dropdown.Divider />
-                    <Dropdown.Item variant="danger" onClick={() => navigate(`#`)}>End Training</Dropdown.Item>
+                    <Dropdown.Item variant="danger" onClick={() => navigate(`#`)}>
+                      End Training
+                    </Dropdown.Item>
                   </DropdownButton>
                 </td>
               </tr>

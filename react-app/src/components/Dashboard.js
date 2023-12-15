@@ -437,9 +437,6 @@ const CoachDashboard = () => {
         return (
           <>
             {clientDataAlert}
-            <p>
-              <strong>This Week: {user.username}</strong>
-            </p>
             <Row>
               {[...Array(6)].map((_, i) => (
                 <Col md={4} className="mb-4 d-flex" key={i}>
@@ -453,9 +450,6 @@ const CoachDashboard = () => {
         return (
           <>
             {clientDataAlert}
-            <p>
-              <strong>Statistics: {user.username}</strong>
-            </p>
             <Tabs defaultActiveKey="calories" id="chart-tabs" className="mb-3" justify>
               <Tab eventKey="calories" title="Calories">
                 {renderCombinedCaloriesChart(chart_data.calories_burned_y, chart_data.calories_consumed_y, "Calories Burned vs Consumed")}
