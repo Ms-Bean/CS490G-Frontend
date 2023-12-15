@@ -3,14 +3,14 @@ import { useAuth } from "../hooks/useAuth";
 import { config } from "./../utils/config";
 import { Button, ButtonGroup, Table, Container, Dropdown, Image, DropdownButton, Row, Col, Modal } from "react-bootstrap";
 
-const queryString = window.location.search;
-const urlParams = new URLSearchParams(queryString);
 
-
-let client_id = urlParams.get("user_id");
 const handleAssignClick = (workout_plan_id) => {
   try {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
     let client_id = urlParams.get("user_id");
+    console.log("CLIENT ID")
+    console.log(client_id);
     fetch(`${config.backendUrl}/assign_workout_plan`, {
       method: "POST",
       credentials: "include",
@@ -30,6 +30,9 @@ const handleAssignClick = (workout_plan_id) => {
 
 const SelectWorkoutPlanComponent = () => {
 
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  let client_id = urlParams.get("user_id");
   const [workout_plans, setWorkoutPlans] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   console.log(client_id);

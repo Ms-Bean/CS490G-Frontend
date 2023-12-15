@@ -64,13 +64,6 @@ const WorkoutPlanCard = ({ workoutPlanName, workoutPlanId, handleUploadSuccessCh
           show={showDeleteModal}
           handleClose={() => setShowDeleteModal(false)}
         />
-        <WorkoutProgress
-          workoutPlanName={workoutPlanName}
-          workoutPlanId={workoutPlanId}
-          handleUploadSuccessChange={handleUploadSuccessChange}
-          show={showLogModal}
-          handleClose={() => setShowLogModal(false)}
-        />
       </div>
     </>
   );

@@ -17,6 +17,7 @@ import ExerciseManagement from "./views/ExerciseManagement";
 import CoachDashboard from "./views/CoachDashboard";
 import WorkoutPlan from "./views/WorkoutPlan";
 import SelectWorkoutPlan from "./views/SelectWorkoutPlan";
+import ActivityLogger from "./views/ActivityLogger";
 import { ExerciseProvider } from "./context/exerciseContext";
 import "./css/Pagination.css";
 import "./css/Footer.css";
@@ -53,6 +54,7 @@ const App = () => {
                 <Route path="/coach_dashboard" element={<CoachDashboard />} />
                 <Route path="/select_workout_plan" element={<SelectWorkoutPlan />} />
                 <Route path="workout_plan" element={<WorkoutPlan />} />
+                <Route path="/workout_progress" element={<ActivityLogger/>}/>
               </Route>
               <Route path="/onboard" element={<Onboarding />} />
               <Route path="/registration" element={<RegisterPage />} />

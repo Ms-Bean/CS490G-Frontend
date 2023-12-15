@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import WorkoutNavbar from "../components/WorkoutPlan/WorkoutNavbar";
+import WorkoutProgress from "../components/WorkoutPlan/WorkoutProgress";
 import WorkoutPlanCard from "../components/WorkoutPlan/WorkoutCard";
 // import CreateWorkoutPlanForClient from "../components/WorkoutPlan/CreateWorkoutPlanForClient.js";
 import { FaRegClipboard } from "react-icons/fa6";
@@ -15,14 +16,21 @@ const WorkoutPlan = () => {
     const [isCoach, setIsCoach] = useState(false);
     const [colCount, setColCount] = useState(4);
     const [rowCount, setRowCount] = useState(0);
+    let [workoutPlanId, setWorkoutPlanId] = useState([]);
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [sortKey, setSortKey] = useState("");
     const [sortDirection, setSortDirection] = useState("ascending");
     const [isLoading, setIsLoading] = useState(false);
+    const [showLogModal, setShowLogModal] = useState(false);
+  
+    const toggleLogModal = () => setShowLogModal(!showLogModal);
+
+
     const {user} = useAuth();
 
     useEffect(() => {
+        setWorkoutPlanId(25);
         const fetchRole = async () => {
             try {
                 const response = await fetch(`${config.backendUrl}/get_role`, {
@@ -61,10 +69,11 @@ const WorkoutPlan = () => {
                 headers: {
                 },
             });
-            if (!response.ok) throw new Error("Failed to fetch client dashboard info");
-            const assigned_data = await response.json();
+            if (!assigned_response.ok) throw new Error("Failed to fetch client dashboard info");
+            const assigned_data = await assigned_response.json();
     
             let workout_plan_id = assigned_data.workout_plan_id;
+            setWorkoutPlanId(workout_plan_id);
             console.log("Assigned workout plan");
             console.log(workout_plan_id);
         }
@@ -74,6 +83,7 @@ const WorkoutPlan = () => {
             setIsLoading(false);
         }
     }
+
 
     //re-renders when a workout plan has been created, edited or deleted
     useEffect(() => {
@@ -157,7 +167,12 @@ const WorkoutPlan = () => {
             sortDirection={sortDirection}
             user_id ={user.user_id}
             />
-            <Button onClick={() => handleAssignClick()}>Choose a workout plan for yourself</Button>
+            <Button onClick={() => handleAssignClick()}>Choose a new workout plan for yourself</Button>
+            <br></br>
+            <Button onClick={toggleLogModal}>
+                Log today's exercises
+              </Button>
+
             {workoutPlans.length === 0 ? <div className="container vh-100 d-flex justify-content-center align-items-center">
                 <div className="w-50 d-flex flex-column justify-content-center align-items-center border border-black shadow-lg rounded p-2" >
                     <h2><FaRegClipboard className="mb-1" size={30}/> No Workout Plan available</h2>
@@ -184,6 +199,15 @@ const WorkoutPlan = () => {
                 <>
                 </>}
             </>}
+            <div>
+                <WorkoutProgress
+                    workoutPlanName={"TestTest"}
+                    workoutPlanId={workoutPlanId}
+                    handleUploadSuccessChange={handleUploadSuccessChange}
+                    show={showLogModal}
+                    handleClose={() => setShowLogModal(false)}
+                />
+            </div>
         </div>
     )
 }
