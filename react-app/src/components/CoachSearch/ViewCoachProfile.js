@@ -5,7 +5,7 @@ import "../../css/ViewCoachProf.css"
 import { useAuth } from '../../hooks/useAuth';
 import { config } from "./../../utils/config";
 
-function ViewCoachProfile({ coach, handleUploadSuccessChange }) {
+function ViewCoachProfile({ coach, handleUploadSuccessChange, handleAlert }) {
     const [show, setShow] = useState(false);
     const [showHired, setShowHired] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
@@ -97,9 +97,12 @@ function ViewCoachProfile({ coach, handleUploadSuccessChange }) {
           });
           console.log(response);
           if (!response.ok) {
+            handleAlert(`Failed to ended training with ${coach.personal_info.first_name} ${coach.personal_info.last_name}. Please try again later.`, "danger");
+            handleCloseTerm();
             throw new Error("Network response was not ok");
           }
           else{
+            handleAlert(`You ended training with ${coach.personal_info.first_name} ${coach.personal_info.last_name}.`, "success");
             handleUploadSuccessChange();
             handleCloseTerm();
           }
@@ -107,7 +110,7 @@ function ViewCoachProfile({ coach, handleUploadSuccessChange }) {
         catch(err){
           console.log(err);
         }
-      }
+    }
 
     const handleRequest=()=>{
         reqCoach();
