@@ -80,7 +80,6 @@ function WorkoutProgress({workoutPlanName, workoutPlanId, handleUploadSuccessCha
           });
         });
         if (exercises.length === 0){setIsEditing(true)}
-        setExercise(exercises[0])
       }
 
       const addToDB = async (s) => {
@@ -88,7 +87,7 @@ function WorkoutProgress({workoutPlanName, workoutPlanId, handleUploadSuccessCha
         try{
             const data = {
                 user_id : user.user_id,
-                workout_exercise_id : exercise.workout_plan_exercise_id,
+                workout_exercise_id : parseInt(exercise),
                 set_number : s[0],
                 reps : Number.isInteger(s[1]) ? s[1] : 0,
                 weight : Number.isInteger(s[2]) ? s[2] : 0,
