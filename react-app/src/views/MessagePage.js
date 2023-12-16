@@ -468,60 +468,74 @@ const MessagePage = () => {
           <Navbar.Brand href="#">Messages</Navbar.Brand>
         </Container>
       </Navbar>
-      <Container className="mt-4">
-        <Card className="my-3">
-          <Row>
-            <Col md={4} className="user-list-column" style={{ borderRight: "1px solid #D1D1D6", maxHeight: "80vh", overflowY: "auto" }}>
-              <div style={{ padding: "10px" }}>
-                {renderCoachList()}
-                {renderClientList()}
-              </div>
-            </Col>
-  
-            <Col md={8} className="message-section-column px-3 py-3">
-              {selectedUserId && (
-                <>
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <Image className="thumbnail-image" roundedCircle src={SelectedUserPicture} alt="Profile Picture" />
-                    <div style={{ marginLeft: "10px", fontWeight: "bold", fontSize: "1.2rem" }}>{selectedUserName}</div>
-                  </div>
-                  <hr style={{ margin: "10px 0", border: "1px solid black" }} />
-                </>
-              )}
-              {loading && <Spinner animation="border" />}
-              {error && <Alert variant="danger">{error}</Alert>}
-              {!loading && !error && selectedUserId ? (
-                renderMessages()
-              ) : (
+      {userRole === 'admin' && (
+        <Container className="mt-4">
+          <Card className="my-3">
+            <Row>
+              <Col md={12} className="message-section-column px-3 py-3">
                 <div style={{ textAlign: "center", flexGrow: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <p>Select a user to message.</p>
+                  <p>Admin cannot send messages.</p>
                 </div>
-              )}
-              {selectedUserId && (
-                <Form onSubmit={handleNewMessageSubmit} className="mt-2">
-                  <Form.Group controlId="newMessageContent" className="d-flex">
-                    <Form.Control
-                      type="text"
-                      placeholder="Message..."
-                      value={newMessageContent}
-                      onChange={(e) => setNewMessageContent(e.target.value)}
-                      style={{ borderRadius: "10px", border: "1px solid #D1D1D6" }}
-                      autoComplete="off"
-                    />
-                    <Button variant="primary" type="submit" className="mx-2" style={{ borderRadius: "10px" }}>
-                      Send
-                    </Button>
-                  </Form.Group>
-                </Form>
-              )}
-              {renderPagination()} {/* Include the pagination rendering here */}
-            </Col>
-          </Row>
-        </Card>
-      </Container>
+              </Col>
+            </Row>
+          </Card>
+        </Container>
+      )}
+      {userRole !== 'admin' && (
+        <Container className="mt-4">
+          <Card className="my-3">
+            <Row>
+              <Col md={4} className="user-list-column" style={{ borderRight: "1px solid #D1D1D6", maxHeight: "80vh", overflowY: "auto" }}>
+                <div style={{ padding: "10px" }}>
+                  {renderCoachList()}
+                  {renderClientList()}
+                </div>
+              </Col>
+              <Col md={8} className="message-section-column px-3 py-3">
+                {selectedUserId && (
+                  <>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <Image className="thumbnail-image" roundedCircle src={SelectedUserPicture} alt="Profile Picture" />
+                      <div style={{ marginLeft: "10px", fontWeight: "bold", fontSize: "1.2rem" }}>{selectedUserName}</div>
+                    </div>
+                    <hr style={{ margin: "10px 0", border: "1px solid black" }} />
+                  </>
+                )}
+                {loading && <Spinner animation="border" />}
+                {error && <Alert variant="danger">{error}</Alert>}
+                {!loading && !error && selectedUserId ? (
+                  renderMessages()
+                ) : (
+                  <div style={{ textAlign: "center", flexGrow: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <p>Select a user to message.</p>
+                  </div>
+                )}
+                {selectedUserId && (
+                  <Form onSubmit={handleNewMessageSubmit} className="mt-2">
+                    <Form.Group controlId="newMessageContent" className="d-flex">
+                      <Form.Control
+                        type="text"
+                        placeholder="Message..."
+                        value={newMessageContent}
+                        onChange={(e) => setNewMessageContent(e.target.value)}
+                        style={{ borderRadius: "10px", border: "1px solid #D1D1D6" }}
+                        autoComplete="off"
+                      />
+                      <Button variant="primary" type="submit" className="mx-2" style={{ borderRadius: "10px" }}>
+                        Send
+                      </Button>
+                    </Form.Group>
+                  </Form>
+                )}
+                {renderPagination()} {/* Include the pagination rendering here */}
+              </Col>
+            </Row>
+          </Card>
+        </Container>
+      )}
     </>
   );
-  
 };
-
+  
 export default MessagePage;
+  
