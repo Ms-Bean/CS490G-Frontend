@@ -1,7 +1,7 @@
 // SearchFiltersModal.test.js
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import SearchFiltersModal from '../path-to-your-app/SearchFiltersModal';
+import SearchFiltersModal from '../src/components/CoachSearch/SearchFiltersModal';
 
 test('renders SearchFiltersModal component', () => {
   const handleClose = jest.fn();

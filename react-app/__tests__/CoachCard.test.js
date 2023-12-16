@@ -1,7 +1,7 @@
 // CoachCard.test.js
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import CoachCard from '../path-to-your-app/CoachCard';
+import CoachCard from '../src/components/CoachSearch/CoachCard';
 
 test('renders CoachCard component', () => {
   const coach = {
