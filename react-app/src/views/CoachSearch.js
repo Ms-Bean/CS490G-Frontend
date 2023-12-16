@@ -23,7 +23,17 @@ const CoachSearch = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [sortOption, setSortOption] = useState({ key: "name", isDescending: false });
 
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertVariant, setAlertVariant] = useState('success');
+
   const pageSize = 12;
+
+  const handleAlert = (msg, variant) => {
+    setAlertMessage(msg);
+    setAlertVariant(variant);
+    setShowAlert(true);
+  }
 
   const handleChange = (e) => {
     const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
@@ -192,6 +202,7 @@ const CoachSearch = () => {
       />
 
       <Container className="mt-4">
+        <Alert show={showAlert} variant={alertVariant}>{alertMessage}</Alert>
         {isLoading ? (
           <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading...</span>
@@ -203,7 +214,7 @@ const CoachSearch = () => {
         ) : (
           <Row>
             {results.map((coach, index) => (
-              <CoachCard key={index} coach={coach} handleUploadSuccessChange={handleUploadSuccessChange}/>
+              <CoachCard key={index} coach={coach} handleUploadSuccessChange={handleUploadSuccessChange} handleAlert={handleAlert}/>
             ))}
           </Row>
         )}
