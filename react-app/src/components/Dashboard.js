@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { config } from "./../utils/config";
-import { Card, Row, Col, Container, Alert, Tab, Tabs, Button } from "react-bootstrap";
+import { Card, Row, Col, Container, Alert, Tab, Tabs, Button, ListGroup, Accordion } from "react-bootstrap";
 import DashboardNavbar from "./Dashboard/DashboardNavbar";
 import { Line, Bar, Pie } from "react-chartjs-2";
 import "./../css/Dashboard.css";
@@ -177,41 +177,96 @@ const CoachDashboard = () => {
 
   const renderExerciseCard = (day) => {
     const dayData = exerciseData[day];
-    console.log(exerciseData);
-    if (!dayData) {
-      return null;
+    if (!dayData || dayData.exercises.length === 0) {
+      return (
+        <Card className="w-100" style={{ display: "flex", flexDirection: "column", minHeight: "250px" }}>
+          <Card.Header>
+            <span style={{ fontSize: "20px" }}>{capitalizeFirstLetter(dayData.weekday)}</span>
+          </Card.Header>
+          <Card.Body>
+            <p>No exercises scheduled</p>
+          </Card.Body>
+        </Card>
+      );
     }
 
-    const renderExerciseDetails = (exercise) => (
-      <div key={exercise.workout_exercise_id}>
-        <strong>{exercise.exercise_name}</strong>
-        <br />
-        Time: {exercise.time}
-        <br />
-        Expected Sets: {exercise.expected_num_sets}
-        <br />
-        Reps per Set: {exercise.expected_reps_per_set}
-        <br />
-        Expected Weight: {exercise.expected_weight} lbs
-        {exercise.logged_sets && exercise.logged_sets.length > 0 && (
-          <div>
-            <h6>Logged Sets:</h6>
-            {exercise.logged_sets.map((set, index) => (
-              <p key={index}>
-                Set {index + 1}: {set.actual_reps} reps, {set.actual_weight} lbs
-              </p>
-            ))}
-          </div>
-        )}
-      </div>
-    );
+    const calculateDayProgress = () => {
+      let totalExpectedSets = 0;
+      let totalLoggedSets = 0;
+
+      dayData.exercises.forEach((exercise) => {
+        totalExpectedSets += exercise.expected_num_sets;
+        totalLoggedSets += exercise.logged_sets.length;
+      });
+
+      return totalExpectedSets > 0 ? (totalLoggedSets / totalExpectedSets) * 100 : 0;
+    };
+
+    const renderProgressBar = () => {
+      const progress = calculateDayProgress();
+      return (
+        <div
+          style={{
+            width: `${progress}%`,
+            height: "100%",
+            backgroundColor: progress >= 100 ? "green" : "orange",
+            borderRadius: "0 0 5px 5px",
+          }}
+        ></div>
+      );
+    };
+
+    const renderExerciseDetails = (exercise, index) => {
+      const renderLoggedSets = () => {
+        return (
+          <ListGroup variant="flush">
+            {exercise.logged_sets.length > 0 ? (
+              exercise.logged_sets.map((set, setIndex) => (
+                <span key={setIndex}>
+                  {set.logged_reps} reps x {set.logged_weight} lbs
+                </span>
+              ))
+            ) : (
+              <span style={{ color: "darkred" }}>No activity logged</span>
+            )}
+          </ListGroup>
+        );
+      };
+
+      return (
+        <Accordion.Item eventKey={index.toString()} key={exercise.workout_exercise_id} style={{ borderRadius: 0 }}>
+        <Accordion.Header style={{ borderRadius: 0 }}>
+            <strong style={{ fontSize: "18px" }}>{exercise.exercise_name}</strong>
+          </Accordion.Header>
+          <Accordion.Body>
+            <ListGroup variant="flush">
+              <ListGroup.Item>
+                <strong>Scheduled:</strong>
+                <br /> {exercise.expected_num_sets}x{exercise.expected_reps_per_set} {exercise.expected_weight} lbs
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <strong>Logged Sets:</strong>
+                {renderLoggedSets(exercise)}
+              </ListGroup.Item>
+            </ListGroup>
+          </Accordion.Body>
+        </Accordion.Item>
+      );
+    };
 
     return (
-      <Card className="w-100" style={{ minHeight: "250px" }}>
+      <Card className="w-100" style={{ display: "flex", flexDirection: "column", minHeight: "250px" }}>
         <Card.Header>
-          <Card.Title>{capitalizeFirstLetter(dayData.weekday)}</Card.Title>
+          <span style={{ fontSize: "20px" }}>{capitalizeFirstLetter(dayData.weekday)}</span>
         </Card.Header>
-        <Card.Body>{dayData.exercises.length > 0 ? dayData.exercises.map(renderExerciseDetails) : <p>No exercises scheduled</p>}</Card.Body>
+        <div style={{ flexGrow: 1, overflowY: "auto" }}>
+        <Accordion defaultActiveKey="0" className="no-radius-top">
+            {dayData.exercises.map(renderExerciseDetails)}
+          </Accordion>
+        </div>
+        <Card.Footer style={{ padding: 0, height: "20px", display: "flex", backgroundColor: "#ddd", borderRadius: "0 0 5px 5px" }}>
+          {renderProgressBar()}
+        </Card.Footer>
       </Card>
     );
   };
@@ -436,7 +491,6 @@ const CoachDashboard = () => {
     switch (currentTab) {
       case "weeklyView":
         const hasData = exerciseData.some((day) => day && day.exercises.length > 0);
-
         return (
           <>
             {clientDataAlert}
@@ -461,7 +515,7 @@ const CoachDashboard = () => {
         return (
           <>
             {clientDataAlert}
-            <Tabs defaultActiveKey="calories" id="chart-tabs" className="mb-3" justify >
+            <Tabs defaultActiveKey="calories" id="chart-tabs" className="mb-3" justify>
               <Tab eventKey="calories" title="Calories">
                 {chart_data.calories_burned_y.length > 0 || chart_data.calories_consumed_y.length > 0 ? (
                   renderCombinedCaloriesChart(chart_data.calories_burned_y, chart_data.calories_consumed_y)

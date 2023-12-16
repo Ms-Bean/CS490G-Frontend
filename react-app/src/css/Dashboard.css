@@ -1,3 +1,19 @@
 .card-fixed-height {
-    min-height: 300px; /* Adjust this value as needed */
-  }
+  min-height: 300px; /* Adjust this value as needed */
+}
+
+.no-radius-top .accordion-item:first-of-type .accordion-button {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  background-color: #ffffff;
+  border: 0px!important;
+}
+
+.accordion-item {
+  border: 0 !important;
+}
+
+.no-radius-top .accordion-item:last-of-type .accordion-button:not(.collapsed) {
+  border: 0!important;
+  background-color: #ffffff;
+}
