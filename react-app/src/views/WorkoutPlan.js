@@ -206,7 +206,8 @@ const WorkoutPlan = () => {
                 </>}
             </>}
             <div>
-            {assigned_workout_data.workoutPlanId !== "" && <WorkoutProgress
+            {
+            assigned_workout_data.workoutPlanId && assigned_workout_data.workoutPlanId !== "" && <WorkoutProgress
                     workoutPlanName={assigned_workout_data.workoutPlanName}
                     workoutPlanId={assigned_workout_data.workoutPlanId}
                     handleUploadSuccessChange={handleUploadSuccessChange}
