@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { useParams } from "react-router-dom";
 import { config } from "./../utils/config";
-import { Card, Row, Col, Container, Alert, Tab, Tabs } from "react-bootstrap";
+import { Card, Row, Col, Container, Alert, Tab, Tabs, Button } from "react-bootstrap";
 import DashboardNavbar from "./Dashboard/DashboardNavbar";
 import { Line, Bar, Pie } from "react-chartjs-2";
 import "./../css/Dashboard.css";
@@ -10,8 +9,10 @@ import { CategoryScale } from "chart.js";
 import Chart from "chart.js/auto";
 import DailySurveyForm from "./../views/DailySurvey";
 import CoachClientDashboard from "./CoachClientDashboard";
+import { useAuth } from "../hooks/useAuth";
 
 const CoachDashboard = () => {
+  const { user } = useAuth();
   const location = useLocation();
   const urlParams = new URLSearchParams(location.search);
   const client_id = urlParams.get("client_id");
@@ -29,6 +30,8 @@ const CoachDashboard = () => {
       },
     ],
   });
+
+  console.log("user", user);
 
   const [exerciseData, setExerciseData] = useState([]);
   const [chart_data, set_chart_data] = useState({
@@ -174,6 +177,7 @@ const CoachDashboard = () => {
 
   const renderExerciseCard = (day) => {
     const dayData = exerciseData[day];
+    console.log(exerciseData);
     if (!dayData) {
       return null;
     }
@@ -188,13 +192,13 @@ const CoachDashboard = () => {
         <br />
         Reps per Set: {exercise.expected_reps_per_set}
         <br />
-        Expected Weight: {exercise.expected_weight} kg
+        Expected Weight: {exercise.expected_weight} lbs
         {exercise.logged_sets && exercise.logged_sets.length > 0 && (
           <div>
             <h6>Logged Sets:</h6>
             {exercise.logged_sets.map((set, index) => (
               <p key={index}>
-                Set {index + 1}: {set.actual_reps} reps, {set.actual_weight} kg
+                Set {index + 1}: {set.actual_reps} reps, {set.actual_weight} lbs
               </p>
             ))}
           </div>
@@ -203,7 +207,7 @@ const CoachDashboard = () => {
     );
 
     return (
-      <Card className="shadow-sm w-100" style={{ minHeight: "300px" }}>
+      <Card className="w-100" style={{ minHeight: "250px" }}>
         <Card.Header>
           <Card.Title>{capitalizeFirstLetter(dayData.weekday)}</Card.Title>
         </Card.Header>
@@ -411,43 +415,83 @@ const CoachDashboard = () => {
   );
 
   const renderTabContent = () => {
+    const isViewingClientData = !!client_id;
+
+    const handleResetDashboard = () => {
+      window.history.pushState({}, document.title, "/dashboard"); // Reset URL (remove client_id)
+      fetchClientDashboardInfo(); // Refetch data for the coach
+      setCurrentTab("coachClientDashboard");
+    };
+
+    const clientDataAlert = isViewingClientData && (
+      <Alert variant="info d-flex flex-column align-items-center">
+        <Alert.Heading>Viewing Client Data</Alert.Heading>
+        <p>You are currently viewing data for a client.</p>
+        <Button variant="dark" onClick={handleResetDashboard}>
+          View My Dashboard
+        </Button>
+      </Alert>
+    );
+
     switch (currentTab) {
       case "weeklyView":
+        const hasData = exerciseData.some((day) => day && day.exercises.length > 0);
+
         return (
           <>
-            <p>
-              <strong>This Week: username</strong>
-            </p>
-            <Row>
-              {[...Array(5)].map((_, i) => (
-                <Col md={4} className="mb-4 d-flex" key={i}>
-                  {renderExerciseCard(i)}
-                </Col>
-              ))}
-            </Row>
+            {clientDataAlert}
+            {hasData ? (
+              <Row>
+                {[...Array(6)].map((_, i) => (
+                  <Col md={4} className="mb-4 d-flex" key={i}>
+                    {renderExerciseCard(i)}
+                  </Col>
+                ))}
+              </Row>
+            ) : (
+              <Alert variant="secondary">
+                <Alert.Heading>No Data Available</Alert.Heading>
+                <p>There is no exercise data available for the entire week.</p>
+              </Alert>
+            )}
           </>
         );
+
       case "statisticsView":
         return (
           <>
-            <p>
-            <strong>Statistics: username</strong>
-            </p>
-            <Tabs defaultActiveKey="calories" id="chart-tabs" className="mb-3" justify>
+            {clientDataAlert}
+            <Tabs defaultActiveKey="calories" id="chart-tabs" className="mb-3" justify >
               <Tab eventKey="calories" title="Calories">
-                {renderCombinedCaloriesChart(chart_data.calories_burned_y, chart_data.calories_consumed_y, "Calories Burned vs Consumed")}
+                {chart_data.calories_burned_y.length > 0 || chart_data.calories_consumed_y.length > 0 ? (
+                  renderCombinedCaloriesChart(chart_data.calories_burned_y, chart_data.calories_consumed_y)
+                ) : (
+                  <Alert variant="secondary">No calorie data available.</Alert>
+                )}
               </Tab>
               <Tab eventKey="netCalories" title="Net Calories">
-                {renderNetCaloriesChart(chart_data.calories_burned_y, chart_data.calories_consumed_y)}
+                {chart_data.calories_burned_y.length > 0 || chart_data.calories_consumed_y.length > 0 ? (
+                  renderNetCaloriesChart(chart_data.calories_burned_y, chart_data.calories_consumed_y)
+                ) : (
+                  <Alert variant="secondary">No net calorie data available.</Alert>
+                )}
               </Tab>
               <Tab eventKey="waterIntake" title="Water Intake">
-                {renderLineChart("Water Intake (Liters)", chart_data.water_intake_y, "blue", "Daily Water Intake", "Liters")}
+                {chart_data.water_intake_y.length > 0 ? (
+                  renderLineChart("Water Intake (Liters)", chart_data.water_intake_y, "blue", "Daily Water Intake", "Liters")
+                ) : (
+                  <Alert variant="secondary">No water intake data available.</Alert>
+                )}
               </Tab>
               <Tab eventKey="weight" title="Weight">
-                {renderWeightChart("Weight", chart_data.weight_y, "purple", "Weight", "Pounds", targetWeight)}
+                {chart_data.weight_y.length > 0 ? (
+                  renderWeightChart("Weight", chart_data.weight_y, "purple", "Weight", "Pounds", targetWeight)
+                ) : (
+                  <Alert variant="secondary">No weight data available.</Alert>
+                )}
               </Tab>
               <Tab eventKey="moodPieChart" title="Mood Pie Chart">
-                {renderMoodPieChart()}
+                {moodData.datasets[0].data.length > 0 ? renderMoodPieChart() : <Alert variant="secondary">No mood data available.</Alert>}
               </Tab>
             </Tabs>
           </>

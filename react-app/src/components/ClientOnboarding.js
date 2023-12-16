@@ -55,7 +55,7 @@ const ClientOnboarding = () => {
                 value={formData.weight}
                 onChange={handleChange}
                 required
-                placeholder="Enter your weight in kg"
+                placeholder="Enter your weight in pounds"
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="height">
