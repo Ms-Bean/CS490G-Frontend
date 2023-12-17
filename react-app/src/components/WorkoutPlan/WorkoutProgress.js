@@ -26,7 +26,7 @@ function WorkoutProgress({workoutPlanName, workoutPlanId, handleUploadSuccessCha
     useEffect (()=> {
       getData();
       console.log("add", showAddButton)
-  },[showAddButton,show])
+  },[show])
 
     function getDate() {
       const today = new Date();
