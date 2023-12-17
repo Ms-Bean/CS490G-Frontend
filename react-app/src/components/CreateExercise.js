@@ -80,9 +80,9 @@ function CreateExercise({ addTag, workout_plan_id, addWorkoutExercise }) {
         exercise_id: Number(exerciseFormData.exercise_id),
         weekday: exerciseFormData.weekday,
         time: exerciseFormData.time + ":00",
-        reps_per_set: Number(exerciseFormData.reps_per_set),
-        num_sets: Number(exerciseFormData.num_sets),
-        weight: Number(exerciseFormData.weight),
+        reps_per_set: exerciseFormData.reps_per_set === "" ? null : Number(exerciseFormData.reps_per_set),
+        num_sets: exerciseFormData.num_sets === "" ? null : Number(exerciseFormData.num_sets),
+        weight: exerciseFormData.weight === "" ? null : Number(exerciseFormData.weight),
       };
 
       const response = await fetch(`${config.backendUrl}/workout_plan/${workout_plan_id}/exercise/new`, {
