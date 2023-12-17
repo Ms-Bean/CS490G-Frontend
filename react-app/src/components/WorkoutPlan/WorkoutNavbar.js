@@ -58,6 +58,9 @@ const WorkoutNavbar = ({
             <Button onClick={toggleLogModal} variant="secondary" className="me-2">
               Log Today's Exercises
             </Button>
+            <Button onClick={() =>{
+              window.location.href = "/select_workout_plan";
+            }} variant="secondary" className="me-2">Select a workout plan</Button>
             <form className="d-flex ms-auto" role="search">
               <input
                 onChange={handleSearchChange}
