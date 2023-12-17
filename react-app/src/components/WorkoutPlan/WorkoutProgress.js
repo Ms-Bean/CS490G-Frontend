@@ -22,12 +22,13 @@ function WorkoutProgress({workoutPlanName, workoutPlanId, handleUploadSuccessCha
     const {user} = useAuth();
 
     const url = `${config.backendUrl}/workout_plan/${workoutPlanId}?include_exercises=true`;
-
     useEffect (()=> {
-      getData();
       console.log("add", showAddButton)
   },[showAddButton,show])
 
+    useEffect(() =>{
+      getData();
+    }, [])
     function getDate() {
       const today = new Date();
       const month = today.getMonth() + 1;
@@ -76,6 +77,9 @@ function WorkoutProgress({workoutPlanName, workoutPlanId, handleUploadSuccessCha
             const incoming = [];
             pulled.forEach((element)=> {if(element.weekday == getDayOfWeek()){incoming[incoming.length]=element}})
             setExercises(incoming)
+            console.log("Incoming");
+            if(incoming.length !== 0)
+              setExercise(incoming[0].workout_plan_exercise_id);
             if (!res.ok){throw new Error("Network response was not ok");}
           });
         });
