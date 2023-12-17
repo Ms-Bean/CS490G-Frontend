@@ -84,9 +84,6 @@ const HomePage = () => {
                 <Card.Body>
                   <Card.Title>{trainer.name}</Card.Title>
                   <Card.Text>{trainer.description}</Card.Text>
-                  <Button variant="outline-secondary" className="w-100">
-                    View Profile
-                  </Button>
                 </Card.Body>
               </Card>
             </Col>
