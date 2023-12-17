@@ -1,34 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { config } from "./../utils/config";
-import { Button, ButtonGroup, Table, Container, Dropdown, Image, DropdownButton, Row, Col, Modal } from "react-bootstrap";
+import { Button, ButtonGroup, Table, Container, Dropdown, Image, DropdownButton, Row, Col, Modal, Toast } from "react-bootstrap";
 
-
-const handleAssignClick = (workout_plan_id) => {
-  try {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    let client_id = urlParams.get("user_id");
-    console.log("CLIENT ID")
-    console.log(client_id);
-    fetch(`${config.backendUrl}/assign_workout_plan`, {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "client_id": client_id,
-        "workout_plan_id": workout_plan_id
-      }
-    }).then((response) =>{
-      if (!response.ok) throw new Error("Failed to assign workout plan");
-    }).catch( (err) =>{
-      console.log("Err");
-    });
-  } catch (err) {
-    console.log(err);
-  }
-}
 
 const SelectWorkoutPlanComponent = () => {
+
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+  const [timeoutId, setTimeoutId] = useState(null);
 
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -65,8 +45,47 @@ const SelectWorkoutPlanComponent = () => {
     setIsLoading(false);
   }, []);
 
+  const handleAssignClick = (workout_plan_id, workout_plan_name) => {
+    try {
+      console.log(workout_plans)
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      let client_id = urlParams.get("user_id");
+      console.log("CLIENT ID")
+      console.log(client_id);
+      fetch(`${config.backendUrl}/assign_workout_plan`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "client_id": client_id,
+          "workout_plan_id": workout_plan_id
+        }
+      }).then((response) =>{
+        if (!response.ok) throw new Error("Failed to assign workout plan");
+        setShowToast(true);
+        setToastMessage(workout_plan_name);
+
+        // Clear previous timeout (if any)
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+
+        // Set a new timeout to hide the toast after a certain duration
+        const newTimeoutId = setTimeout(() => {
+          setShowToast(false);
+        }, 5000);
+
+        setTimeoutId(newTimeoutId);
+      }).catch( (err) =>{
+        console.log("Err");
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
     return (
-      <div id="wrapper">
+      <div className="container" id="wrapper">
         <h1>Assign a workout plan to your client</h1>
         <table className="table responsive">
           <thead>
@@ -93,7 +112,7 @@ const SelectWorkoutPlanComponent = () => {
                     {workout_plan.name}
                   </td>
                   <td>
-                  <Button onClick={() => handleAssignClick(workout_plan.workout_plan_id)}>Assign Workout Plan</Button>
+                  <Button onClick={() => handleAssignClick(workout_plan.workout_plan_id, workout_plan.name)}>Assign Workout Plan</Button>
                   </td>
                 </tr>
               ))
@@ -104,6 +123,13 @@ const SelectWorkoutPlanComponent = () => {
             )}
           </tbody>
         </table>
+
+        <Toast className="position-fixed bottom-0 end-0 p-3 m-3" show={showToast} onClose={() => setShowToast(false)}>
+          <Toast.Header>
+            <strong className="mr-auto">New Workout Plan Assigned</strong>
+          </Toast.Header>
+          <Toast.Body>{toastMessage}</Toast.Body>
+        </Toast>
       </div>
     );
 };
