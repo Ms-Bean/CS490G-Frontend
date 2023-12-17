@@ -123,6 +123,13 @@ const SelectWorkoutPlanComponent = () => {
             )}
           </tbody>
         </table>
+        <Container>
+              <Row>
+                <Col xs={11}></Col>
+                <Col xs={1}><Button href="/workout_plan" variant="secondary">Go Back</Button></Col>
+              </Row>
+        </Container>
+
 
         <Toast className="position-fixed bottom-0 end-0 p-3 m-3" show={showToast} onClose={() => setShowToast(false)}>
           <Toast.Header>
