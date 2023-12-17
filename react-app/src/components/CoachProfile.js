@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import profile_pic from "./static_images/default-avatar-profile-icon-of-social-media-user-vector.jpg";
 import { config
  } from "../utils/config";
 const ClientProfile = () => {
@@ -93,15 +92,6 @@ const ClientProfile = () => {
   };
   return (
     <div className="container my-2">
-      <div className="my-3">
-        <img className="img-thumbnail rounded-circle d-block mx-auto" src={profile_pic} />
-        <div className="mt-3 me-3 d-flex justify-content-center">
-          <button disabled={editing} onClick={changeProfilePicture} className="ms-3 btn btn-dark">
-            Change Profile Picture
-          </button>
-        </div>
-      </div>
-
       <form onSubmit={submitEdit} className="w-75 mx-auto">
         <div class="form-group my-3">
           <label for="weight">Hourly Rate</label>
