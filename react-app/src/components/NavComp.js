@@ -48,6 +48,10 @@ const NavComp = () => {
                     Account
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
+                  <NavDropdown.Item onClick={() => navigate("/your_trainer")}>
+                    Your Trainer
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
                   <NavDropdown.Item onClick={handleLogout}>
                     Logout
                   </NavDropdown.Item>

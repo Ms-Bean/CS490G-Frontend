@@ -474,8 +474,8 @@ const CoachDashboard = () => {
               </Row>
             ) : (
               <Alert variant="secondary">
-                <Alert.Heading>No Data Available</Alert.Heading>
-                <p>There is no exercise data available for the entire week.</p>
+                <Alert.Heading>No Workout Plan Assigned</Alert.Heading>
+                <p>There are no scheduled exercises for this week. To create and assign a workout plan, click <a href="/workout_plan">here</a> or go to the Workouts page.</p>
               </Alert>
             )}
           </>

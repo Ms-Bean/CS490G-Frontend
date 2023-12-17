@@ -3,11 +3,11 @@ import WorkoutNavbar from "../components/WorkoutPlan/WorkoutNavbar";
 import WorkoutProgress from "../components/WorkoutPlan/WorkoutProgress";
 import WorkoutPlanCard from "../components/WorkoutPlan/WorkoutCard";
 // import CreateWorkoutPlanForClient from "../components/WorkoutPlan/CreateWorkoutPlanForClient.js";
-import { FaRegClipboard } from "react-icons/fa6";
-import { FaPlusCircle} from "react-icons/fa";
+import { FaRegClipboard, FaPlusCircle, FaCog } from 'react-icons/fa';
+import { Alert, Container } from "react-bootstrap";
 import { useAuth } from "../hooks/useAuth";
 import { config } from "./../utils/config";
-import { Button, ButtonGroup, Table, Container, Dropdown, Image, DropdownButton, Row, Col, Modal, Alert } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const WorkoutPlan = () => {
@@ -76,11 +76,10 @@ const WorkoutPlan = () => {
             if (!response.ok) throw new Error("Failed to fetch client dashboard info");
             const assigned_data = await assigned_response.json();
 
-            console.log("Assigned workout plan");
-            console.log(assigned_data);
+            console.log("Assigned workout plan", assigned_data);
             set_assigned_workout_data({
                 workoutPlanId: assigned_data.workout_plan_id,
-                workoutPlanName: assigned_data.name
+                workoutPlanName: assigned_data.workout_plan_name
             })
         }
         catch(err){
@@ -172,31 +171,40 @@ const WorkoutPlan = () => {
             onToggleSortDirection={toggleSortDirection}
             sortDirection={sortDirection}
             user_id ={user.user_id}
+            handleAssignClick={handleAssignClick} 
+            toggleLogModal={toggleLogModal}
+            hasAssignedWorkoutPlan={!!assigned_workout_data.workoutPlanId}
             />
-            <Button onClick={() => handleAssignClick()}>Choose a new workout plan for yourself</Button>
-            <br></br>
-            <Button onClick={toggleLogModal}>
-                Log today's exercises
-            </Button>
-            {workoutPlans.length === 0 ? <div className="container vh-100 d-flex justify-content-center align-items-center">
-                <div className="w-50 d-flex flex-column justify-content-center align-items-center border border-black shadow-lg rounded p-2" >
-                    <h2><FaRegClipboard className="mb-1" size={30}/> No Workout Plan available</h2>
-                    <small>Create a Workout Plan by Clicking the <span><FaPlusCircle/></span> on the Navbar</small>
-                </div>
-            </div> : 
-            <>
+            {!assigned_workout_data.workoutPlanId && workoutPlans.length > 0 && (
+                <Alert variant="info" className="text-center rounded-0">
+                    You don't have an assigned workout plan. To assign yourself a workout plan, click <a href="#" onClick={(e) => { e.preventDefault(); handleAssignClick(); }} style={{ textDecoration: 'underline' }}>here</a> or the <span><FaCog/></span> and "Choose a new workout plan for yourself".
+                </Alert>
+            )}
+
+            {workoutPlans.length === 0 ? 
+            <Alert variant="info" className="text-center rounded-0">
+                    <h2><FaRegClipboard className="mb-1" size={30}/> No workout plans available</h2>
+                    <small>Create a Workout Plan by clicking <span><FaPlusCircle/></span> above</small>
+                </Alert>
+             : 
+                <Container className="mt-4">
                     {!isLoading && filteredAndSortedWorkoutPlans.length === 0 ?
-                    <div className="container vh-100 d-flex justify-content-center align-items-center">
-                        <div className="w-50 d-flex flex-column justify-content-center align-items-center border border-black shadow-lg rounded p-2" >
-                            <h2>No Workout Plan found matching the specified criteria.</h2>
+                        <Alert variant="info" className="text-center">
+                            <h2>No workout plans found matching the search criteria.</h2>
+                        </Alert>
+                        :
+                        <div className="container mt-3" style={{minHeight: "53em"}}>
+                        {createGrid(filteredAndSortedWorkoutPlans)}
                         </div>
+                    }
+                    {isCoach ? 
+                    <div className="d-flex justify-content-center mt-3">
+                        {/* <CreateWorkoutPlanForClient/> */}
                     </div>
                     :
-                    <div className="container mt-3" style={{minHeight: "53em"}}>
-                    {createGrid(filteredAndSortedWorkoutPlans)}
-                    </div>
-                    }
-            </>}
+                    <>
+                    </>}
+            </Container>}
             <div>
             {
             assigned_workout_data.workoutPlanId && assigned_workout_data.workoutPlanId !== "" && <WorkoutProgress
