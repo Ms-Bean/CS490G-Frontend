@@ -13,6 +13,7 @@ const WorkoutNavbar = ({
   user_id,
   handleAssignClick,
   toggleLogModal,
+  hasAssignedWorkoutPlan,
 }) => {
   const handleSortOptionClick = (key) => {
     if (sortKey === key) {
@@ -55,9 +56,11 @@ const WorkoutNavbar = ({
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="d-flex ms-auto align-items-center">
-            <Button onClick={toggleLogModal} variant="secondary" className="me-2">
-              Log Today's Exercises
-            </Button>
+            {hasAssignedWorkoutPlan && (
+              <Button onClick={toggleLogModal} variant="secondary" className="me-2">
+                Log Today's Exercises
+              </Button>
+            )}
             <form className="d-flex ms-auto" role="search">
               <input
                 onChange={handleSearchChange}
@@ -88,7 +91,9 @@ const WorkoutNavbar = ({
                   <FaCog size={22} style={{ color: "white" }} />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => handleAssignClick()}>Choose a new workout plan</Dropdown.Item>
+                  <Dropdown.Item onClick={() => handleAssignClick()}>
+                    {hasAssignedWorkoutPlan ? "Change your workout plan" : "Choose a workout plan"}
+                  </Dropdown.Item>{" "}
                 </Dropdown.Menu>
               </Dropdown>
             </form>

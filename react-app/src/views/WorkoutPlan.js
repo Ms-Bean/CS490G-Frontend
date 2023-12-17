@@ -3,7 +3,8 @@ import WorkoutNavbar from "../components/WorkoutPlan/WorkoutNavbar";
 import WorkoutProgress from "../components/WorkoutPlan/WorkoutProgress";
 import WorkoutPlanCard from "../components/WorkoutPlan/WorkoutCard";
 // import CreateWorkoutPlanForClient from "../components/WorkoutPlan/CreateWorkoutPlanForClient.js";
-import { FaRegClipboard, FaPlusCircle } from 'react-icons/fa';
+import { FaRegClipboard, FaPlusCircle, FaCog } from 'react-icons/fa';
+import { Alert } from "react-bootstrap";
 import { useAuth } from "../hooks/useAuth";
 import { config } from "./../utils/config";
 import { Button } from "react-bootstrap";
@@ -172,13 +173,20 @@ const WorkoutPlan = () => {
             user_id ={user.user_id}
             handleAssignClick={handleAssignClick} 
             toggleLogModal={toggleLogModal}
+            hasAssignedWorkoutPlan={!!assigned_workout_data.workoutPlanId}
             />
-            {workoutPlans.length === 0 ? <div className="container vh-100 d-flex justify-content-center align-items-center">
-                <div className="w-50 d-flex flex-column justify-content-center align-items-center border border-black shadow-lg rounded p-2" >
+            {!assigned_workout_data.workoutPlanId && workoutPlans.length > 0 && (
+                <Alert variant="info" className="text-center">
+                    You don't have an assigned workout plan. Click on the <span><FaCog/></span> and "Choose a new workout plan for yourself" to assign one.
+                </Alert>
+            )}
+
+            {workoutPlans.length === 0 ? 
+            <Alert variant="info" className="text-center">
                     <h2><FaRegClipboard className="mb-1" size={30}/> No Workout Plan available</h2>
                     <small>Create a Workout Plan by Clicking the <span><FaPlusCircle/></span> on the Navbar</small>
-                </div>
-            </div> : 
+                </Alert>
+             : 
             <>
                     {!isLoading && filteredAndSortedWorkoutPlans.length === 0 ?
                     <div className="container vh-100 d-flex justify-content-center align-items-center">
