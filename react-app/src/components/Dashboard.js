@@ -174,14 +174,13 @@ const CoachDashboard = () => {
     if (!string) return "";
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
-
   const renderExerciseCard = (day) => {
     const dayData = exerciseData[day];
     if (!dayData || dayData.exercises.length === 0) {
       return (
-        <Card className="w-100" style={{ display: "flex", flexDirection: "column", minHeight: "250px" }}>
+        <Card className="w-100" style={{ height: "25vh" }}>
           <Card.Header>
-            <span style={{ fontSize: "20px" }}>{capitalizeFirstLetter(dayData.weekday)}</span>
+            <strong style={{ fontSize: "20px" }}>{capitalizeFirstLetter(dayData.weekday)}</strong>
           </Card.Header>
           <Card.Body>
             <p>No exercises scheduled</p>
@@ -189,32 +188,6 @@ const CoachDashboard = () => {
         </Card>
       );
     }
-
-    const calculateDayProgress = () => {
-      let totalExpectedSets = 0;
-      let totalLoggedSets = 0;
-
-      dayData.exercises.forEach((exercise) => {
-        totalExpectedSets += exercise.expected_num_sets;
-        totalLoggedSets += exercise.logged_sets.length;
-      });
-
-      return totalExpectedSets > 0 ? (totalLoggedSets / totalExpectedSets) * 100 : 0;
-    };
-
-    const renderProgressBar = () => {
-      const progress = calculateDayProgress();
-      return (
-        <div
-          style={{
-            width: `${progress}%`,
-            height: "100%",
-            backgroundColor: progress >= 100 ? "green" : "orange",
-            borderRadius: "0 0 5px 5px",
-          }}
-        ></div>
-      );
-    };
 
     const renderExerciseDetails = (exercise, index) => {
       const renderLoggedSets = () => {
@@ -235,10 +208,10 @@ const CoachDashboard = () => {
 
       return (
         <Accordion.Item eventKey={index.toString()} key={exercise.workout_exercise_id} style={{ borderRadius: 0 }}>
-        <Accordion.Header style={{ borderRadius: 0 }}>
+          <Accordion.Header style={{ borderRadius: 0 }}>
             <strong style={{ fontSize: "18px" }}>{exercise.exercise_name}</strong>
           </Accordion.Header>
-          <Accordion.Body>
+          <Accordion.Body className="py-0">
             <ListGroup variant="flush">
               <ListGroup.Item>
                 <strong>Scheduled:</strong>
@@ -255,18 +228,15 @@ const CoachDashboard = () => {
     };
 
     return (
-      <Card className="w-100" style={{ display: "flex", flexDirection: "column", minHeight: "250px" }}>
+      <Card className="w-100" style={{ height: "25vh" }}>
         <Card.Header>
-          <span style={{ fontSize: "20px" }}>{capitalizeFirstLetter(dayData.weekday)}</span>
+          <strong style={{ fontSize: "20px" }}>{capitalizeFirstLetter(dayData.weekday)}</strong>
         </Card.Header>
         <div style={{ flexGrow: 1, overflowY: "auto" }}>
-        <Accordion defaultActiveKey="0" className="no-radius-top">
+          <Accordion defaultActiveKey="0" className="no-radius-top">
             {dayData.exercises.map(renderExerciseDetails)}
           </Accordion>
         </div>
-        <Card.Footer style={{ padding: 0, height: "20px", display: "flex", backgroundColor: "#ddd", borderRadius: "0 0 5px 5px" }}>
-          {renderProgressBar()}
-        </Card.Footer>
       </Card>
     );
   };
