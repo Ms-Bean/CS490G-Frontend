@@ -135,7 +135,7 @@ const ExerciseManagement = () => {
         <Row>
           {!isLoading && paginatedExercises.length === 0 ? (
             <>
-              <Alert variant="info">No exercises found matching the specified criteria.</Alert>
+              <Alert variant="info" className="text-center"><h2>No exercises found matching the search criteria.</h2></Alert>
               <Col className="d-flex justify-content-center">
                 <Button onClick={resetFilters} className="w-50" variant="secondary">
                   Reset Filters

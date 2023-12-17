@@ -57,8 +57,8 @@ const WorkoutNavbar = ({
           </button>
           <div className="d-flex ms-auto align-items-center">
             {hasAssignedWorkoutPlan && (
-              <Button onClick={toggleLogModal} variant="secondary" className="me-2">
-                Log Today's Exercises
+              <Button onClick={toggleLogModal} variant="success" className="me-2">
+                Log Exercises
               </Button>
             )}
             <form className="d-flex ms-auto" role="search">
