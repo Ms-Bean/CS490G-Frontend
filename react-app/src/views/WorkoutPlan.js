@@ -177,8 +177,7 @@ const WorkoutPlan = () => {
             <br></br>
             <Button onClick={toggleLogModal}>
                 Log today's exercises
-              </Button>
-
+            </Button>
             {workoutPlans.length === 0 ? <div className="container vh-100 d-flex justify-content-center align-items-center">
                 <div className="w-50 d-flex flex-column justify-content-center align-items-center border border-black shadow-lg rounded p-2" >
                     <h2><FaRegClipboard className="mb-1" size={30}/> No Workout Plan available</h2>
@@ -197,13 +196,6 @@ const WorkoutPlan = () => {
                     {createGrid(filteredAndSortedWorkoutPlans)}
                     </div>
                     }
-                {isCoach ? 
-                <div className="d-flex justify-content-center mt-3">
-                    {/* <CreateWorkoutPlanForClient/> */}
-                </div>
-                :
-                <>
-                </>}
             </>}
             <div>
             {
