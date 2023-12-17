@@ -3,11 +3,10 @@ import WorkoutNavbar from "../components/WorkoutPlan/WorkoutNavbar";
 import WorkoutProgress from "../components/WorkoutPlan/WorkoutProgress";
 import WorkoutPlanCard from "../components/WorkoutPlan/WorkoutCard";
 // import CreateWorkoutPlanForClient from "../components/WorkoutPlan/CreateWorkoutPlanForClient.js";
-import { FaRegClipboard } from "react-icons/fa6";
-import { FaPlusCircle} from "react-icons/fa";
+import { FaRegClipboard, FaPlusCircle } from 'react-icons/fa';
 import { useAuth } from "../hooks/useAuth";
 import { config } from "./../utils/config";
-import { Button, ButtonGroup, Table, Container, Dropdown, Image, DropdownButton, Row, Col, Modal, Alert } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const WorkoutPlan = () => {
@@ -171,13 +170,9 @@ const WorkoutPlan = () => {
             onToggleSortDirection={toggleSortDirection}
             sortDirection={sortDirection}
             user_id ={user.user_id}
+            handleAssignClick={handleAssignClick} 
+            toggleLogModal={toggleLogModal}
             />
-            <Button onClick={() => handleAssignClick()}>Choose a new workout plan for yourself</Button>
-            <br></br>
-            <Button onClick={toggleLogModal}>
-                Log today's exercises
-              </Button>
-
             {workoutPlans.length === 0 ? <div className="container vh-100 d-flex justify-content-center align-items-center">
                 <div className="w-50 d-flex flex-column justify-content-center align-items-center border border-black shadow-lg rounded p-2" >
                     <h2><FaRegClipboard className="mb-1" size={30}/> No Workout Plan available</h2>
