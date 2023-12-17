@@ -11,6 +11,7 @@ function WorkoutProgress({ workoutPlanName, workoutPlanId, handleUploadSuccessCh
   const [count, setCount] = useState(1);
   const [showForm, setShowForm] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [showAddAnotherForm, setShowAddAnotherForm] = useState(false);
   const [exerciseSelected, setExerciseSelected] = useState(false);
   const [isExerciseLocked, setIsExerciseLocked] = useState(false);
 
@@ -143,6 +144,9 @@ function WorkoutProgress({ workoutPlanName, workoutPlanId, handleUploadSuccessCh
     }
   };
 
+  const handleShowAddAnotherForm = () => setShowAddAnotherForm(true); //shows Modal asks user if they wish to log another exercise
+  const handleHideAddAnotherForm = () => setShowAddAnotherForm(false);
+
   const handleCancel = () => {
     setShowForm(false);
     setIsEditing(false);
@@ -181,34 +185,32 @@ function WorkoutProgress({ workoutPlanName, workoutPlanId, handleUploadSuccessCh
   };
 
   const handleHide = () => {
-    setSetArray([]);
-    setCount(1);
+    resetFormAndState();
     handleClose();
+    handleHideAddAnotherForm();
   };
 
   const handleSubmit = async () => {
     await Promise.all(setArray.map(element => addToDB(element)));
-  
-    const resetFormAndState = () => {
-      setSetArray([]);
-      setCount(1);
-      setReps(undefined);
-      setWeight(undefined);
-      setShowForm(false);
-      setIsEditing(false);
-      setShowAddButton(true);
-      setIsExerciseLocked(false);
-      setExerciseSelected(false);
-    };
-  
-    const addAnother = window.confirm("Do you want to log another exercise?");
-  
-    resetFormAndState();
-  
-    if (!addAnother) {
-      handleHide();
-    }
+    handleShowAddAnotherForm();
   };
+
+  const resetFormAndState = () => {
+    setSetArray([]);
+    setCount(1);
+    setReps(undefined);
+    setWeight(undefined);
+    setShowForm(false);
+    setIsEditing(false);
+    setShowAddButton(true);
+    setIsExerciseLocked(false);
+    setExerciseSelected(false);
+  };
+
+  const handleAddAnother = () =>{
+    resetFormAndState();
+    handleHideAddAnotherForm();
+  }
  
   return (
     <div>
@@ -320,6 +322,25 @@ function WorkoutProgress({ workoutPlanName, workoutPlanId, handleUploadSuccessCh
             Submit
           </Button>
         </Modal.Footer>
+      </Modal>
+      <Modal //log another exercise
+        size="sm"
+        show={showAddAnotherForm}
+        onHide={handleHideAddAnotherForm}
+        backdrop="static"
+        centered
+      >
+       <Modal.Header closeButton>
+          <Modal.Title>Activity Logger</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <center>
+          <p>Do you want to log another exercise?</p>
+            <Button onClick={()=> handleAddAnother()}variant="success">Yes, add another</Button>
+            <br/>
+            <Button onClick={()=> handleHide()}variant="secondary">No thanks</Button>
+          </center>
+        </Modal.Body>
       </Modal>
     </div>
   );
