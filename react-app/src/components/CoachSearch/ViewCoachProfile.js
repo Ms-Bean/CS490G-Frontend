@@ -118,7 +118,7 @@ function ViewCoachProfile({ coach, handleUploadSuccessChange, handleAlert }) {
 
   return (
     <div>
-            <button onClick={handleShow} className="btn btn-secondary">Info</button>
+            <Button onClick={handleShow} variant="secondary" className="w-100 mb-2">Info</Button>
 
         
         <Modal //Modal for Viewing non-hired Coach

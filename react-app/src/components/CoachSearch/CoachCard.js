@@ -5,7 +5,7 @@ import ViewCoachProfile from "./ViewCoachProfile";
 
 const CoachCard = ({ coach, handleUploadSuccessChange, handleAlert }) => {
   const [isHovered, setIsHovered] = useState(false);
-  
+
   return (
     <Col md={3} className="mb-4">
       <Card
@@ -32,10 +32,9 @@ const CoachCard = ({ coach, handleUploadSuccessChange, handleAlert }) => {
             <strong>Coaching History:</strong> {truncateText(coach.professional_info.coaching_history || "Not provided", 50)}
           </p> */}
         </Card.Body>
-        <ButtonGroup className="w-100 p-2">
-          <ViewCoachProfile coach={coach} handleUploadSuccessChange={handleUploadSuccessChange} handleAlert={handleAlert}/>
-        </ButtonGroup>
-
+        <div className="justify-content-center mx-2">
+          <ViewCoachProfile coach={coach} handleUploadSuccessChange={handleUploadSuccessChange} handleAlert={handleAlert} />
+        </div>
       </Card>
     </Col>
   );
