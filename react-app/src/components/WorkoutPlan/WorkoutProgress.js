@@ -24,7 +24,7 @@ function WorkoutProgress({workoutPlanName, workoutPlanId, handleUploadSuccessCha
     const url = `${config.backendUrl}/workout_plan/${workoutPlanId}?include_exercises=true`;
     useEffect (()=> {
       console.log("add", showAddButton)
-  },[showAddButton,show])
+  },[show])
 
     useEffect(() =>{
       getData();
