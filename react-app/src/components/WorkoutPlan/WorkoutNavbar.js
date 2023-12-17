@@ -66,7 +66,7 @@ const WorkoutNavbar = ({
                 onChange={handleSearchChange}
                 className="form-control ms-auto"
                 type="search"
-                placeholder="Search By name..."
+                placeholder="Search by name..."
                 aria-label="Search"
               />
               <span className="navbar-text-link align-self-center" variant="secondary" type="submit">

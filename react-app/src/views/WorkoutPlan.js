@@ -184,7 +184,7 @@ const WorkoutPlan = () => {
             {workoutPlans.length === 0 ? 
             <Alert variant="info" className="text-center rounded-0">
                     <h2><FaRegClipboard className="mb-1" size={30}/> No workout plans available</h2>
-                    <small>Create a Workout Plan by Clicking the <span><FaPlusCircle/></span> on the Navbar</small>
+                    <small>Create a Workout Plan by clicking <span><FaPlusCircle/></span> above</small>
                 </Alert>
              : 
                 <Container className="mt-4">

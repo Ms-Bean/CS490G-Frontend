@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Modal, Table, Form, Button, ButtonGroup, Container, Row, Col } from "react-bootstrap";
+import { Modal, Table, Form, Button, ButtonGroup, Container, Row, Col, Alert } from "react-bootstrap";
 import { config } from "./../../utils/config";
 import "../../css/ActivityLogger.css";
 import { useAuth } from "../../hooks/useAuth";
@@ -225,12 +225,10 @@ function WorkoutProgress({ workoutPlanName, workoutPlanId, handleUploadSuccessCh
         </Modal.Header>
         <Modal.Body>
           {exercises.length === 0 ? (
-            <div className="container d-flex justify-content-center align-items-center my-2">
-              <div className="w-50 d-flex flex-column justify-content-center align-items-center border border-black shadow rounded p-2 my-2">
-                <h6> No Exercises Scheduled for Today</h6>
-                <small>Create an Exercise by Clicking on the Edit Button.</small>
-              </div>
-            </div>
+              <Alert variant="info">
+                <h5> No Exercises Scheduled for Today</h5>
+                <small>Add an exercise by clicking 'Edit' on the workout plan card.</small>
+              </Alert>
           ) : (
             <Container>
               <Row>
