@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { config } from "./../utils/config";
-import { Button, ButtonGroup, Table, Container, Dropdown, Image, DropdownButton, Row, Col, Modal, Toast } from "react-bootstrap";
+import { Button, Table, Container, Row, Col, Toast, Card } from "react-bootstrap";
 
 
 const SelectWorkoutPlanComponent = () => {
@@ -84,61 +84,67 @@ const SelectWorkoutPlanComponent = () => {
     }
   }
 
-    return (
-      <div className="container" id="wrapper">
-        <h1>Assign a workout plan to your client</h1>
-        <table className="table responsive">
-          <thead>
-            <tr>
-              <th scope="col">Name</th>
-              <th scope="col">Assign</th>
-            </tr>
-          </thead>
-          <tbody>
-            {isLoading ? (
-              <tr>
-                <td colSpan="2">
-                  <div className="d-flex justify-content-center">
-                    <div className="spinner-border" role="status">
-                      <span className="visually-hidden">Loading...</span>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            ) : workout_plans.length > 0 ? (
-              workout_plans.map((workout_plan, index) => (
-                <tr key={index}>
-                  <td>
-                    {workout_plan.name}
-                  </td>
-                  <td>
-                  <Button onClick={() => handleAssignClick(workout_plan.workout_plan_id, workout_plan.name)}>Assign Workout Plan</Button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="2">No workout plans to display</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-        <Container>
-              <Row>
-                <Col xs={11}></Col>
-                <Col xs={1}><Button href="/workout_plan" variant="secondary">Go Back</Button></Col>
-              </Row>
-        </Container>
+  return (
+    <Container className="mt-4">
+      <Row className="justify-content-center">
+        <Col md={6}>
+          <Card>
+            <Card.Header>
+              <h2 className="text-center">Assign a Workout Plan to User</h2>
+            </Card.Header>
+            <Card.Body>
+              <Table  bordered hover responsive>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Assign</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {isLoading ? (
+                    <tr>
+                      <td colSpan="2" className="text-center">
+                        <div className="spinner-border" role="status">
+                          <span className="visually-hidden">Loading...</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : workout_plans.length > 0 ? (
+                    workout_plans.map((workout_plan, index) => (
+                      <tr key={index}>
+                        <td style={{ verticalAlign: "middle" }}>{workout_plan.name}</td>
+                        <td>
+                          <Button className="w-100" onClick={() => handleAssignClick(workout_plan.workout_plan_id, workout_plan.name)}>
+                            Assign Workout Plan
+                          </Button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="2" className="text-center">No workout plans to display</td>
+                    </tr>
+                  )}
+                </tbody>
+              </Table>
+            </Card.Body>
+        <Col className="text-center m-3">
+          <Button href="/workout_plan" variant="secondary">Back</Button>
+        </Col>
+          </Card>
+        </Col>
+      </Row>
+      <Row className="mt-3">
+      </Row>
 
-
-        <Toast className="position-fixed bottom-0 end-0 p-3 m-3" show={showToast} onClose={() => setShowToast(false)}>
-          <Toast.Header>
-            <strong className="mr-auto">New Workout Plan Assigned</strong>
-          </Toast.Header>
-          <Toast.Body>{toastMessage}</Toast.Body>
-        </Toast>
-      </div>
-    );
+      <Toast className="position-absolute top-50 start-50 translate-middle m-3" show={showToast} onClose={() => setShowToast(false)}>
+        <Toast.Header>
+          <strong >New Workout Plan Assigned</strong>
+        </Toast.Header>
+        <Toast.Body>Workout Plan {toastMessage} has been successfully assigned.</Toast.Body>
+      </Toast>
+    </Container>
+  );
 };
 
 export default SelectWorkoutPlanComponent;
