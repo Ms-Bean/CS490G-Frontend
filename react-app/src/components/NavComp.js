@@ -37,7 +37,6 @@ const NavComp = () => {
                 <Nav.Link href="/exercise_management">Exercises</Nav.Link>
                 <Nav.Link href="/coaches">Trainers</Nav.Link>
                 <Nav.Link href="/messages">Messages</Nav.Link>
-                <Nav.Link href="/your_trainer">Your trainer</Nav.Link>
                 <NavDropdown className="align-self-center"
                   title={<Image className="thumbnail-image" roundedCircle  src="/profilepic.jpg" alt="Profile Picture" />}
                   id="basic-nav-dropdown"
@@ -47,6 +46,10 @@ const NavComp = () => {
                   </NavDropdown.Item>
                   <NavDropdown.Item onClick={() => navigate("/account")}>
                     Account
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item onClick={() => navigate("/your_trainer")}>
+                    Your Trainer
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item onClick={handleLogout}>
