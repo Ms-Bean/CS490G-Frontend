@@ -76,11 +76,10 @@ const WorkoutPlan = () => {
             if (!response.ok) throw new Error("Failed to fetch client dashboard info");
             const assigned_data = await assigned_response.json();
 
-            console.log("Assigned workout plan");
-            console.log(assigned_data);
+            console.log("Assigned workout plan", assigned_data);
             set_assigned_workout_data({
                 workoutPlanId: assigned_data.workout_plan_id,
-                workoutPlanName: assigned_data.name
+                workoutPlanName: assigned_data.workout_plan_name
             })
         }
         catch(err){
