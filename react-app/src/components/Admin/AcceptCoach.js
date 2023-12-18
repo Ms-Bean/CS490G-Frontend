@@ -23,7 +23,7 @@ function AcceptCoach({user_id, handleUploadSuccessChange, firstName}) {
             //     throw new Error(`Failed to accept coach. Status: ${response.status}`);
             // }
 
-            handleUploadSuccessChange(true);
+            handleUploadSuccessChange();
             handleClose();
         } catch(err){
             console.log(err);
