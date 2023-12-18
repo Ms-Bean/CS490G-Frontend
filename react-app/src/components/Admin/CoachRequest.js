@@ -106,6 +106,7 @@ const CoachRequest = () => {
     };
 
     const handleUploadSuccessChange = () => {
+        console.log("handleUploadSuccessChange");
         setUploadSuccessCount(prevCount => prevCount + 1);
     }
 
