@@ -29,7 +29,7 @@ const convertTimeAMPM = (time) => {
   return timeValue;
 };
 
-const NewWorkoutPlan = ({ handleUploadSuccessChange , user_id, button}) => {
+const NewWorkoutPlan = ({handleUploadSuccessChange, user_id, button}) => {
   // const { user } = useAuth();
   const [show, setShow] = useState(false);
   const [error, setError] = useState("");
@@ -109,7 +109,7 @@ const NewWorkoutPlan = ({ handleUploadSuccessChange , user_id, button}) => {
 
     return (
         <>
-            <div onClick={handleShow} className="d-inline" data-bs-toggle="modal" style={{ cursor: "pointer" }}>
+            <div onClick={handleShow} className="d-inline w-100" data-bs-toggle="modal" style={{ cursor: "pointer" }}>
                 {button}
             </div>
 

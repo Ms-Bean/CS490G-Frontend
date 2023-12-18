@@ -223,6 +223,8 @@ const CoachClientDashboard = () => {
                     <Dropdown.Item onClick={() => handleAnalyticsClick(client.client_id)}>View Statistics</Dropdown.Item>
                     <Dropdown.Divider />
                     <Dropdown.Item onClick={() => handleAssignClick(client.client_id)}>Assign Workout Plan</Dropdown.Item>
+                    {/* <Dropdown.Item ><NewWorkoutPlan button={<span>Create Workout Plan</span>}/></Dropdown.Item> */}
+                    <NewWorkoutPlan handleUploadSuccessChange={() => {}} user_id={client.client_id} button={<Dropdown.Item>Create Workout Plan</Dropdown.Item>}/>
                     <Dropdown.Divider />
                     <Dropdown.Item variant="danger" onClick={() => handleTermClient(client)}>
                       End Training
