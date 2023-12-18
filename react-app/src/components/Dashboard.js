@@ -70,6 +70,7 @@ const CoachDashboard = () => {
         },
       });
       if (!response.ok) throw new Error("Failed to fetch client dashboard info");
+
       const data = await response.json();
 
       if (data.message) {
@@ -77,6 +78,17 @@ const CoachDashboard = () => {
         return;
       }
 
+      const { minDate, maxDate } = getMinMaxDates(data.daily_surveys);
+      const allDates = getAllDatesInRange(minDate, maxDate);
+  
+      set_chart_data({
+        x: allDates,
+        calories_burned_y: fillMissingData(allDates, data.daily_surveys, 'calories_burned'),
+        calories_consumed_y: fillMissingData(allDates, data.daily_surveys, 'calories_consumed'),
+        water_intake_y: fillMissingData(allDates, data.daily_surveys, 'water_intake'),
+        weight_y: fillMissingData(allDates, data.daily_surveys, 'weight'),
+      });
+  
       // Process and set the data for daily surveys
       let daily_survey_x = [];
       let calories_burned_y = [];
@@ -107,14 +119,6 @@ const CoachDashboard = () => {
           }
         }
       }
-
-      set_chart_data({
-        x: daily_survey_x,
-        calories_burned_y: calories_burned_y,
-        calories_consumed_y: calories_consumed_y,
-        water_intake_y: water_intake_y,
-        weight_y: weight_y,
-      });
 
       // Process and set data for mood
       const moodCounts = data.daily_surveys.reduce((acc, survey) => {
@@ -174,6 +178,31 @@ const CoachDashboard = () => {
     if (!string) return "";
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
+
+  const getMinMaxDates = (surveys) => {
+    if (!surveys.length) return { minDate: new Date(), maxDate: new Date() };
+    const dates = surveys.map(survey => new Date(survey.date));
+    return { minDate: new Date(Math.min(...dates)), maxDate: new Date(Math.max(...dates)) };
+  };
+  
+  const getAllDatesInRange = (startDate, endDate) => {
+    const dates = [];
+    let currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
+      dates.push(currentDate.toISOString().split("T")[0]);
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    return dates;
+  };
+  
+  const fillMissingData = (allDates, userData, dataKey) => {
+    const filledData = allDates.map(date => {
+      const dataForDate = userData.find(d => d.date.slice(0, 10) === date);
+      return dataForDate ? dataForDate[dataKey] : null;
+    });
+    return filledData;
+  };
+
   const renderExerciseCard = (day) => {
     const dayData = exerciseData[day];
     if (!dayData || dayData.exercises.length === 0) {
@@ -254,6 +283,7 @@ const CoachDashboard = () => {
             borderWidth: 4,
             backgroundColor: color,
             borderColor: color,
+            spanGaps: true,
           },
         ],
       }}
@@ -303,6 +333,7 @@ const CoachDashboard = () => {
             borderWidth: 4,
             backgroundColor: color,
             borderColor: color,
+            spanGaps: true,
           },
           {
             label: "Target Weight",
@@ -361,6 +392,7 @@ const CoachDashboard = () => {
             borderWidth: 4,
             backgroundColor: "green",
             borderColor: "green",
+            spanGaps: true,
           },
           {
             label: "Calories Consumed",
@@ -369,6 +401,7 @@ const CoachDashboard = () => {
             borderWidth: 4,
             backgroundColor: "red",
             borderColor: "red",
+            spanGaps: true,
           },
         ],
       }}
@@ -475,7 +508,10 @@ const CoachDashboard = () => {
             ) : (
               <Alert variant="secondary">
                 <Alert.Heading>No Workout Plan Assigned</Alert.Heading>
-                <p>There are no scheduled exercises for this week. To create and assign a workout plan, click <a href="/workout_plan">here</a> or go to the Workouts page.</p>
+                <p>
+                  There are no scheduled exercises for this week. To create and assign a workout plan, click{" "}
+                  <a href="/workout_plan">here</a> or go to the Workouts page.
+                </p>
               </Alert>
             )}
           </>
