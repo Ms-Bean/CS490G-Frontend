@@ -15,7 +15,6 @@ const CoachRequest = () => {
 
     //re-renders when a workout plan has been created, edited or deleted
     useEffect(() => {
-        console.log("useEffect");
         const fetchCoachList = async () => {
         setIsLoading(true);
         try{
@@ -32,7 +31,7 @@ const CoachRequest = () => {
             setRowCount(Math.floor(data.coachList.length / colCount) + 1);
             }
             setCoachList(data.coachList);
-            console.log(data);
+            // console.log(data);
         }
         catch(err){
             console.log(err);
@@ -47,7 +46,6 @@ const CoachRequest = () => {
 
     // Filter and sort workout plans
     const filteredAndSortedCoachList = useMemo(() => {
-        console.log("filteredAndSortedCoachList");
         let filtered = coachList.filter((coach) => coach.firstName.toLowerCase().includes(searchTerm.toLowerCase()));
 
         if(sortKey){
@@ -66,13 +64,11 @@ const CoachRequest = () => {
     }, [searchTerm, sortKey, sortDirection, isLoading, uploadSuccess]);
 
     const createGrid = (cl) => {
-        console.log("createGrid ");
         const counter = {count : 0};
         return renderRows(cl, counter);
     }
 
     const renderRows = (cl, counter) => {
-        console.log("renderRows ");
         let rows = [];
         for(let row = 0; row < rowCount; row++){
             rows.push(
@@ -86,7 +82,6 @@ const CoachRequest = () => {
     }
 
     const renderCols = (cl, counter) => {
-        console.log("renderCols");
         let cols = [];
         for(let col = 0; col < colCount; col++){
             if(counter.count < cl.length){
@@ -106,7 +101,6 @@ const CoachRequest = () => {
     };
 
     const handleUploadSuccessChange = () => {
-        console.log("handleUploadSuccessChange");
         setUploadSuccess(true);
     }
 
