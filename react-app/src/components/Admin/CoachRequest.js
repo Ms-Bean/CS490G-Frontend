@@ -61,7 +61,7 @@ const CoachRequest = () => {
         }
 
         return filtered;
-    }, [searchTerm, sortKey, sortDirection, isLoading]);
+    }, [searchTerm, sortKey, sortDirection, isLoading, uploadSuccess]);
 
     const createGrid = (cl) => {
         const counter = {count : 0};
