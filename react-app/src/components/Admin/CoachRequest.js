@@ -7,7 +7,7 @@ const CoachRequest = () => {
     const [coachList, setCoachList] = useState([]);
     const [colCount, setColCount] = useState(4);
     const [rowCount, setRowCount] = useState(0);
-    const [uploadSuccessCount, setUploadSuccessCount] = useState(0);
+    const [uploadSuccess, setUploadSuccess] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [sortKey, setSortKey] = useState("");
     const [sortDirection, setSortDirection] = useState("ascending");
@@ -41,8 +41,8 @@ const CoachRequest = () => {
         }
         }
         fetchCoachList();
-        setUploadSuccessCount(false);
-    }, [uploadSuccessCount]);
+        setUploadSuccess(false);
+    }, [uploadSuccess]);
 
 
     // Filter and sort workout plans
@@ -63,7 +63,7 @@ const CoachRequest = () => {
         }
 
         return filtered;
-    }, [searchTerm, sortKey, sortDirection, isLoading, uploadSuccessCount]);
+    }, [searchTerm, sortKey, sortDirection, isLoading, uploadSuccess]);
 
     const createGrid = (cl) => {
         console.log("createGrid ");
@@ -107,7 +107,7 @@ const CoachRequest = () => {
 
     const handleUploadSuccessChange = () => {
         console.log("handleUploadSuccessChange");
-        setUploadSuccessCount(prevCount => prevCount + 1);
+        setUploadSuccess(true);
     }
 
     return (
