@@ -32,8 +32,6 @@ function CoachInfo({coach}) {
             <Modal
             show={show}
             onHide={handleClose}
-            backdrop="static"
-            keyboard={false}
             centered
             >
             <Modal.Header className='text-center' closeButton>
@@ -43,15 +41,14 @@ function CoachInfo({coach}) {
             </Modal.Header>
             <Modal.Body>
                 <ul className='list-group list-group-flush'>
-                    <li className='list-group-item lead'>First Name: {coach.firstName}</li>
-                    <li className='list-group-item lead'>Last Name: {coach.lastName}</li>
-                    <li className='list-group-item lead'>Phone Number : {coach.phoneNumber}</li>
-                    <li className='list-group-item lead'>Email : {coach.email}</li>
-                    <li className='list-group-item lead'>Experience : {coach.experienceLevel}</li>
-                    <li className='list-group-item lead'>Hourly Rate : {coach.hourlyRate}</li>
-                    <li className='list-group-item lead'>Coach History : {coach.coachingHistory}</li>
-                    <li className='list-group-item lead'>Availability : {coach.availability}</li>
-                    <li className='list-group-item lead'>Coach Request Date : {formatDateToYYYYMMDD(coach.date)}</li>
+                    <li className='list-group-item '><b>Name</b>: {coach.firstName} {coach.lastName}</li>
+                    <li className='list-group-item '><b>Phone Number</b>: {coach.phoneNumber}</li>
+                    <li className='list-group-item '><b>Email</b>: {coach.email}</li>
+                    <li className='list-group-item '><b>Experience</b>: {coach.experienceLevel}</li>
+                    <li className='list-group-item '><b>Hourly Rate</b>: {coach.hourlyRate}</li>
+                    <li className='list-group-item '><b>Coach History</b>: {coach.coachingHistory}</li>
+                    <li className='list-group-item '><b>Availability</b>: {coach.availability}</li>
+                    <li className='list-group-item '><b>Coach Request Date</b>: {formatDateToYYYYMMDD(coach.date)}</li>
                 </ul>
             </Modal.Body>
             </Modal>
