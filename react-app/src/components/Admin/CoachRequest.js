@@ -7,7 +7,7 @@ const CoachRequest = () => {
     const [coachList, setCoachList] = useState([]);
     const [colCount, setColCount] = useState(4);
     const [rowCount, setRowCount] = useState(0);
-    const [uploadSuccess, setUploadSuccess] = useState(false);
+    const [uploadSuccessCount, setUploadSuccessCount] = useState(0);
     const [searchTerm, setSearchTerm] = useState("");
     const [sortKey, setSortKey] = useState("");
     const [sortDirection, setSortDirection] = useState("ascending");
@@ -15,6 +15,7 @@ const CoachRequest = () => {
 
     //re-renders when a workout plan has been created, edited or deleted
     useEffect(() => {
+        console.log("useEffect");
         const fetchCoachList = async () => {
         setIsLoading(true);
         try{
@@ -40,12 +41,13 @@ const CoachRequest = () => {
         }
         }
         fetchCoachList();
-        setUploadSuccess(false);
-    }, [uploadSuccess]);
+        setUploadSuccessCount(false);
+    }, [uploadSuccessCount]);
 
 
     // Filter and sort workout plans
     const filteredAndSortedCoachList = useMemo(() => {
+        console.log("filteredAndSortedCoachList");
         let filtered = coachList.filter((coach) => coach.firstName.toLowerCase().includes(searchTerm.toLowerCase()));
 
         if(sortKey){
@@ -61,14 +63,16 @@ const CoachRequest = () => {
         }
 
         return filtered;
-    }, [searchTerm, sortKey, sortDirection, isLoading, uploadSuccess]);
+    }, [searchTerm, sortKey, sortDirection, isLoading, uploadSuccessCount]);
 
     const createGrid = (cl) => {
+        console.log("createGrid ");
         const counter = {count : 0};
         return renderRows(cl, counter);
     }
 
     const renderRows = (cl, counter) => {
+        console.log("renderRows ");
         let rows = [];
         for(let row = 0; row < rowCount; row++){
             rows.push(
@@ -82,6 +86,7 @@ const CoachRequest = () => {
     }
 
     const renderCols = (cl, counter) => {
+        console.log("renderCols");
         let cols = [];
         for(let col = 0; col < colCount; col++){
             if(counter.count < cl.length){
@@ -93,7 +98,6 @@ const CoachRequest = () => {
                 counter.count++;
             }
         }
-
         return cols;
     }
 
@@ -102,7 +106,7 @@ const CoachRequest = () => {
     };
 
     const handleUploadSuccessChange = () => {
-        setUploadSuccess(true);
+        setUploadSuccessCount(prevCount => prevCount + 1);
     }
 
     return (
