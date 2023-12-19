@@ -39,7 +39,8 @@ const WorkoutNavbar = ({
           <NewWorkoutPlan
             handleUploadSuccessChange={handleUploadSuccessChange}
             user_id={user_id}
-            button={<FaPlusCircle className="align-self-center" size={22} style={{ color: "white" }} />}
+            button={<FaPlusCircle className="align-self-center" size={22} style={{ color: "white" }}
+            coach={false} />}
           />
         </div>
 
