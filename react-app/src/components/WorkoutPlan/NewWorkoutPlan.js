@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Modal, Table } from "react-bootstrap";
+import { Button, ButtonGroup, Modal, Table } from "react-bootstrap";
 import CreateExercise from "../CreateExercise";
 import { config } from "./../../utils/config";
 
@@ -29,9 +29,10 @@ const convertTimeAMPM = (time) => {
   return timeValue;
 };
 
-const NewWorkoutPlan = ({handleUploadSuccessChange, user_id, button}) => {
+const NewWorkoutPlan = ({handleUploadSuccessChange, user_id, button, coach}) => {
   // const { user } = useAuth();
   const [show, setShow] = useState(false);
+  const [showAssign, setShowAssign] = useState(false);
   const [error, setError] = useState("");
   const [workoutPlanSuccess, setWorkoutPlanSuccess] = useState(false);
   const [isLoadingWorkoutPlan, setIsLoadingWorkoutPlan] = useState(false);
@@ -48,53 +49,58 @@ const NewWorkoutPlan = ({handleUploadSuccessChange, user_id, button}) => {
     setFormData({ ...formData, [name]: value });
   };
 
-    const createWorkoutPlan = async () => {
-        try{
-            setIsLoadingWorkoutPlan(true);
-            const data = {
-                name : formData.name,
-                author_id : Number(user_id),
-            }
-            const response = await fetch(`${config.backendUrl}/workout_plan/new`, {
-                method: "POST",
-                headers: {
-                  // Moved data to body instead of headers
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-                credentials: "include", // Include credentials with the request
-            });
-            if (!response.ok) {
-                setError("Failed to Create Workout Plan")
-                throw new Error(`Failed to create workout plan. Status: ${response.status}`);
-            }
-            console.log(response);
-            const wp = await response.json();
-            // Update only the workout_plan_id in formData
-            setFormData((prevData) => ({
-                ...prevData,
-                workout_plan_id: wp.workout_plan.workout_plan_id,
-            }));
-            console.log(wp);
-            setWorkoutPlanSuccess(true);
+  const createWorkoutPlan = async () => {
+      try{
+          setIsLoadingWorkoutPlan(true);
+          const data = {
+              name : formData.name,
+              author_id : Number(user_id),
+          }
+          const response = await fetch(`${config.backendUrl}/workout_plan/new`, {
+              method: "POST",
+              headers: {
+                // Moved data to body instead of headers
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
+              credentials: "include", // Include credentials with the request
+          });
+          if (!response.ok) {
+              setError("Failed to Create Workout Plan")
+              throw new Error(`Failed to create workout plan. Status: ${response.status}`);
+          }
+          console.log(response);
+          const wp = await response.json();
+          // Update only the workout_plan_id in formData
+          setFormData((prevData) => ({
+              ...prevData,
+              workout_plan_id: wp.workout_plan.workout_plan_id,
+          }));
+          console.log(wp);
+          setWorkoutPlanSuccess(true);
+          if(!coach){
             handleUploadSuccessChange();
-        } catch(err){
-            console.log(err);
-        } finally {
-            setIsLoadingWorkoutPlan(false);
-        }
-        
-    }
+          }
+      } catch(err){
+          console.log(err);
+      } finally {
+          setIsLoadingWorkoutPlan(false);
+      }
+      
+  }
 
   const handleClose = () => {
-    setFormData({
-      name: "",
-      workout_plan_id: null,
-      exercises: [],
-    });
-    setError();
-    setWorkoutPlanSuccess(false);
+    if(!coach){
+      setFormData({
+        name: "",
+        workout_plan_id: null,
+        exercises: [],
+      });
+      setWorkoutPlanSuccess(false);
+    }
+    setError("");
     setShow(false);
+    setShowAssign(true);
   };
   const handleShow = () => setShow(true);
 
@@ -107,11 +113,47 @@ const NewWorkoutPlan = ({handleUploadSuccessChange, user_id, button}) => {
     console.log(formData);
   };
 
+  const handleAssignWorkout = async () => {
+    try{
+      const response = await fetch(`${config.backendUrl}/assign_workout_plan`, {
+          method: "POST",
+          headers: {
+            "client_id" : user_id,
+            "workout_plan_id": formData.workout_plan_id
+          },
+          credentials: "include", // Include credentials with the request
+      });
+      if (!response.ok) {
+          throw new Error(`Failed to assign workout plan. Status: ${response.status}`);
+      }
+      console.log(response);
+      setFormData({
+        name: "",
+        workout_plan_id: null,
+        exercises: [],
+      });
+      setWorkoutPlanSuccess(false);
+      setShowAssign(false);
+      handleUploadSuccessChange();
+  } catch(err){
+      console.log(err);
+  }
+}
+  const handleRejectAssignWorkout = () => {
+    setFormData({
+      name: "",
+      workout_plan_id: null,
+      exercises: [],
+    });
+    setWorkoutPlanSuccess(false);
+    setShowAssign(false);
+  }
+
     return (
         <>
-            <div onClick={handleShow} className="d-inline w-100" data-bs-toggle="modal" style={{ cursor: "pointer" }}>
-                {button}
-            </div>
+          <div onClick={handleShow} className="d-inline w-100" data-bs-toggle="modal" style={{ cursor: "pointer" }}>
+              {button}
+          </div>
 
       <Modal size="md" show={show} onHide={handleClose} backdrop="static" keyboard={false} centered>
         <Modal.Header closeButton>
@@ -197,6 +239,20 @@ const NewWorkoutPlan = ({handleUploadSuccessChange, user_id, button}) => {
           )}
         </Modal.Footer>
       </Modal>
+      {coach?
+      <Modal size="md" show={showAssign && workoutPlanSuccess} onHide={handleClose} backdrop="static" keyboard={false} centered>
+        <Modal.Header>
+          <Modal.Title>Would You Like to Assign this Workout?</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Button className="btn-success w-25" onClick={handleAssignWorkout}>Yes</Button>
+          <Button className="btn-danger w-25 ms-2" onClick={handleRejectAssignWorkout}>No</Button>
+        </Modal.Body>
+      </Modal>
+      :
+      <>
+      </>
+      }
     </>
   );
 };
