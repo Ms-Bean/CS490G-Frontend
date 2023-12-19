@@ -88,8 +88,8 @@ const ClientProfile = () => {
     setEditing(!editing);
   };
   return (
-    <div id = "wrapper" className="container my-2">
-      <h1 id="trainer_name"></h1>
+    <div id = "wrapper" className="container my-2 col-md-5 justify-content-center">
+      <h1 id="trainer_name" className="text-center"></h1>
       <div className="my-3">
         <img id="pfp" height="200" width="200" className="img-thumbnail rounded-circle d-block mx-auto" src={profile_pic} />
         <div className="mt-3 me-3 d-flex justify-content-center">
@@ -163,10 +163,12 @@ const ClientProfile = () => {
             value={formData.paypal_link}
           />
         </div>
-        <div className="row my-4">
-          <div className="col-8">
+        <div className="row my-4 justify-content-center">
+          <div className="col-8 text-center">
             <Button
+            variant="danger"
                 onClick={fireCoach}
+                className="w-75"
             >Fire coach</Button>
           </div>
         </div>
