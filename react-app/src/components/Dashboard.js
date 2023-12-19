@@ -17,6 +17,7 @@ const CoachDashboard = () => {
   const urlParams = new URLSearchParams(location.search);
   const client_id = urlParams.get("client_id");
   const [userRole, setUserRole] = useState("");
+  const [hasAssignedWorkoutPlan, setHasAssignedWorkoutPlan] = useState(false);
   const [currentTab, setCurrentTab] = useState("");
   const [showPermissionAlert, setShowPermissionAlert] = useState(false);
   const [targetWeight, setTargetWeight] = useState(null);
@@ -31,7 +32,21 @@ const CoachDashboard = () => {
     ],
   });
 
-  console.log("user", user);
+  const checkUserWorkoutPlan = async () => {
+    try {
+      const response = await fetch(`${config.backendUrl}/check_user_workout_plan`, {
+        method: "GET",
+        credentials: "include",
+      });
+
+      if (!response.ok) throw new Error('Failed to check workout plan');
+
+      const data = await response.json();
+      setHasAssignedWorkoutPlan(!!data.workoutPlan);
+    } catch (error) {
+      console.error("Error checking user workout plan:", error);
+    }
+  };
 
   const [exerciseData, setExerciseData] = useState([]);
   const [chart_data, set_chart_data] = useState({
@@ -160,6 +175,7 @@ const CoachDashboard = () => {
       }
     };
     fetchUserRole();
+    checkUserWorkoutPlan();
   }, []);
 
   useEffect(() => {
@@ -494,6 +510,16 @@ const CoachDashboard = () => {
     switch (currentTab) {
       case "weeklyView":
         const hasData = exerciseData.some((day) => day && day.exercises.length > 0);
+
+        if (!hasAssignedWorkoutPlan) {
+          return (
+            <Alert variant="warning">
+              <Alert.Heading>No Workout Plan Assigned</Alert.Heading>
+              <p>You currently do not have a workout plan assigned. Please assign a workout plan to start tracking your progress.</p>
+            </Alert>
+          );
+        }
+
         return (
           <>
             {clientDataAlert}
@@ -507,10 +533,9 @@ const CoachDashboard = () => {
               </Row>
             ) : (
               <Alert variant="secondary">
-                <Alert.Heading>No Workout Plan Assigned</Alert.Heading>
+                <Alert.Heading>No Workout Data Available</Alert.Heading>
                 <p>
-                  There are no scheduled exercises for this week. To create and assign a workout plan, click{" "}
-                  <a href="/workout_plan">here</a> or go to the Workouts page.
+                  There are no scheduled exercises for this period. Please check back later or update the workout plan.
                 </p>
               </Alert>
             )}

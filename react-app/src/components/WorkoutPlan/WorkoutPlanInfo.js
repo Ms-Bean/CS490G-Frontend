@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Table, Modal } from "react-bootstrap";
+import { Table, Modal, Alert } from "react-bootstrap";
 import { config } from "./../../utils/config";
 
 const convertTimeAMPM = (time) => {
@@ -28,7 +28,7 @@ const convertTimeAMPM = (time) => {
   return timeValue;
 };
 
-const tempGoals = ["Build Muscle", "Improve Endurance", , "Reduce Body Fat Percentage", "Improve Posture"];
+// const tempGoals = ["Build Muscle", "Improve Endurance", , "Reduce Body Fat Percentage", "Improve Posture"];
 
 function WorkoutPlanInfo({ workoutPlanName, workoutPlanId, show, handleClose }) {
   const weekdayOrder = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
@@ -67,22 +67,20 @@ function WorkoutPlanInfo({ workoutPlanName, workoutPlanId, show, handleClose }) 
         <Modal.Header className="text-center" closeButton>
           <Modal.Title className="w-100">{workoutPlanName}</Modal.Title>
         </Modal.Header>
-        <Modal.Body className="pb-0">
-          <div className="mx-auto">
+        <Modal.Body className="py-0">
+          {/* <div className="mx-auto">
             <strong>xTEMPx Fitness Goals</strong>:
             {tempGoals.map((goal, index) => (
               <span className="ms-1" key={`goal-${index}`}>
                 {goal ? `${goal},` : ""}
               </span>
             ))}
-          </div>
+          </div> */}
           {exercises.length === 0 ? (
-            <div className="container d-flex justify-content-center align-items-center my-2">
-              <div className="w-50 d-flex flex-column justify-content-center align-items-center border border-black shadow rounded p-2 my-2">
-                <h6> No Exercises Yet</h6>
-                <small>Create an Exercise by Clicking on the Edit Button</small>
-              </div>
-            </div>
+            <Alert variant="info" className=" align-items-center my-2">
+              <h5> No Exercises Planned</h5>
+              Plan an workout by clicking edit on the workout plan card
+            </Alert>
           ) : (
             <div className="mt-3">
               <Table responsive hover>

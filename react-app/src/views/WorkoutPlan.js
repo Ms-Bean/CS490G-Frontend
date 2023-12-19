@@ -7,7 +7,6 @@ import { FaRegClipboard, FaPlusCircle, FaCog } from 'react-icons/fa';
 import { Alert, Container } from "react-bootstrap";
 import { useAuth } from "../hooks/useAuth";
 import { config } from "./../utils/config";
-import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const WorkoutPlan = () => {
@@ -88,6 +87,38 @@ const WorkoutPlan = () => {
             setIsLoading(false);
         }
     }
+
+    const checkUserHasWorkoutPlan = async () => {
+        try {
+            const response = await fetch(`${config.backendUrl}/check_user_workout_plan`, {
+                method: "GET",
+                credentials: "include",
+            });
+
+            if (!response.ok) throw new Error('Failed to check workout plan');
+
+            const data = await response.json();
+            if (data.workoutPlan) {
+                set_assigned_workout_data({
+                    workoutPlanId: data.workoutPlan.workout_plan_id,
+                    workoutPlanName: data.workoutPlan.name
+                });
+            } else {
+                set_assigned_workout_data({
+                    workoutPlanId: "",
+                    workoutPlanName: ""
+                });
+            }
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    // Using useEffect to check if the user has a workout plan on component mount
+    useEffect(() => {
+        checkUserHasWorkoutPlan();
+        fetchWorkoutPlans(); // Existing function to fetch workout plans
+    }, []);
 
 
     //re-renders when a workout plan has been created, edited or deleted
@@ -177,12 +208,12 @@ const WorkoutPlan = () => {
             />
             {!assigned_workout_data.workoutPlanId && workoutPlans.length > 0 && (
                 <Alert variant="info" className="text-center rounded-0">
-                    You don't have an assigned workout plan. To assign yourself a workout plan, click <a href="#" onClick={(e) => { e.preventDefault(); handleAssignClick(); }} style={{ textDecoration: 'underline' }}>here</a> or the <span><FaCog/></span> and "Choose a new workout plan for yourself".
-                </Alert>
+                You don't have an assigned workout plan. To assign yourself a workout plan, click <a href="#" onClick={(e) => { e.preventDefault(); handleAssignClick(); }} style={{ textDecoration: 'underline' }}>here</a> or the <span><FaCog/></span> and "Choose a new workout plan for yourself".
+            </Alert>
             )}
 
             {workoutPlans.length === 0 ? 
-            <Alert variant="info" className="text-center rounded-0">
+                <Alert variant="info" className="text-center rounded-0">
                     <h2><FaRegClipboard className="mb-1" size={30}/> No workout plans available</h2>
                     <small>Create a Workout Plan by clicking <span><FaPlusCircle/></span> above</small>
                 </Alert>
