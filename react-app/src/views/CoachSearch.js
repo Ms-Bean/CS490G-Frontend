@@ -12,6 +12,9 @@ const CoachSearch = () => {
     maxHourlyRate: "",
     minExperience: "",
     maxExperience: "",
+    goals:"",
+    city:"",
+    state:"",
     acceptingNewClients: true, // By default, show coaches who are accepting new clients
   });
   const [results, setResults] = useState([]);
@@ -38,6 +41,7 @@ const CoachSearch = () => {
   const handleChange = (e) => {
     const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
     setSearchParams({ ...searchParams, [e.target.name]: value });
+    console.log(searchParams.state)
   };
 
   const handleSubmit = async (e) => {
@@ -98,6 +102,8 @@ const CoachSearch = () => {
   const createSearchRequestBody = (searchParams, pageNumber) => {
     const [defaultMinHourlyRate, defaultMaxHourlyRate] = [0, 1_000_000];
     const [defaultMinExperienceLevel, defaultMaxExperienceLevel] = [0, 100];
+    const [defaultCity, defaultState] = ["" ,""];
+    const [defaultGoals] = [];
 
     const pageInfo = { page_num: pageNumber, page_size: pageSize };
     const filterOptions = {
@@ -110,6 +116,11 @@ const CoachSearch = () => {
         min: Number(searchParams.minExperience) || defaultMinExperienceLevel,
         max: Number(searchParams.maxExperience) || defaultMaxExperienceLevel,
       },
+      location: {
+        city: searchParams.city || defaultCity,
+        state: searchParams.state || defaultState,
+      },
+      goals: searchParams.goals || defaultGoals,
       // Include accepting_new_clients only if it's explicitly checked
       ...(searchParams.acceptingNewClients && { accepting_new_clients: searchParams.acceptingNewClients }),
     };

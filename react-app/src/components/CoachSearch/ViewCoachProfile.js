@@ -18,7 +18,6 @@ function ViewCoachProfile({ coach, handleUploadSuccessChange, handleAlert }) {
     const handleClose = () => {setShow(false); setShowHired(false); setShowTerm(false);}
     const handleShow = () => {
         checkIfHired();
-        //console.log("They are", hired);
         if(hired){
             //console.log(coach.personal_info.first_name, coach.personal_info.last_name, "is this user's coach.");
             setShowHired(true);
@@ -79,7 +78,7 @@ function ViewCoachProfile({ coach, handleUploadSuccessChange, handleAlert }) {
           res.json().then((data) => {
             if (!res.ok){throw new Error("Network response was not ok");}
             else{
-                console.log("Hired=", data);
+                //console.log("Hired=", data);
                 setHired(data.result);
             }
           });

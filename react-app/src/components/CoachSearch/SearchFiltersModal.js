@@ -1,7 +1,13 @@
 import React from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
+import Select from "react-select";
+import { State } from "country-state-city";
 
 const SearchFiltersModal = ({ show, handleClose, searchParams, handleChange, handleSubmit }) => {
+  const states = State.getStatesOfCountry("US");
+  var theStates = []
+  states.forEach((state)=> theStates[theStates.length]= {value:state.isoCode, label:state.name, name:"state"})
+
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
@@ -66,7 +72,49 @@ const SearchFiltersModal = ({ show, handleClose, searchParams, handleChange, han
               />
             </Col>
           </Row>
-
+          <Row>
+          <Form.Group className="mb-0">
+              <Form.Label>Specialization</Form.Label>
+              <Select
+                isMulti
+                //options
+                //value={selectedEquipmentItems}
+                //onChange={handleEquipmentChange}
+                name="equipmentItems"
+              />{" "}
+            </Form.Group>
+          </Row>
+          <br/>
+          <Row>
+            <Col>
+            <Form.Label>City</Form.Label>
+            <Form.Control
+            type="text"
+            placeholder="City"
+            name="city"
+            value={searchParams.city}
+            onChange={handleChange}
+            />
+            </Col>
+            <Col>
+            <Form.Group>
+            <Form.Label>State</Form.Label>
+            <Form.Select
+            placeholder="State"
+            name="state"
+            value={searchParams.state}
+            onChange={handleChange}
+            >
+            <option value={searchParams.state}>{searchParams.state}</option>
+            {states.map((state) => (
+              <option key={state.isoCode} value={state.name}>
+                {state.name}
+              </option>
+            ))}
+            </Form.Select>
+            </Form.Group>
+            </Col>
+          </Row>
           <Form.Group controlId="formAcceptingNewClients" className="mt-3">
             <Form.Check
               type="switch"
