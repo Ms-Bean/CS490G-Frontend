@@ -131,16 +131,14 @@ const ExerciseManagement = () => {
           {error}
         </Alert>
       )}
-      <Container className="mt-4">
+      <Container className="my-3">
         <Row>
           {!isLoading && paginatedExercises.length === 0 ? (
             <>
-              <Alert variant="info" className="text-center"><h2>No exercises found matching the search criteria.</h2></Alert>
-              <Col className="d-flex justify-content-center">
-                <Button onClick={resetFilters} className="w-50" variant="secondary">
-                  Reset Filters
-                </Button>
-              </Col>
+              <Alert variant="info" className="text-center"><Alert.Heading>No exercises found matching the search criteria.</Alert.Heading>
+              <Button onClick={resetFilters} className="mt-3" variant="secondary">
+                  Reset Search
+                </Button></Alert>
             </>
           ) : (
             paginatedExercises.map((exercise) => <ExerciseCard key={exercise.exercise_id} exercise={exercise} isAdmin={isAdmin} />)
