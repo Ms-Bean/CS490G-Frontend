@@ -37,7 +37,7 @@ const RegisterField = ({ setAlertMessage, setAlertType }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setAlertMessage(null); // Clear any previous alert messages
+    // setAlertMessage(null); // Clear any previous alert messages
     console.log("Submitting form data:", formData);
     console.log("User role:", userRole);
 
