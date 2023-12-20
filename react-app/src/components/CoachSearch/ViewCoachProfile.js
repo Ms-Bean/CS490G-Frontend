@@ -29,6 +29,10 @@ function ViewCoachProfile({ coach, handleUploadSuccessChange, handleAlert }) {
     const handleShowTerm = () => setShowTerm(true);
     const handleCloseTerm = () => setShowTerm(false);
 
+    const renderCoachGoals = () => {
+      return coach.professional_info.goals.join(', ');
+    };
+
     const url = `${config.backendUrl}/request_coach`
 
     const {user} = useAuth();
@@ -144,19 +148,18 @@ function ViewCoachProfile({ coach, handleUploadSuccessChange, handleAlert }) {
                     
                    <h2>{coach.personal_info.first_name} {coach.personal_info.last_name}</h2>
                    <p className="fs-5 fw-lighter"> Personal Trainer  &nbsp;|&nbsp; Advanced</p>
-                   
                    <p className= "lh-1"><b>Experience:&nbsp;</b>{coach.professional_info.experience_level === 0 ? "Less than a year" : coach.professional_info.experience_level + " years"}</p>
                    <p className= "lh-1"><b>Session Cost:&nbsp;</b>{coach.professional_info.hourly_rate}/hour</p>
-                   <p className= "lh-1"><b>Location:&nbsp;</b>{coach.location.city}, {coach.location.state}</p> 
-                   
+                   <p className= "lh-1"><b>Location:&nbsp;</b>{coach.location.city}, {coach.location.state}</p>
+                   <p className= "lh-1"><b>Goals:</b> {renderCoachGoals()}</p>
                 </Col>
             </Row>
             <Row>
                     {coach.professional_info.accepting_new_clients === 1 ? (
-                    <div className="text-center"><Button size="lg" onClick={handleRequest}>Request Coach</Button></div>)
+                    <div className="text-center"><Button size="lg" className="my-2"  onClick={handleRequest}>Request Coach</Button></div>)
                     :(
                     <div className="text-center">    
-                        <Button size="lg" disabled>Request Coach</Button>
+                        <Button className="my-2" size="lg" disabled>Request Coach</Button>
                         <p>This user is currently not accepting clients. Please come back later.</p>
                     </div>
                     )
