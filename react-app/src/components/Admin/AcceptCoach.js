@@ -1,6 +1,7 @@
-import { useState } from "react";
-import Modal from "react-bootstrap/Modal";
-import { config } from "../../utils/config";
+import React, { useState } from 'react';
+import Modal from 'react-bootstrap/Modal';
+import { config } from '../../utils/config';
+
 
 function AcceptCoach({ user_id, handleUploadSuccessChange, firstName }) {
   const [show, setShow] = useState(false);
