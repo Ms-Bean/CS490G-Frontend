@@ -25,15 +25,14 @@ describe('SearchFiltersModal', () => {
     );
 
     expect(getByLabelText(/Name/i).value).toBe('');
-    
-    expect(getByLabelText(/Hourly Rate/i).value).toBe('');
-
+    expect(getByLabelText(/Min Hourly Rate/i).value).toBe('');
     expect(getByLabelText(/Max Hourly Rate/i).value).toBe('');
     expect(getByLabelText(/Min Experience/i).value).toBe('');
     expect(getByLabelText(/Max Experience/i).value).toBe('');
     expect(getByLabelText(/Show only coaches accepting new clients/i).checked).toBe(false);
     expect(getByText(/Submit/i)).toBeInTheDocument();
   });
+
 
   it('updates input values correctly', () => {
     const handleChange = jest.fn();
@@ -48,7 +47,7 @@ describe('SearchFiltersModal', () => {
     );
 
     fireEvent.change(getByLabelText(/Name/i), { target: { value: 'John Doe' } });
-    fireEvent.change(getByLabelText(/Hourly Rate/i), { target: { value: '20' } });
+    fireEvent.change(getByLabelText(/Min Hourly Rate/i), { target: { value: '20' } });
     fireEvent.change(getByLabelText(/Max Hourly Rate/i), { target: { value: '50' } });
     fireEvent.change(getByLabelText(/Min Experience/i), { target: { value: '2' } });
     fireEvent.change(getByLabelText(/Max Experience/i), { target: { value: '5' } });
