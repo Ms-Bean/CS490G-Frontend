@@ -1,12 +1,27 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import Select from "react-select";
 import { State } from "country-state-city";
+import { config } from "../../utils/config";
 
-const SearchFiltersModal = ({ show, handleClose, searchParams, handleChange, handleSubmit }) => {
+const SearchFiltersModal = ({ show, handleClose, searchParams, handleChange, handleSubmit, handleMultiChange }) => {
   const states = State.getStatesOfCountry("US");
-  var theStates = []
-  states.forEach((state)=> theStates[theStates.length]= {value:state.isoCode, label:state.name, name:"state"})
+  const [goals, setGoals] = useState([]);
+
+  const getStateName = (iso) =>{
+    var name;
+    states.forEach((state)=> (iso === state.isoCode) ? name = state.name : name = name)
+    return name;
+  }
+  useEffect(()=> {
+    fetch(`${config.backendUrl}/goals/`)
+    .then((data) => data.json())
+    .then((val) => {val.forEach((goal) => goals[goals.length] = {value: goal.goal_id, label: goal.name});
+  console.log(val[0].goal_id);});
+
+  console.log(goals)
+  }, [show]);
+
 
   return (
     <Modal show={show} onHide={handleClose}>
@@ -77,10 +92,9 @@ const SearchFiltersModal = ({ show, handleClose, searchParams, handleChange, han
               <Form.Label>Specialization</Form.Label>
               <Select
                 isMulti
-                //options
-                //value={selectedEquipmentItems}
-                //onChange={handleEquipmentChange}
-                name="equipmentItems"
+                options={goals}
+                onChange={(selectedOptions) => handleMultiChange(selectedOptions)}
+                name="goals"
               />{" "}
             </Form.Group>
           </Row>
@@ -105,9 +119,9 @@ const SearchFiltersModal = ({ show, handleClose, searchParams, handleChange, han
             value={searchParams.state}
             onChange={handleChange}
             >
-            <option value={searchParams.state}>{searchParams.state}</option>
+            <option placeholder="State" value={searchParams.state}>{searchParams.state ? getStateName(searchParams.state) : "Select a State"}</option>
             {states.map((state) => (
-              <option key={state.isoCode} value={state.name}>
+              <option key={state.isoCode} value={state.isoCode}>
                 {state.name}
               </option>
             ))}

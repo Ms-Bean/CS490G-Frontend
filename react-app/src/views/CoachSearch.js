@@ -12,7 +12,7 @@ const CoachSearch = () => {
     maxHourlyRate: "",
     minExperience: "",
     maxExperience: "",
-    goals:"",
+    goals:[],
     city:"",
     state:"",
     acceptingNewClients: true, // By default, show coaches who are accepting new clients
@@ -40,11 +40,20 @@ const CoachSearch = () => {
 
   const handleChange = (e) => {
     const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
-    setSearchParams({ ...searchParams, [e.target.name]: value });
-    console.log(searchParams.state)
+    console.log(value);
+    //setSearchParams({ ...searchParams, [e.target.name]: value });
   };
 
+  const handleMultiChange = (e) => {
+    console.log("Obj", e);
+    const goals = [];
+    e.forEach((v)=> goals[goals.length]= v.value);
+    console.log("Arr", goals);
+    setSearchParams({...searchParams, ["goals"]: goals})
+  }
+
   const handleSubmit = async (e) => {
+    console.log(searchParams.goals);
     e.preventDefault();
     fetchCoaches();
   };
@@ -210,6 +219,7 @@ const CoachSearch = () => {
         searchParams={searchParams}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
+        handleMultiChange={handleMultiChange}
       />
 
       <Container className="mt-4">
