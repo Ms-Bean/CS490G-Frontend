@@ -1,4 +1,3 @@
-// AcceptCoach.test.js
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom'; // for toHaveTextContent
@@ -10,5 +9,10 @@ describe('AcceptCoach component', () => {
       render(<AcceptCoach />);
       expect(screen.getByText('Accept')).toBeInTheDocument();
     });
+    it("opens the modal when the 'Accept' button is clicked", () => {
+        render(<AcceptCoach />);
+        fireEvent.click(screen.getByText("Accept"));
+        expect(screen.getByText("Accept Coach")).toBeInTheDocument();
+      });
     // You can add more tests as needed
   });
