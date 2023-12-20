@@ -103,6 +103,14 @@ const NewWorkoutPlan = ({handleUploadSuccessChange, user_id, button, coach}) => 
       if(workoutPlanSuccess){
         setShowAssign(true);
       }
+      else{
+        setFormData({
+          name: "",
+          workout_plan_id: null,
+          exercises: [],
+        });
+        setWorkoutPlanSuccess(false);
+      }
     }
     setError("");
     setShow(false);
