@@ -78,6 +78,7 @@ const NewWorkoutPlan = ({handleUploadSuccessChange, user_id, button, coach}) => 
           }));
           console.log(wp);
           setWorkoutPlanSuccess(true);
+          setError("");
           if(!coach){
             handleUploadSuccessChange();
           }
@@ -98,9 +99,22 @@ const NewWorkoutPlan = ({handleUploadSuccessChange, user_id, button, coach}) => 
       });
       setWorkoutPlanSuccess(false);
     }
+    else{
+      if(workoutPlanSuccess){
+        setShowAssign(true);
+      }
+      else{
+        setFormData({
+          name: "",
+          workout_plan_id: null,
+          exercises: [],
+        });
+        setWorkoutPlanSuccess(false);
+      }
+    }
     setError("");
     setShow(false);
-    setShowAssign(true);
+    //setShowAssign(true);
   };
   const handleShow = () => setShow(true);
 

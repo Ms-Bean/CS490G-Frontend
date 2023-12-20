@@ -33,7 +33,6 @@ const FilterModal = ({ show, onHide, onApplyFilter }) => {
   };
 
   const applyFilter = () => {
-    console.log("goal", filters.goals);
     if (validateFilters()) {
       onApplyFilter(filters);
       onHide();
@@ -53,6 +52,9 @@ const FilterModal = ({ show, onHide, onApplyFilter }) => {
     onApplyFilter(resetFilterValues);
     onHide();
   };
+
+  const selectedGoals = goals.filter(goal => filters.goals.includes(goal.name))
+  .map(goal => ({ value: goal.name, label: goal.name }));
 
   return (
     <Modal show={show} onHide={onHide}>
@@ -92,6 +94,7 @@ const FilterModal = ({ show, onHide, onApplyFilter }) => {
               isMulti
               options={goals.map((goal) => ({ value: goal.name, label: goal.name }))}
               onChange={(selectedOptions) => handleSelectChange("goals", selectedOptions)}
+              value={selectedGoals}
             />
           </Form.Group>
 
@@ -118,12 +121,12 @@ const FilterModal = ({ show, onHide, onApplyFilter }) => {
       </Modal.Body>
       <Modal.Footer>
         <ButtonGroup className="w-100">
-        <Button variant="secondary" onClick={resetFilters}>
-          Reset Filters
-        </Button>
-        <Button className="btn-dark" onClick={applyFilter}>
-          Apply Filters
-        </Button>
+          <Button variant="secondary" onClick={resetFilters}>
+            Reset Filters
+          </Button>
+          <Button className="btn-dark" onClick={applyFilter}>
+            Apply Filters
+          </Button>
         </ButtonGroup>
       </Modal.Footer>
     </Modal>

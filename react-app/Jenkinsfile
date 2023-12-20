@@ -23,6 +23,20 @@ pipeline {
             }
         }
 
+        stage('Run Frontend Tests') {
+            steps {
+                dir('CS490G-Frontend/react-app') {
+                    script {
+                        try {
+                            sh 'npm test'
+                        } catch (Exception e) {
+                            echo "Tests failed, but pipeline will continue."
+                        }
+                    }
+                }
+            }
+        }
+
         stage('Build and Run Frontend') {
             steps {
                 dir('CS490G-Frontend/react-app') {
