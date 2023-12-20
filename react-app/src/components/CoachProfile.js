@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { config
- } from "../utils/config";
+import Select from "react-select";
+import { config } from "../utils/config";
+
 const ClientProfile = () => {
   const [editing, setEditing] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
@@ -9,8 +10,12 @@ const ClientProfile = () => {
     experience_level: "",
     accepting_new_clients: "",
     coaching_history: "",
-    paypal_link: ""
+    paypal_link: "",
+    goals: [],
   });
+
+  const [goalsList, setGoalsList] = useState([]);
+  const [goalsOptions, setGoalsOptions] = useState([]);
 
   useEffect(() => {
     //Fetch client profile information
@@ -26,11 +31,21 @@ const ClientProfile = () => {
           experience_level: data.response.coach_profile_info.experience_level,
           accepting_new_clients: data.response.coach_profile_info.accepting_new_clients,
           coaching_history: data.response.coach_profile_info.coaching_history,
-          paypal_link: data.response.coach_profile_info.paypal_link
+          paypal_link: data.response.coach_profile_info.paypal_link,
+          goals: data.response.coach_profile_info.goals,
         });
       });
     setUploadSuccess(false);
+
+    fetch(`${config.backendUrl}/goals`)
+      .then((res) => res.json())
+      .then((data) => {
+        const formattedGoals = data.map((goal) => ({ label: goal.name, value: goal.goal_id }));
+        setGoalsOptions(formattedGoals);
+      })
+      .catch((err) => console.error("Error fetching goals:", err));
   }, [uploadSuccess, editing]);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -61,7 +76,8 @@ const ClientProfile = () => {
           accepting_new_clients: formData.accepting_new_clients,
           coaching_history: formData.coaching_history,
           availability: formData.availability,
-          paypal_link: formData.paypal_link
+          paypal_link: formData.paypal_link,
+          goals: formData.goals,
         }),
         credentials: "include", // Include credentials with the request
       });
@@ -76,20 +92,18 @@ const ClientProfile = () => {
     setEditing(false);
   };
 
-  
-  const changeProfilePicture = async (e) => {
-    //... code to upload picture from computer
-
-    //... rest call to update user's profile picture
-
-    //if upload was a success    
-
-    setUploadSuccess(true);
+  const handleGoalsChange = (selectedOptions) => {
+    const selectedGoals = selectedOptions.map((option) => option.value);
+    setFormData({
+      ...formData,
+      goals: selectedGoals,
+    });
   };
 
   const toggleEditing = () => {
     setEditing(!editing);
   };
+
   return (
     <div className="container my-2">
       <form onSubmit={submitEdit} className="w-75 mx-auto">
@@ -134,7 +148,7 @@ const ClientProfile = () => {
           />
         </div>
         <div class="form-group my-3">
-          <label for="experience">Years of experience</label>
+          <label for="experience">Years of Experience</label>
           <input
             disabled={!editing}
             className="form-select mt-1"
@@ -147,7 +161,7 @@ const ClientProfile = () => {
           />
         </div>
         <div class="form-group my-3">
-          <label for="weight">Paypal link</label>
+          <label for="weight">Paypal Link</label>
           <input
             className="form-control mt-1"
             disabled={!editing}
@@ -157,6 +171,19 @@ const ClientProfile = () => {
             placeholder="Not Set"
             onChange={handleInputChange}
             value={formData.paypal_link}
+          />
+        </div>
+        <div className="form-group my-3">
+          <label htmlFor="goals">Coaching Goals</label>
+          <Select
+            isMulti
+            name="goals"
+            options={goalsOptions}
+            className="basic-multi-select"
+            classNamePrefix="select"
+            onChange={handleGoalsChange}
+            value={goalsOptions.filter((option) => formData.goals.includes(option.value))}
+            isDisabled={!editing}
           />
         </div>
         <div className="row my-4">
