@@ -26,31 +26,30 @@ describe('RegisterField', () => {
     render(<RegisterField />);
   });
 
-//   it('handles form submission', async () => {
-//     const { getByText } = render(<RegisterField />);
+  it('handles form submission', async () => {
+    const { getByText } = render(<RegisterField />);
 
-//     // Trigger form submission
-//     fireEvent.click(getByText(/Submit/i));
+    // Trigger form submission
+    fireEvent.click(getByText(/Submit/i));
 
-//     // Wait for form submission to complete
-//     await waitFor(() => {
-//       // Assert that setAlertMessage was called with null
-//       expect(useSignup().setAlertMessage).toHaveBeenCalledWith(null);
-//       // Assert that signup function was called with the correct formData and userRole
-//       expect(useSignup().signup).toHaveBeenCalledWith(
-//         {
-//           first_name: '',
-//           last_name: '',
-//           email: '',
-//           username: '',
-//           password: '',
-//         },
-//         'client' // Assuming the default role is 'client'
-//       );
-//       // Assert that setAlertMessage and setAlertType were not called with an error message
-//       expect(setAlertMessage).not.toHaveBeenCalledWith(expect.any(String));
-//       expect(setAlertType).not.toHaveBeenCalledWith(expect.any(String));
-//     });
-//   });
+    // Wait for form submission to complete
+    await waitFor(() => {
+      // Assert that signup function was called with the correct formData and userRole
+      expect(useSignup().signup).toHaveBeenCalledWith(
+        {
+          first_name: '',
+          last_name: '',
+          email: '',
+          username: '',
+          password: '',
+        },
+        'client' // Assuming the default role is 'client'
+      );
+
+      // Assert that isLoading and errorMessage are as expected
+      expect(useSignup().isLoading).toBe(false);
+      expect(useSignup().errorMessage).toBe(null);
+    });
+  });
   // Add more tests for other functionalities as needed
 });
