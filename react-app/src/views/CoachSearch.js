@@ -40,8 +40,7 @@ const CoachSearch = () => {
 
   const handleChange = (e) => {
     const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
-    console.log(value);
-    //setSearchParams({ ...searchParams, [e.target.name]: value });
+    setSearchParams({ ...searchParams, [e.target.name]: value });
   };
 
   const handleMultiChange = (e) => {
