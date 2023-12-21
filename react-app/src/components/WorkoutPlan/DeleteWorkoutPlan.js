@@ -23,8 +23,8 @@ function DeleteWorkoutPlan({ workoutPlanName, workoutPlanId, handleUploadSuccess
             console.log(err);
         }
       }
-    const handleDelete =() =>{
-        deleteDB();
+      const handleDelete = async () => {
+        await deleteDB();
         handleClose();
         handleUploadSuccessChange(true);
     }
