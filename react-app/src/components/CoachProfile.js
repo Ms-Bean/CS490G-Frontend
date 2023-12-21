@@ -77,7 +77,7 @@ const ClientProfile = () => {
           coaching_history: formData.coaching_history,
           availability: formData.availability,
           paypal_link: formData.paypal_link,
-          goals: formData.goals,
+          coach_goals: formData.goals,
         }),
         credentials: "include", // Include credentials with the request
       });
