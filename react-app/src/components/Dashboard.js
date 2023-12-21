@@ -34,10 +34,16 @@ const CoachDashboard = () => {
 
   const checkUserWorkoutPlan = async () => {
     try {
-      const response = await fetch(`${config.backendUrl}/check_user_workout_plan`, {
+      let req = {
         method: "GET",
         credentials: "include",
-      });
+      };
+      if(client_id)
+      {
+        req.headers = {user_id: client_id};
+      }
+      console.log(req.headers);
+      const response = await fetch(`${config.backendUrl}/check_user_workout_plan`, req);
 
       if (!response.ok) throw new Error('Failed to check workout plan');
 
