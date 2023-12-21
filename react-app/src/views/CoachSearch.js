@@ -44,7 +44,7 @@ const CoachSearch = () => {
   };
 
   const handleMultiChange = (e) => {
-    console.log("Obj", e);
+    //console.log("Obj", e);
     const goals = [];
     e.forEach((v)=> goals[goals.length]= v.value);
     console.log("Arr", goals);
