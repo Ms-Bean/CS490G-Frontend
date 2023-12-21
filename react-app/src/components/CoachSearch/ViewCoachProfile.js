@@ -30,7 +30,7 @@ function ViewCoachProfile({ coach, handleUploadSuccessChange, handleAlert }) {
     const handleCloseTerm = () => setShowTerm(false);
 
     const renderCoachGoals = () => {
-      return coach.professional_info.goals.join(', ');
+      return coach.professional_info.goals ? coach.professional_info.goals.join(', ') : '';
     };
 
     const url = `${config.backendUrl}/request_coach`
