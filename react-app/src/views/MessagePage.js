@@ -449,7 +449,7 @@ const MessagePage = () => {
             </span>
             {SelectedPageInfo.has_next && (
               <Button variant="outline-secondary" size="sm" onClick={() => handlePaginationClick("next")}>
-                Previous Messages
+                Older Messages
               </Button>
             )}
           </div>
